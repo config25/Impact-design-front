@@ -1,0 +1,148 @@
+/* GNB 스타일 - 전체 화면 1920 x 1320 기준 */
+/* GNB 전체 박스: 1920 x 100, 파란색 배경 */
+.gnb {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #353B72;
+    width: 100%;
+    height: 100px;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+/* GNB 아이템들을 감싸는 내부 컨테이너 */
+.gnb-inner {
+    display: flex;
+    max-width: 1840px;
+    width: 100%;
+    gap: 24px;
+}
+
+/* 각 GNB 아이템 - 286 x 100 */
+.gnb-item {
+    flex: 1;
+    height: 100px;
+    padding: 12px 8px;
+    text-align: center;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+}
+
+.gnb-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* 선택된 상태: #F3F5F9 배경 */
+.gnb-item.active {
+    background: #F3F5F9;
+}
+
+/* 기본 상태 (선택 안됨): 흰색 텍스트, Regular */
+/* 영문 타이틀 - 18px, Regular */
+.gnb-title {
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 100%;
+    letter-spacing: 0;
+    text-align: center;
+    color: #ffffff;
+    display: block;
+}
+
+/* 한글 서브타이틀 - 24px, Regular */
+.gnb-subtitle {
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 100%;
+    letter-spacing: 0;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.9);
+    display: block;
+    margin-top: 6px;
+}
+
+/* 선택된 상태: 파란색 텍스트, Bold */
+/* 영문 타이틀 - 18px, Bold */
+.gnb-item.active .gnb-title {
+    font-weight: 700;
+    color: #353B72;
+}
+
+/* 한글 서브타이틀 - 24px, Bold */
+.gnb-item.active .gnb-subtitle {
+    font-weight: 700;
+    color: #353B72;
+}
+
+/* 반응형 */
+@media (max-width: 1400px) {
+    .gnb {
+        height: 80px;
+        padding: 0 32px;
+    }
+
+    .gnb-item {
+        height: 80px;
+    }
+
+    .gnb-title {
+        font-size: 14px;
+    }
+
+    .gnb-subtitle {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .gnb {
+        height: auto;
+        padding: 0 24px;
+    }
+
+    .gnb-inner {
+        flex-wrap: wrap;
+    }
+
+    .gnb-item {
+        flex: 1 1 33.33%;
+        height: 70px;
+    }
+
+    .gnb-title {
+        font-size: 12px;
+    }
+
+    .gnb-subtitle {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 768px) {
+    .gnb {
+        padding: 0 16px;
+    }
+
+    .gnb-item {
+        flex: 1 1 50%;
+        height: 60px;
+    }
+
+    .gnb-title {
+        font-size: 10px;
+    }
+
+    .gnb-subtitle {
+        font-size: 14px;
+    }
+}

@@ -1,0 +1,242 @@
+.start-screen {
+    min-height: 100vh;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.start-overlay {
+    width: 100%;
+    min-height: 100vh;
+    background: rgba(55, 65, 100, 0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+.start-content {
+    text-align: center;
+    max-width: 1200px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* 압도적 성과조직을 만드는 네 가지 Performance Secret - 884 x 48 */
+.start-subtitle {
+    width: 884px;
+    height: 48px;
+    font-size: 24px;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 16px;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Impact Design Canvas - 1070 x 122 */
+.start-title {
+    width: 1070px;
+    height: 122px;
+    font-size: 80px;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0 0 40px 0;
+    letter-spacing: -1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 시작하기 버튼 - 520 x 80 */
+.start-button {
+    width: 520px;
+    height: 80px;
+    font-size: 28px;
+    color: #ffffff;
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    border-radius: 40px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    letter-spacing: 8px;
+}
+
+.start-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: #ffffff;
+}
+
+/* 하단 캔버스 아이템 컨테이너 */
+.canvas-items-container {
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    gap: 0;
+    margin-top: 20px;
+}
+
+.canvas-item-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+/* 각 박스 - 240 x 300 */
+/* 1번, 6번 박스 기본 스타일 */
+.canvas-item {
+    width: 240px;
+    height: 300px;
+    background: #7C7E90B2;
+    border-radius: 4px;
+    padding: 20px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    transition: all 0.3s ease;
+    border: 1px solid #FFFFFF;
+}
+
+.canvas-item:hover {
+    background: #7C7E90CC;
+    transform: translateY(-5px);
+}
+
+/* 2, 3, 4, 5번 박스 - 파란색 배경 */
+.canvas-item-wrapper:nth-child(2) .canvas-item,
+.canvas-item-wrapper:nth-child(3) .canvas-item,
+.canvas-item-wrapper:nth-child(4) .canvas-item,
+.canvas-item-wrapper:nth-child(5) .canvas-item {
+    background: #131A5BB2;
+    border: 1px solid #353B72;
+}
+
+.canvas-item-wrapper:nth-child(2) .canvas-item:hover,
+.canvas-item-wrapper:nth-child(3) .canvas-item:hover,
+.canvas-item-wrapper:nth-child(4) .canvas-item:hover,
+.canvas-item-wrapper:nth-child(5) .canvas-item:hover {
+    background: #131A5BCC;
+}
+
+.canvas-text-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+}
+
+.canvas-korean-title {
+    font-size: 20px;
+    font-weight: 500;
+    color: #FFFFFF;
+    line-height: 100%;
+    letter-spacing: 0;
+    margin-bottom: 8px;
+}
+
+.canvas-english-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #FFFFFF;
+    line-height: 140%;
+    letter-spacing: 0;
+}
+
+.canvas-english-subtitle {
+    font-size: 24px;
+    font-weight: 700;
+    color: #FFFFFF;
+    line-height: 140%;
+    letter-spacing: 0;
+}
+
+.canvas-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 36px;
+    margin-top: auto;
+    align-self: flex-end;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.canvas-icon-img {
+    width: 48px;
+    height: 48px;
+    margin-top: auto;
+    align-self: flex-end;
+    object-fit: contain;
+}
+
+/* 화살표 - 꺾쇠 > 형태 */
+.canvas-arrow {
+    width: 10px;
+    height: 10px;
+    margin: 0 16px;
+    border-top: 3px solid #FFFFFF;
+    border-right: 3px solid #FFFFFF;
+    transform: rotate(45deg);
+}
+
+/* 반응형 스타일 */
+@media (max-width: 1400px) {
+    .canvas-items-container {
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+
+    .canvas-arrow {
+        display: none;
+    }
+
+    .start-title {
+        width: auto;
+        font-size: 60px;
+    }
+
+    .start-subtitle {
+        width: auto;
+        font-size: 20px;
+    }
+
+    .start-button {
+        width: 400px;
+        height: 60px;
+        font-size: 24px;
+    }
+}
+
+@media (max-width: 768px) {
+    .start-title {
+        font-size: 36px;
+        height: auto;
+    }
+
+    .start-subtitle {
+        font-size: 14px;
+        height: auto;
+    }
+
+    .start-button {
+        width: 280px;
+        height: 50px;
+        font-size: 18px;
+        letter-spacing: 4px;
+    }
+
+    .canvas-item {
+        width: 200px;
+        height: 250px;
+    }
+}

@@ -1,25 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import StartScreen from "./screens/StartScreen";
+import ImpactCheckScreen from "./screens/ImpactCheckScreen";
+import IdentityCanvasScreen from "./screens/IdentityCanvasScreen";
+import PerformanceStreamScreen from "./screens/PerformanceStreamScreen";
+import QuickWinScreen from "./screens/QuickWinScreen";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [currentScreen, setCurrentScreen] = useState("start");
+
+    const handleStart = () => {
+        setCurrentScreen("impactcheck");
+    };
+
+    const handleNavigate = (screen) => {
+        setCurrentScreen(screen);
+    };
+
+    switch (currentScreen) {
+        case "start":
+            return <StartScreen onStart={handleStart} />;
+        case "impactcheck":
+            return <ImpactCheckScreen onNavigate={handleNavigate} />;
+        case "identity":
+            return <IdentityCanvasScreen onNavigate={handleNavigate} />;
+        case "performance":
+            return <PerformanceStreamScreen onNavigate={handleNavigate} />;
+        case "quickwin":
+            return <QuickWinScreen onNavigate={handleNavigate} />;
+        default:
+            return <StartScreen onStart={handleStart} />;
+    }
 }
 
 export default App;
