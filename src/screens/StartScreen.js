@@ -18,14 +18,13 @@ const StartScreen = ({ onStart }) => {
         {
             koreanTitle: "정체성 설계",
             englishTitle: "Strategic",
-            englishSubtitle: "Identity",
-            englishSubtitle2: "Canvas",
+            englishSubtitle: "Identity Canvas",
             iconImage: isolationIcon2
         },
         {
             koreanTitle: "성과경로 설계",
             englishTitle: "Performance",
-            englishSubtitle: "Stream Canvas",
+            englishSubtitle: "Flow Canvas",
             iconImage: isolationIcon3
         },
         {

@@ -1,18 +1,18 @@
 import { useState } from "react";
 import GNB from "../components/common/GNB";
-import "./QuickWinScreen.css";
+import "./BuildWinScreen.css";
 import shinhanLogo from "../resource/flow/신한은행.png";
-import component1 from "../resource/quick/Component 1.png";
-import vector3 from "../resource/quick/Vector 3.png";
+import component1 from "../resource/build/Component 1.png";
+import vector3 from "../resource/build/Vector 3.png";
 import pencil2 from "../resource/quick/pencil2.png";
 import pencil from "../resource/start/pencil.png";
 
-const QuickWinScreen = ({ onNavigate }) => {
+const BuildWinScreen = ({ onNavigate }) => {
     // Editable fields state
     const [alignment, setAlignment] = useState("");
     const [taskName, setTaskName] = useState("");
     const [taskContent, setTaskContent] = useState("");
-    const [crisisSignal, setCrisisSignal] = useState("");
+    const [triggerSignal, setTriggerSignal] = useState("");
     const [painPoint, setPainPoint] = useState("");
     const [teamwork, setTeamwork] = useState("");
     const [output, setOutput] = useState("");
@@ -61,13 +61,13 @@ const QuickWinScreen = ({ onNavigate }) => {
     };
 
     return (
-        <div className="quickwin-container">
+        <div className="buildwin-container">
             {/* GNB */}
-            <GNB activeScreen="quickwin" onNavigate={onNavigate} />
+            <GNB activeScreen="buildwin" onNavigate={onNavigate} />
 
             {/* Sub Header */}
             <div className="sub-header">
-                <div className="sub-header-title">3. Quick Win Canvas</div>
+                <div className="sub-header-title">4. Build Win Canvas</div>
                 <div className="sub-header-actions">
                     <button className="tips-button">
                         <img src={pencil2} alt="" className="pencil-icon" />
@@ -81,20 +81,20 @@ const QuickWinScreen = ({ onNavigate }) => {
             {/* Main Content Box */}
             <div className="main-content-box">
                 {/* Header */}
-                <header className="quickwin-header">
+                <header className="buildwin-header">
                     <div className="header-left">
                         <div className="step-badge-container">
                             <img src={component1} alt="" className="step-badge-img" />
-                            <span className="step-badge-number">3</span>
+                            <span className="step-badge-number">4</span>
                             <img src={vector3} alt="" className="step-badge-vector" />
                         </div>
                         <div className="header-text">
-                            <h1>Quick Win Canvas <span className="title-sub">(전술적 실행과제)</span></h1>
+                            <h1>Build Win Canvas <span className="title-sub">(전략적 실행과제)</span></h1>
                             <p className="header-desc">
-                                Quick Win은 전략목표 달성을 가로막는 장애물을 빠르게 제거하여 단기적으로 가시적인 성과를 만들어내는 실행과제입니다.
+                                Build Win은 단기 성과를 만드는 과제가 아니라, 성과가 반복되게 만드는 '체질'을 바꾸는 과제입니다.
                             </p>
                             <p className="header-desc">
-                                이 Quick Win이 실행되지 않으면, 우리는 지금 만들 수 있는 성과를 계속 '놓치게' 됩니다.
+                                이 Build Win이 성공하면, 우리는 한 차원 높은 성과창출 역량을 확보하게 됩니다.
                             </p>
                         </div>
                     </div>
@@ -104,10 +104,10 @@ const QuickWinScreen = ({ onNavigate }) => {
                 </header>
 
                 {/* Content */}
-                <div className="quickwin-content">
+                <div className="buildwin-content">
                     {/* Alignment Section */}
                     <div className="alignment-section">
-                        <div className="section-label cyan">전략목표 Alignment</div>
+                        <div className="section-label purple">전략목표 Alignment</div>
                         <div
                             className="section-content"
                             onClick={() => !editing && handleEdit('alignment')}
@@ -121,14 +121,14 @@ const QuickWinScreen = ({ onNavigate }) => {
                                     onBlur={handleBlur}
                                     onKeyDown={handleKeyDown}
                                     autoFocus
-                                    placeholder="이 과제는 회사의 어떤 전략목표(방향)와 연계되어 있습니까?"
+                                    placeholder="Build Win을 통해 중·장기적으로 바꾸고자 하는 '성과가 만들어지는 방식'은 무엇입니까?"
                                 />
                             ) : alignment ? (
                                 <span>{alignment}</span>
                             ) : (
                                 <>
                                     <img src={pencil} alt="" className="edit-icon" />
-                                    <span className="help-text">이 과제는 회사의 어떤 전략목표(방향)와 연계되어 있습니까?</span>
+                                    <span className="help-text">Build Win을 통해 중·장기적으로 바꾸고자 하는 '성과가 만들어지는 방식'은 무엇입니까?</span>
                                 </>
                             )}
                         </div>
@@ -138,8 +138,8 @@ const QuickWinScreen = ({ onNavigate }) => {
                     <div className="task-section">
                         <div className="task-rows">
                             <div className="task-row">
-                                <div className="section-label cyan small">
-                                    <span>전술적</span>
+                                <div className="section-label purple small">
+                                    <span>전략적</span>
                                     <span>실행과제</span>
                                 </div>
                                 <div className="task-label">과제명</div>
@@ -156,21 +156,21 @@ const QuickWinScreen = ({ onNavigate }) => {
                                             onBlur={handleBlur}
                                             onKeyDown={handleKeyDown}
                                             autoFocus
-                                            placeholder="이 과제를 한 문장으로 표현하면, '무엇을 제거/해결하는 과제'입니까?"
+                                            placeholder="이 과제를 한 문장으로 정의하면, '무엇을 새로 만들거나 바꾸는 과제'입니까?"
                                         />
                                     ) : taskName ? (
                                         <span>{taskName}</span>
                                     ) : (
                                         <>
                                             <img src={pencil} alt="" className="edit-icon" />
-                                            <span>이 과제를 한 문장으로 표현하면, '무엇을 제거/해결하는 과제'입니까?</span>
+                                            <span>이 과제를 한 문장으로 정의하면, '무엇을 새로 만들거나 바꾸는 과제'입니까?</span>
                                         </>
                                     )}
                                 </div>
                             </div>
                             <div className="task-row">
-                                <div className="section-label cyan small invisible">
-                                    <span>전술적</span>
+                                <div className="section-label purple small invisible">
+                                    <span>전략적</span>
                                     <span>실행과제</span>
                                 </div>
                                 <div className="task-label main-content-label">주요 내용</div>
@@ -187,14 +187,14 @@ const QuickWinScreen = ({ onNavigate }) => {
                                             onBlur={handleBlur}
                                             onKeyDown={handleKeyDown}
                                             autoFocus
-                                            placeholder="이 과제를 실행하면 [어떤 문제]가 해결되어 [어떤 결과]가 나올 것이라고 확신합니까?"
+                                            placeholder="이 과제가 완료되면, 조직의 어떤 기준·구조·역량이 달라집니까?"
                                         />
                                     ) : taskContent ? (
                                         <span>{taskContent}</span>
                                     ) : (
                                         <>
                                             <img src={pencil} alt="" className="edit-icon" />
-                                            <span className="help-text">이 과제를 실행하면 [어떤 문제]가 해결되어 [어떤 결과]가 나올 것이라고 확신합니까?</span>
+                                            <span className="help-text">이 과제가 완료되면, 조직의 어떤 기준·구조·역량이 달라집니까?</span>
                                         </>
                                     )}
                                 </div>
@@ -213,41 +213,41 @@ const QuickWinScreen = ({ onNavigate }) => {
                                     <th colSpan="2" className="outputs">산출(Outputs)</th>
                                 </tr>
                                 <tr className="subheader-row">
-                                    <th className="crisis-header">위기의 신호 (Crisis Signal)</th>
+                                    <th className="crisis-header">변화의 신호(Trigger)</th>
                                     <th className="resource-header">필요 자원</th>
                                     <th className="quantity-header">수량</th>
-                                    <th className="procedure-header">추진 절차</th>
-                                    <th className="content-header">주요 내용</th>
+                                    <th className="procedure-header">전환 단계</th>
+                                    <th className="content-header">전환 활동</th>
                                     <th className="duration-header">소요기간</th>
                                     <th className="teamwork-header">팀 워크</th>
                                     <th className="teamwork-header2">팀 워크</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {/* 행 1-2: 위기의 신호 */}
+                                {/* 행 1-2: 변화의 신호 */}
                                 <tr>
                                     <td
                                         rowSpan="2"
                                         className="crisis-cell"
-                                        onClick={() => !editing && handleEdit('crisisSignal')}
+                                        onClick={() => !editing && handleEdit('triggerSignal')}
                                     >
-                                        {editing === 'crisisSignal' ? (
+                                        {editing === 'triggerSignal' ? (
                                             <textarea
                                                 className="editable-textarea"
-                                                value={crisisSignal}
-                                                onChange={(e) => setCrisisSignal(e.target.value)}
+                                                value={triggerSignal}
+                                                onChange={(e) => setTriggerSignal(e.target.value)}
                                                 onBlur={handleBlur}
                                                 onKeyDown={handleKeyDown}
                                                 autoFocus
-                                                placeholder="지금 이 과제를 실행해야 할 이유나 신호(Signal)는 무엇입니까?"
+                                                placeholder="지금의 성과 방식이 중·장기적으로 지속되기 어렵다고 판단되는 신호는 무엇입니까?"
                                             />
-                                        ) : crisisSignal ? (
-                                            <div className="cell-content">{crisisSignal}</div>
+                                        ) : triggerSignal ? (
+                                            <div className="cell-content">{triggerSignal}</div>
                                         ) : (
                                             <>
                                                 <div className="cell-question">
-                                                    지금 이 과제를 실행해야 할<br />
-                                                    이유나 신호(Signal)는 무엇입니까?
+                                                    지금의 성과 방식이 중·장기적으로 지속되기<br />
+                                                    어렵다고 판단되는 신호는 무엇입니까?
                                                 </div>
                                                 <div className="cell-example">(예: 매출하락, 고객이탈 등)</div>
                                             </>
@@ -330,9 +330,9 @@ const QuickWinScreen = ({ onNavigate }) => {
                                                     '남는 것'은<br />
                                                     무엇입니까?
                                                 </div>
-                                                <div className="cell-example">(업무 매뉴얼, 체크리스트,</div>
-                                                <div className="cell-example">개선된 양식, 분석 보고서,</div>
-                                                <div className="cell-example">시범 운영 결과 등)</div>
+                                                <div className="cell-example">(기준 / 규칙 프로세스</div>
+                                                <div className="cell-example">/ 체계 시스템 / 플랫폼</div>
+                                                <div className="cell-example">역할 정의 등)</div>
                                             </>
                                         )}
                                     </td>
@@ -389,7 +389,7 @@ const QuickWinScreen = ({ onNavigate }) => {
                                         </td>
                                     ))}
                                 </tr>
-                                {/* 행 4-5: 성과를 막고... */}
+                                {/* 행 4-5: 지금 성과가 나더라도... */}
                                 <tr>
                                     <td
                                         rowSpan="2"
@@ -404,17 +404,17 @@ const QuickWinScreen = ({ onNavigate }) => {
                                                 onBlur={handleBlur}
                                                 onKeyDown={handleKeyDown}
                                                 autoFocus
-                                                placeholder="성과를 막고 문제를 발생시키는 구체적인 '장애물(Bottleneck)'은 무엇입니까?"
+                                                placeholder="지금 성과가 나더라도, 앞으로 해결되지 않으면 결국 반복될 문제는 무엇입니까?"
                                             />
                                         ) : painPoint ? (
                                             <div className="cell-content">{painPoint}</div>
                                         ) : (
                                             <>
                                                 <div className="cell-question">
-                                                    성과를 막고 문제를 발생시키는 구체적인<br />
-                                                    '장애물(Bottleneck)'은 무엇입니까?
+                                                    지금 성과가 나더라도, 앞으로 해결되지 않으면<br />
+                                                    결국 반복될 문제는 무엇입니까?
                                                 </div>
-                                                <div className="cell-example">(예: 시스템 오류 등)</div>
+                                                <div className="cell-example">(예: 복잡한 의사결정 구조 등)</div>
                                             </>
                                         )}
                                     </td>
@@ -520,14 +520,14 @@ const QuickWinScreen = ({ onNavigate }) => {
                                                 onBlur={handleBlur}
                                                 onKeyDown={handleKeyDown}
                                                 autoFocus
-                                                placeholder={index === 0 ? "6개월 내 수치로 확인 가능한 변화는 무엇입니까?" : ""}
+                                                placeholder={index === 0 ? "6~18개월 내 추세로 확인 가능한 변화는 무엇입니까?" : ""}
                                             />
                                         ) : outcomes.quantitative[index] ? (
                                             <span>{outcomes.quantitative[index]}</span>
                                         ) : (
                                             <>
                                                 <img src={pencil} alt="" className="edit-icon" />
-                                                {index === 0 && <span className="help-text">6개월 내 수치로 확인 가능한 변화는 무엇입니까?</span>}
+                                                {index === 0 && <span className="help-text">6~18개월 내 추세로 확인 가능한 변화는 무엇입니까?</span>}
                                             </>
                                         )}
                                     </div>
@@ -541,4 +541,4 @@ const QuickWinScreen = ({ onNavigate }) => {
     );
 };
 
-export default QuickWinScreen;
+export default BuildWinScreen;

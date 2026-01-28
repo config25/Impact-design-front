@@ -118,30 +118,32 @@
 /* Main Grid */
 .identity-grid {
     display: flex;
-    gap: 24px;
     align-items: flex-start;
-    justify-content: center;
+    justify-content: space-between;
+    padding: 0 40px;
 }
 
 /* ========== Legacy Section ========== */
 .legacy-section {
-    width: 440px;
+    width: 400px;
 }
 
-/* 기존 가치체계 헤더 - 440 x 100 */
+/* 기존 가치체계 헤더 - 400 x 100 */
 .legacy-header {
-    width: 440px;
+    width: 400px;
     height: 100px;
     background: #2c2f7c;
-    color: white;
+    color: #FFFFFF;
     border-radius: 4px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: 'Pretendard', sans-serif;
     font-weight: 700;
-    font-size: 18px;
+    font-size: 24px;
     text-align: center;
+    line-height: 100%;
+    letter-spacing: 0;
     margin-bottom: 30px;
 }
 
@@ -152,30 +154,33 @@
 }
 
 .legacy-item {
-    width: 440px;
+    width: 400px;
 }
 
-/* 미션/비전/핵심가치 타이틀 - 440 x 50 */
+/* 미션/비전/핵심가치 타이틀 - 400 x 50 */
 .legacy-item-title {
-    width: 440px;
+    width: 400px;
     height: 50px;
-    padding: 13px 160px;
+    padding: 13px 20px;
     background: #f0f0f0;
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
     font-family: 'Pretendard', sans-serif;
-    font-weight: 600;
-    font-size: 16px;
+    font-weight: 500;
+    font-size: 20px;
+    color: #111111;
     text-align: center;
+    line-height: 100%;
+    letter-spacing: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
 }
 
-/* 존재이유/지향하는미래/행동원칙 내용 - 440 x 140 */
+/* 존재이유/지향하는미래/행동원칙 내용 - 400 x 140 */
 .legacy-item-body {
-    width: 440px;
+    width: 400px;
     height: 140px;
     padding: 16px;
     border: 1px solid #e0e0e0;
@@ -186,20 +191,38 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    gap: 10px;
+    justify-content: flex-start;
+    gap: 8px;
     box-sizing: border-box;
 }
 
 .edit-icon {
-    color: #999999;
-    font-size: 18px;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
 }
 
 .legacy-item-subtitle {
     color: #999999;
     font-family: 'Pretendard', sans-serif;
-    font-size: 14px;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 100%;
+    letter-spacing: 0;
+    text-align: center;
+}
+
+/* Legacy/New Identity 편집 모드 */
+.legacy-item-body.editing,
+.new-item-body.editing {
+    padding: 8px;
+}
+
+.legacy-item-body.editing .editable-input,
+.new-item-body.editing .editable-input {
+    width: 100%;
+    height: 100%;
+    flex: 1;
 }
 
 /* ========== Section Common (for Threat & New Identity) ========== */
@@ -225,10 +248,32 @@
 }
 
 /* ========== Threat Section (External Threats) ========== */
-/* 외부의 위협 신호 헤더 - 728 x 100 */
+.threat-section {
+    position: relative;
+    width: 872px;
+}
+
+/* 왼쪽/오른쪽 삼각형 화살표 - 헤더 높이에 맞춰 배치 */
+.polygon-left {
+    position: absolute;
+    width: 35px;
+    height: auto;
+    left: -50px;
+    top: 68px;
+}
+
+.polygon-right {
+    position: absolute;
+    width: 35px;
+    height: auto;
+    right: -55px;
+    top: 68px;
+}
+
+/* 외부의 위협 신호 헤더 - 872 x 102 */
 .threat-header {
-    width: 728px;
-    height: 100px;
+    width: 872px;
+    height: 102px;
     background: #C73457;
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
@@ -236,6 +281,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    padding: 20px 0;
     box-sizing: border-box;
 }
 
@@ -244,9 +290,11 @@
     height: 29px;
     font-family: 'Pretendard', sans-serif;
     font-weight: 700;
-    font-size: 20px;
+    font-size: 24px;
     color: #ffffff;
     text-align: center;
+    line-height: 100%;
+    letter-spacing: 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -257,204 +305,238 @@
     height: 24px;
     font-family: 'Pretendard', sans-serif;
     font-weight: 400;
-    font-size: 14px;
+    font-size: 20px;
     color: #ffffff;
     text-align: center;
+    line-height: 100%;
+    letter-spacing: 0;
     margin-top: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-/* 4가지 카드를 감싼 빨간 박스 - 728 x 282 */
+/* 4가지 카드를 감싼 빨간 박스 - 872 x 280 */
 .threat-body {
-    width: 728px;
-    height: 282px;
+    width: 872px;
+    height: 280px;
     background: #C73457;
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
-    padding: 4px 20px 20px 20px;
+    padding: 8px 24px 16px 24px;
     box-sizing: border-box;
     margin-bottom: 16px;
 }
 
-/* Threat Grid - 2x2 레이아웃 */
+/* Threat Grid - 1x4 가로 레이아웃 */
 .threat-grid {
-    display: grid;
-    grid-template-columns: 340px 340px;
-    grid-template-rows: auto auto;
+    display: flex;
     gap: 8px;
     justify-content: center;
 }
 
-/* 각 카드 컨테이너 */
+/* 각 카드 컨테이너 - 200 x 256 */
 .threat-card {
-    width: 340px;
+    width: 200px;
     background: transparent;
     border: none;
     padding: 0;
 }
 
-/* 카드 타이틀 - 340 x 50 */
+/* 카드 타이틀 */
 .threat-card-title {
-    width: 340px;
-    height: 50px;
-    padding: 13px 20px;
-    background: #fdf5f7;
+    width: 200px;
+    height: 56px;
+    padding: 8px 5px;
+    background: #ffffff;
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
     font-family: 'Pretendard', sans-serif;
-    font-weight: 600;
-    font-size: 14px;
+    font-weight: 500;
+    font-size: 18px;
     text-align: center;
     color: #333333;
+    line-height: 130%;
+    letter-spacing: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
-    margin-bottom: 0;
 }
 
-/* 카드 질문 박스 - 340 x 76 */
-.threat-card-question {
-    width: 340px;
-    height: 76px;
-    padding: 12px 16px;
+/* 카드 내용 영역 */
+.threat-card-content {
+    width: 200px;
+    height: 200px;
+    padding: 16px 15px;
     background: #ffffff;
-    border: 1px solid #e8c8cf;
-    border-top: none;
-    border-bottom-left-radius: 4px;
-    border-bottom-right-radius: 4px;
-    font-family: 'Pretendard', sans-serif;
-    font-size: 13px;
-    color: #666666;
-    text-align: center;
-    line-height: 1.5;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
-}
-
-/* ========== Internal Limits Section ========== */
-/* 4가지 카드를 감싼 빨간 박스 (상단) - 728 x 282 */
-.internal-body {
-    width: 728px;
-    height: 282px;
-    background: #C73457;
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-    padding: 20px 20px 4px 20px;
-    box-sizing: border-box;
-}
-
-/* Internal Grid - 2x2 레이아웃 */
-.internal-grid {
-    display: grid;
-    grid-template-columns: 340px 340px;
-    grid-template-rows: auto auto;
-    gap: 8px;
-    justify-content: center;
-}
-
-/* 각 카드 컨테이너 */
-.internal-card {
-    width: 340px;
-    background: transparent;
-    border: none;
-    padding: 0;
-}
-
-/* 카드 타이틀 - 340 x 50 */
-.internal-card-title {
-    width: 340px;
-    height: 50px;
-    padding: 13px 20px;
-    background: #f0f0f0;
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-    font-family: 'Pretendard', sans-serif;
-    font-weight: 600;
-    font-size: 14px;
-    text-align: center;
-    color: #333333;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
-    margin-bottom: 0;
-}
-
-/* 카드 질문 박스 - 340 x 76 */
-.internal-card-question {
-    width: 340px;
-    height: 76px;
-    padding: 12px 16px;
-    background: #ffffff;
-    border: 1px solid #e0e0e0;
-    border-top: none;
-    border-bottom-left-radius: 4px;
-    border-bottom-right-radius: 4px;
-    font-family: 'Pretendard', sans-serif;
-    font-size: 13px;
-    color: #666666;
-    text-align: center;
-    line-height: 1.5;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
-}
-
-/* 내부의 한계점 푸터 - 728 x 100 */
-.internal-footer {
-    width: 728px;
-    height: 100px;
-    background: #C73457;
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    box-sizing: border-box;
+    gap: 8px;
+}
+
+/* 편집 모드일 때 전체 영역 사용 */
+.threat-card-content.editing,
+.internal-card-content.editing {
+    padding: 8px;
+}
+
+.threat-card-content.editing .editable-input,
+.internal-card-content.editing .editable-input {
+    width: 100%;
+    height: 100%;
+    flex: 1;
+}
+
+/* 카드 질문 */
+.threat-card-question {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    color: #999999;
+    text-align: center;
+    line-height: 160%;
+    letter-spacing: 0;
+    white-space: nowrap;
+}
+
+/* 연필 아이콘 */
+.threat-card-content .pencil-icon,
+.internal-card-content .pencil-icon {
+    width: 16px;
+    height: 16px;
+}
+
+/* ========== Internal Limits Section ========== */
+/* 내부의 한계점 헤더 - 872 x 102 */
+.internal-header {
+    width: 872px;
+    height: 102px;
+    background: #C73457;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    padding: 20px 0;
     box-sizing: border-box;
 }
 
-.internal-footer-title {
-    width: 315px;
-    height: 29px;
+.internal-header-title {
     font-family: 'Pretendard', sans-serif;
     font-weight: 700;
-    font-size: 20px;
+    font-size: 24px;
     color: #ffffff;
     text-align: center;
+    line-height: 100%;
+    letter-spacing: 0;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.internal-footer-subtitle {
-    width: 485px;
-    height: 24px;
+.internal-header-subtitle {
     font-family: 'Pretendard', sans-serif;
     font-weight: 400;
-    font-size: 14px;
+    font-size: 20px;
     color: #ffffff;
     text-align: center;
+    line-height: 100%;
+    letter-spacing: 0;
     margin-top: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-/* ========== New Identity Section ========== */
-.new-identity-section {
-    width: 440px;
+/* 4가지 카드를 감싼 빨간 박스 - 872 x 280 */
+.internal-body {
+    width: 872px;
+    height: 280px;
+    background: #C73457;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    padding: 8px 24px 16px 24px;
+    box-sizing: border-box;
 }
 
-/* 미래 방향성 헤더 - 440 x 100 */
+/* Internal Grid - 1x4 가로 레이아웃 */
+.internal-grid {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+
+/* 각 카드 컨테이너 - 200 x 256 */
+.internal-card {
+    width: 200px;
+    background: transparent;
+    border: none;
+    padding: 0;
+}
+
+/* 카드 타이틀 */
+.internal-card-title {
+    width: 200px;
+    height: 56px;
+    padding: 8px 5px;
+    background: #ffffff;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 500;
+    font-size: 18px;
+    text-align: center;
+    color: #111111;
+    line-height: 130%;
+    letter-spacing: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+/* 카드 내용 영역 */
+.internal-card-content {
+    width: 200px;
+    height: 200px;
+    padding: 16px 15px;
+    background: #ffffff;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    box-sizing: border-box;
+    gap: 8px;
+}
+
+/* 카드 질문 */
+.internal-card-question {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    color: #999999;
+    text-align: center;
+    line-height: 160%;
+    letter-spacing: 0;
+}
+
+/* ========== New Identity Section ========== */
+.new-identity-section {
+    width: 400px;
+}
+
+/* 미래 방향성 헤더 - 400 x 100 */
 .new-identity-header {
-    width: 440px;
+    width: 400px;
     height: 100px;
     background: #3D49BE;
     border-radius: 4px;
@@ -463,9 +545,11 @@
     justify-content: center;
     font-family: 'Pretendard', sans-serif;
     font-weight: 700;
-    font-size: 18px;
-    color: #ffffff;
+    font-size: 24px;
+    color: #FFFFFF;
     text-align: center;
+    line-height: 100%;
+    letter-spacing: 0;
     margin-bottom: 30px;
     box-sizing: border-box;
 }
@@ -477,31 +561,33 @@
 }
 
 .new-identity-item {
-    width: 440px;
+    width: 400px;
 }
 
-/* New 미션/비전/핵심가치 타이틀 - 440 x 50 */
+/* New 미션/비전/핵심가치 타이틀 - 400 x 50 */
 .new-item-title {
-    width: 440px;
+    width: 400px;
     height: 50px;
-    padding: 13px 160px;
+    padding: 13px 20px;
     background: #f0f0f0;
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
     font-family: 'Pretendard', sans-serif;
-    font-weight: 600;
-    font-size: 16px;
+    font-weight: 700;
+    font-size: 20px;
     text-align: center;
-    color: #333333;
+    color: #111111;
+    line-height: 100%;
+    letter-spacing: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
 }
 
-/* New 미션/비전/핵심가치 내용 - 440 x 140 */
+/* New 미션/비전/핵심가치 내용 - 400 x 140 */
 .new-item-body {
-    width: 440px;
+    width: 400px;
     height: 140px;
     padding: 16px;
     border: 1px solid #e0e0e0;
@@ -512,24 +598,74 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    gap: 10px;
+    justify-content: flex-start;
+    gap: 8px;
     box-sizing: border-box;
 }
 
 .new-item-body .edit-icon {
-    color: #999999;
-    font-size: 18px;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
 }
 
 .new-item-subtitle {
     color: #999999;
     font-family: 'Pretendard', sans-serif;
-    font-size: 14px;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 160%;
+    letter-spacing: 0;
+    text-align: center;
 }
 
 .new-item-desc {
-    color: #666666;
+    color: #999999;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 160%;
+    letter-spacing: 0;
+    text-align: center;
+}
+
+/* 입력 필드 스타일 */
+.editable-input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
     font-family: 'Pretendard', sans-serif;
     font-size: 14px;
+    text-align: center;
+    resize: none;
+    min-height: 60px;
+}
+
+.editable-input:focus {
+    outline: none;
+    border-color: #353B72;
+}
+
+/* 입력된 값 표시 */
+.input-value {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 14px;
+    color: #333333;
+    text-align: center;
+    cursor: pointer;
+    padding: 8px;
+    word-break: break-word;
+}
+
+.input-value:hover {
+    background: #f5f5f5;
+    border-radius: 4px;
+}
+
+/* 연필 아이콘 공통 */
+.pencil-icon {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
 }

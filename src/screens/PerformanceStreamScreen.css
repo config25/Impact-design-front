@@ -233,7 +233,10 @@
 .vision-label {
     font-family: 'Pretendard', sans-serif;
     font-weight: 700;
-    font-size: 18px;
+    font-size: 24px;
+    line-height: 160%;
+    letter-spacing: 0;
+    text-align: center;
     color: #FFFFFF;
     margin-right: 16px;
     white-space: nowrap;
@@ -252,9 +255,12 @@
 
 .vision-text {
     font-family: 'Pretendard', sans-serif;
-    font-weight: 400;
-    font-size: 16px;
-    color: #FFE066;
+    font-weight: 500;
+    font-size: 22px;
+    line-height: 100%;
+    letter-spacing: 0;
+    text-align: center;
+    color: #FFEC3E;
 }
 
 /* 스트림 콘텐츠 */
@@ -262,7 +268,7 @@
     display: flex;
     flex-direction: column;
     gap: 40px;
-    padding: 0 51px;
+    padding: 0 51px 0 35px;
 }
 
 /* 스트림 row */
@@ -290,16 +296,21 @@
 .label-number {
     font-family: 'Pretendard', sans-serif;
     font-weight: 700;
-    font-size: 18px;
+    font-size: 24px;
+    line-height: 160%;
+    letter-spacing: 0;
+    text-align: center;
     color: #FFFFFF;
-    margin-bottom: 8px;
 }
 
 .label-subtitle {
     font-family: 'Pretendard', sans-serif;
-    font-weight: 400;
-    font-size: 14px;
-    color: rgba(255, 255, 255, 0.8);
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 160%;
+    letter-spacing: 0;
+    text-align: center;
+    color: #FFFFFF;
 }
 
 /* Row 콘텐츠 */
@@ -313,7 +324,8 @@
     font-weight: 600;
     font-size: 18px;
     line-height: 160%;
-    color: #222222;
+    letter-spacing: 0;
+    color: #333333;
     margin: 0 0 16px 0;
 }
 
@@ -322,15 +334,16 @@
 }
 
 .row-desc .example {
-    font-weight: 400;
+    font-weight: 600;
     text-decoration: none;
-    color: #666666;
+    color: #999999;
 }
 
 /* Goal Cards (전략목표) */
 .goal-cards {
     display: flex;
     gap: 44px;
+    margin-top: -9px;
 }
 
 .goal-card {
@@ -344,11 +357,13 @@
     width: 480px;
     height: 41px;
     background: #EFF0F2;
-    padding: 10px 160px;
+    padding: 10px 16px;
     box-sizing: border-box;
     font-family: 'Pretendard', sans-serif;
-    font-weight: 600;
-    font-size: 14px;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 100%;
+    letter-spacing: 0;
     color: #333333;
     text-align: center;
     border-top-left-radius: 4px;
@@ -364,9 +379,11 @@
     padding: 8px 16px;
     box-sizing: border-box;
     font-family: 'Pretendard', sans-serif;
-    font-size: 14px;
-    line-height: 1.6;
-    color: #555555;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 160%;
+    letter-spacing: 0;
+    color: #333333;
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -405,20 +422,86 @@
 }
 
 .edit-icon {
-    color: #999999;
-    font-size: 16px;
+    width: 16px;
+    height: 16px;
     margin-right: 8px;
+    cursor: pointer;
 }
 
 .placeholder {
-    color: #BBBBBB;
-    font-size: 14px;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 100%;
+    letter-spacing: 0;
+    text-align: center;
+    color: #999999;
+}
+
+/* 빈 카드 타이틀 스타일 - 기본은 회색 */
+.goal-card .goal-card-title {
+    font-weight: 700;
+    font-size: 18px;
+    color: #999999;
+}
+
+/* 타이틀에 내용이 있을 때만 검은색 */
+.goal-card .goal-card-title.has-content {
+    color: #333333;
+}
+
+/* Goal card 편집 입력 스타일 */
+.goal-title-input {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: transparent;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 100%;
+    color: #333333;
+    text-align: center;
+    outline: none;
+}
+
+.goal-title-input::placeholder {
+    color: #999999;
+}
+
+.goal-content-input {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: transparent;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 160%;
+    color: #333333;
+    text-align: center;
+    outline: none;
+    resize: none;
+}
+
+.goal-content-input::placeholder {
+    color: #999999;
+}
+
+.goal-card-title,
+.goal-card-content {
+    cursor: pointer;
+}
+
+.content-text {
+    white-space: pre-wrap;
 }
 
 /* Metric Tables (전술적 성과 / 전략적 활동) */
 .metric-tables {
     display: flex;
     gap: 44px;
+    margin-top: -9px;
 }
 
 .metric-table-wrapper {
@@ -440,9 +523,11 @@
     padding: 10px 16px;
     box-sizing: border-box;
     font-family: 'Pretendard', sans-serif;
-    font-weight: 600;
-    font-size: 14px;
-    color: #333333;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 100%;
+    letter-spacing: 0;
+    color: #111111;
     text-align: center;
 }
 
@@ -463,11 +548,19 @@
     padding: 6px 16px;
     box-sizing: border-box;
     font-family: 'Pretendard', sans-serif;
-    font-size: 14px;
-    color: #555555;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 160%;
+    letter-spacing: 0;
+    color: #333333;
     background: #FFFFFF;
     border: 1px solid #E6E6E6;
     border-top: none;
+}
+
+/* 빈 행 (2., 3.) 스타일 */
+.metric-table td.empty-row {
+    color: #999999;
 }
 
 .metric-table td:first-child {
@@ -496,6 +589,44 @@
     border-top: 2px solid #9C9C9C;
     border-right: 2px solid #9C9C9C;
     transform: rotate(-45deg);
+}
+
+/* Metric table cell 클릭 가능 */
+.metric-table td {
+    cursor: pointer;
+}
+
+/* Row number (1. 2. 3.) */
+.row-number {
+    color: #999999;
+    margin-right: 4px;
+}
+
+/* 내용이 있을 때 row number도 검은색 */
+.metric-table td:not(.empty-row) .row-number {
+    color: #333333;
+}
+
+/* Metric input 스타일 */
+.metric-input {
+    border: none;
+    background: transparent;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 160%;
+    color: #333333;
+    outline: none;
+    width: calc(100% - 24px);
+}
+
+.metric-input::placeholder {
+    color: #999999;
+}
+
+/* 내용이 있는 셀의 값 */
+.metric-value {
+    color: #333333;
 }
 
 /* 반응형 */

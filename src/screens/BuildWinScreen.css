@@ -1,5 +1,5 @@
-/* Quick Win Canvas - 1920 x 1320 기준 */
-.quickwin-container {
+/* Build Win Canvas - 1920 x 1320 기준 */
+.buildwin-container {
     width: 1920px;
     min-height: 1320px;
     background: #FFFFFF;
@@ -7,8 +7,8 @@
     position: relative;
 }
 
-/* Sub Header - 3. Quick Win Canvas */
-.sub-header {
+/* Sub Header - 4. Build Win Canvas */
+.buildwin-container .sub-header {
     width: 1920px;
     height: 140px;
     background: #F3F5F9;
@@ -19,7 +19,7 @@
     box-sizing: border-box;
 }
 
-.sub-header-title {
+.buildwin-container .sub-header-title {
     font-family: 'Pretendard', sans-serif;
     font-weight: 700;
     font-size: 32px;
@@ -28,14 +28,14 @@
     color: #353B72;
 }
 
-.sub-header-actions {
+.buildwin-container .sub-header-actions {
     display: flex;
     align-items: center;
     gap: 16px;
 }
 
 /* 작성 Tips 버튼 */
-.tips-button {
+.buildwin-container .tips-button {
     width: 256px;
     height: 45px;
     border-radius: 8px;
@@ -55,25 +55,25 @@
     white-space: nowrap;
 }
 
-.tips-button:hover {
+.buildwin-container .tips-button:hover {
     background: rgba(53, 59, 114, 0.1);
 }
 
-.tips-button .pencil-icon {
+.buildwin-container .tips-button .pencil-icon {
     width: 16px;
     height: 16px;
 }
 
-.tips-text-bold {
+.buildwin-container .tips-text-bold {
     font-weight: 600;
 }
 
-.tips-text-regular {
+.buildwin-container .tips-text-regular {
     font-weight: 400;
 }
 
 /* 저장 버튼 */
-.save-button {
+.buildwin-container .save-button {
     width: 99px;
     height: 56px;
     border-radius: 4px;
@@ -90,12 +90,12 @@
     justify-content: center;
 }
 
-.save-button:hover {
+.buildwin-container .save-button:hover {
     background: #F3F5F9;
 }
 
 /* 제출완료 버튼 */
-.submit-button {
+.buildwin-container .submit-button {
     width: 134px;
     height: 56px;
     border-radius: 4px;
@@ -112,12 +112,12 @@
     justify-content: center;
 }
 
-.submit-button:hover {
+.buildwin-container .submit-button:hover {
     background: #2A2F5C;
 }
 
 /* 메인 콘텐츠 박스 */
-.main-content-box {
+.buildwin-container .main-content-box {
     width: 1889px;
     min-height: 1044px;
     margin: 0 auto;
@@ -126,7 +126,7 @@
 }
 
 /* Header */
-.quickwin-header {
+.buildwin-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
@@ -134,14 +134,14 @@
     padding: 0 119px 0 23px;
 }
 
-.header-left {
+.buildwin-container .header-left {
     display: flex;
     align-items: flex-start;
     gap: 16px;
 }
 
-/* 숫자 3 배지 - Component 1 이미지 사용 */
-.step-badge-container {
+/* 숫자 4 배지 - Component 1 이미지 사용 */
+.buildwin-container .step-badge-container {
     position: relative;
     width: 79px;
     height: 130px;
@@ -149,13 +149,13 @@
     margin-top: -24px;
 }
 
-.step-badge-img {
+.buildwin-container .step-badge-img {
     width: 79px;
     height: 116px;
     display: block;
 }
 
-.step-badge-number {
+.buildwin-container .step-badge-number {
     position: absolute;
     top: 14px;
     left: 50%;
@@ -168,7 +168,7 @@
     color: #FFFFFF;
 }
 
-.step-badge-vector {
+.buildwin-container .step-badge-vector {
     width: 79px;
     height: 25px;
     display: block;
@@ -177,27 +177,27 @@
 }
 
 /* 타이틀 영역 */
-.header-text {
+.buildwin-container .header-text {
     padding-top: 3px;
 }
 
-.quickwin-container .header-text h1 {
+.buildwin-container .header-text h1 {
     font-family: 'Pretendard', sans-serif;
     font-weight: 700;
     font-size: 40px;
     line-height: 100%;
     letter-spacing: 0;
-    color: #25AEA7;
+    color: #5E4FB1;
     margin: 0 0 21px 0;
 }
 
-.quickwin-container .header-text .title-sub {
+.buildwin-container .header-text .title-sub {
     font-weight: 700;
     font-size: 40px;
-    color: #25AEA7;
+    color: #5E4FB1;
 }
 
-.header-desc {
+.buildwin-container .header-desc {
     font-family: 'Pretendard', sans-serif;
     font-weight: 400;
     font-size: 21px;
@@ -207,7 +207,7 @@
 }
 
 /* 신한은행 로고 */
-.logo-container {
+.buildwin-container .logo-container {
     width: 240px;
     height: 80px;
     border-radius: 10px;
@@ -220,27 +220,27 @@
     margin-top: 20px;
 }
 
-.logo-container img {
+.buildwin-container .logo-container img {
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
 }
 
 /* Content */
-.quickwin-content {
+.buildwin-content {
     background: white;
     border-radius: 8px;
     padding: 20px 51px;
 }
 
 /* Alignment Section - 전략목표 Alignment */
-.alignment-section {
+.buildwin-container .alignment-section {
     display: flex;
     align-items: stretch;
     margin-bottom: 0;
 }
 
-.section-label {
+.buildwin-container .section-label {
     width: 349px;
     height: 54px;
     padding: 8px 40px;
@@ -258,13 +258,13 @@
     border-top-left-radius: 4px;
 }
 
-.section-label.cyan {
-    background: #25AEA7;
+.buildwin-container .section-label.purple {
+    background: #5E4FB1;
     color: white;
     border-bottom: 1px solid #FFFFFF;
 }
 
-.section-label.small {
+.buildwin-container .section-label.small {
     width: 139px;
     height: 134px;
     flex-direction: column;
@@ -274,11 +274,11 @@
     border-top-left-radius: 0;
 }
 
-.section-label.invisible {
+.buildwin-container .section-label.invisible {
     visibility: hidden;
 }
 
-.section-content {
+.buildwin-container .section-content {
     width: 1408px;
     height: 54px;
     padding: 8px 16px;
@@ -299,32 +299,28 @@
     box-sizing: border-box;
 }
 
-/* Task Section - 전술적 실행과제 */
-.task-section {
+/* Task Section - 전략적 실행과제 */
+.buildwin-container .task-section {
     margin-bottom: 20px;
 }
 
-.task-rows {
+.buildwin-container .task-rows {
     display: grid;
     grid-template-columns: 139px 210px 1fr;
     grid-template-rows: 54px 80px;
 }
 
-.task-row {
+.buildwin-container .task-row {
     display: contents;
 }
 
-.task-row:first-child {
-    /* No border */
-}
-
-/* 전술적 실행과제 - 두 행을 span */
-.section-label.cyan.small {
+/* 전략적 실행과제 - 두 행을 span */
+.buildwin-container .section-label.purple.small {
     grid-row: 1 / 3;
     width: 139px;
     height: 134px;
     padding: 15px 30px;
-    background: #25AEA7;
+    background: #5E4FB1;
     color: #FFFFFF;
     font-family: 'Pretendard', sans-serif;
     font-weight: 700;
@@ -344,14 +340,14 @@
     border-bottom: none;
 }
 
-.section-label.cyan.small.invisible {
+.buildwin-container .section-label.purple.small.invisible {
     display: none;
 }
 
-.task-label {
+.buildwin-container .task-label {
     height: 54px;
     padding: 15px 0;
-    background: #25AEA7;
+    background: #5E4FB1;
     color: #FFFFFF;
     font-family: 'Pretendard', sans-serif;
     font-weight: 700;
@@ -367,14 +363,14 @@
     border-bottom: 1px solid #FFFFFF;
 }
 
-.task-label.main-content-label {
+.buildwin-container .task-label.main-content-label {
     height: 80px;
     padding: 15px 0;
     border-bottom: none;
     font-weight: 600;
 }
 
-.task-content {
+.buildwin-container .task-content {
     height: 54px;
     padding: 8px 16px;
     display: flex;
@@ -393,39 +389,39 @@
     box-sizing: border-box;
 }
 
-.task-content.highlight {
+.buildwin-container .task-content.highlight {
     background: #FFEEF0;
     color: #E41833;
     font-size: 18px;
     line-height: 100%;
 }
 
-.task-content.main-content {
+.buildwin-container .task-content.main-content {
     height: 80px;
     border-bottom: 1px solid #E6E6E6;
     border-bottom-right-radius: 4px;
 }
 
 /* Edit Icon */
-.edit-icon {
+.buildwin-container .edit-icon {
     width: 16px;
     height: 16px;
 }
 
 /* Main Table */
-.main-table {
+.buildwin-container .main-table {
     margin-bottom: 20px;
     overflow-x: auto;
 }
 
-.main-table table {
+.buildwin-container .main-table table {
     width: 100%;
     border-collapse: collapse;
     font-size: 12px;
 }
 
-.main-table th,
-.main-table td {
+.buildwin-container .main-table th,
+.buildwin-container .main-table td {
     border: 1px solid #E6E6E6;
     padding: 6px 16px;
     text-align: center;
@@ -434,7 +430,7 @@
 }
 
 /* 상황, 투입, 활동, 산출 헤더 행 */
-.main-table .header-row th {
+.buildwin-container .main-table .header-row th {
     height: 42px;
     padding: 5px 20px;
     font-family: 'Pretendard', sans-serif;
@@ -447,36 +443,36 @@
     box-sizing: border-box;
 }
 
-.main-table .header-row .situation {
+.buildwin-container .main-table .header-row .situation {
     width: 380px;
-    background: #25AEA7;
+    background: #5E4FB1;
     border-top-left-radius: 4px;
     border-right: 1px solid #FFFFFF;
 }
 
-.main-table .header-row .input {
+.buildwin-container .main-table .header-row .input {
     width: 391px;
-    background: #25AEA7;
+    background: #5E4FB1;
     border-left: 1px solid #FFFFFF;
     border-right: 1px solid #FFFFFF;
 }
 
-.main-table .header-row .activity {
+.buildwin-container .main-table .header-row .activity {
     width: 763px;
-    background: #25AEA7;
+    background: #5E4FB1;
     border-left: 1px solid #FFFFFF;
     border-right: 1px solid #FFFFFF;
 }
 
-.main-table .header-row .outputs {
+.buildwin-container .main-table .header-row .outputs {
     width: 360px;
-    background: #25AEA7;
+    background: #5E4FB1;
     border-left: 1px solid #FFFFFF;
     border-top-right-radius: 4px;
 }
 
-/* 서브헤더 행 - 위기의 신호, 필요 자원 등 */
-.main-table .subheader-row th {
+/* 서브헤더 행 - 변화의 신호, 필요 자원 등 */
+.buildwin-container .main-table .subheader-row th {
     height: 46px;
     padding: 10px 16px;
     background: #EFF0F2;
@@ -492,48 +488,48 @@
     white-space: nowrap;
 }
 
-/* 위기의 신호 셀 */
-.main-table .subheader-row th.crisis-header {
+/* 변화의 신호 셀 */
+.buildwin-container .main-table .subheader-row th.crisis-header {
     width: 380px;
 }
 
 /* 필요 자원 */
-.main-table .subheader-row th.resource-header {
+.buildwin-container .main-table .subheader-row th.resource-header {
     width: 291px;
 }
 
 /* 수량 */
-.main-table .subheader-row th.quantity-header {
+.buildwin-container .main-table .subheader-row th.quantity-header {
     width: 100px;
 }
 
-/* 추진 절차 */
-.main-table .subheader-row th.procedure-header {
+/* 전환 단계 */
+.buildwin-container .main-table .subheader-row th.procedure-header {
     width: 139px;
 }
 
-/* 주요 내용 */
-.main-table .subheader-row th.content-header {
+/* 전환 활동 */
+.buildwin-container .main-table .subheader-row th.content-header {
     width: 428px;
 }
 
 /* 소요기간 */
-.main-table .subheader-row th.duration-header {
+.buildwin-container .main-table .subheader-row th.duration-header {
     width: 98px;
 }
 
 /* 팀워크 */
-.main-table .subheader-row th.teamwork-header {
+.buildwin-container .main-table .subheader-row th.teamwork-header {
     width: 130px;
 }
 
 /* 그옆 팀워크 */
-.main-table .subheader-row th.teamwork-header2 {
+.buildwin-container .main-table .subheader-row th.teamwork-header2 {
     width: 230px;
 }
 
 /* 데이터 셀 기본 */
-.main-table td {
+.buildwin-container .main-table td {
     background: #FFFFFF;
     height: 46px;
     padding: 6px 16px;
@@ -541,13 +537,13 @@
 }
 
 /* 입력 셀 */
-.main-table .input-cell {
+.buildwin-container .main-table .input-cell {
     background: #FFFFFF;
     height: 46px;
 }
 
-/* 위기의 신호 셀 - 2행 span, 90px 높이 */
-.main-table .crisis-cell {
+/* 변화의 신호 셀 - 2행 span, 90px 높이 */
+.buildwin-container .main-table .crisis-cell {
     width: 380px;
     height: 90px;
     background: #FFFFFF;
@@ -561,7 +557,7 @@
 }
 
 /* Pain/Touch point 헤더 셀 */
-.main-table .pain-header-cell {
+.buildwin-container .main-table .pain-header-cell {
     width: 380px;
     height: 46px;
     background: #EFF0F2;
@@ -575,8 +571,8 @@
     padding: 10px 16px;
 }
 
-/* 성과를 막고... 셀 - 2행 span, 90px 높이 */
-.main-table .pain-cell {
+/* 지금 성과가 나더라도... 셀 - 2행 span, 90px 높이 */
+.buildwin-container .main-table .pain-cell {
     width: 380px;
     height: 90px;
     background: #FFFFFF;
@@ -587,7 +583,7 @@
 }
 
 /* 팀워크 셀 - 5행 span, 226px 높이 */
-.main-table .teamwork-cell {
+.buildwin-container .main-table .teamwork-cell {
     width: 130px;
     height: 226px;
     background: #FFFFFF;
@@ -603,7 +599,7 @@
 }
 
 /* 산출 셀 - 5행 span, 226px 높이 */
-.main-table .output-cell {
+.buildwin-container .main-table .output-cell {
     width: 230px;
     height: 226px;
     background: #FFFFFF;
@@ -618,7 +614,7 @@
     vertical-align: middle;
 }
 
-.cell-question {
+.buildwin-container .cell-question {
     font-family: 'Pretendard', sans-serif;
     font-weight: 400;
     font-size: 18px;
@@ -629,7 +625,7 @@
     margin-bottom: 8px;
 }
 
-.cell-example {
+.buildwin-container .cell-example {
     font-family: 'Pretendard', sans-serif;
     font-weight: 400;
     font-size: 18px;
@@ -640,14 +636,14 @@
 }
 
 /* Outcomes Section */
-.outcomes-section {
+.buildwin-container .outcomes-section {
     margin-top: 20px;
 }
 
-.outcomes-header {
+.buildwin-container .outcomes-header {
     width: 1758px;
     height: 42px;
-    background: #25AEA7;
+    background: #5E4FB1;
     color: #FFFFFF;
     padding: 5px 86px;
     font-family: 'Pretendard', sans-serif;
@@ -662,16 +658,16 @@
     box-sizing: border-box;
 }
 
-.outcomes-content {
+.buildwin-container .outcomes-content {
     display: flex;
     flex-direction: column;
 }
 
-.outcomes-row {
+.buildwin-container .outcomes-row {
     display: flex;
 }
 
-.outcomes-cell {
+.buildwin-container .outcomes-cell {
     height: 46px;
     padding: 6px 16px;
     display: flex;
@@ -689,29 +685,29 @@
     box-sizing: border-box;
 }
 
-.outcomes-cell.left {
+.buildwin-container .outcomes-cell.left {
     width: 895px;
     border-right: none;
 }
 
-.outcomes-cell.right {
+.buildwin-container .outcomes-cell.right {
     width: 894px;
 }
 
-.outcomes-cell.last {
+.buildwin-container .outcomes-cell.last {
     border-bottom: 1px solid #E6E6E6;
 }
 
-.outcomes-cell.left.last {
+.buildwin-container .outcomes-cell.left.last {
     border-bottom-left-radius: 4px;
 }
 
-.outcomes-cell.right.last {
+.buildwin-container .outcomes-cell.right.last {
     border-bottom-right-radius: 4px;
 }
 
 /* 정성적/정량적 효과 타이틀 셀 */
-.outcomes-title-cell {
+.buildwin-container .outcomes-title-cell {
     background: #EFF0F2;
     font-family: 'Pretendard', sans-serif;
     font-weight: 500;
@@ -724,7 +720,7 @@
     border-top: 1px solid #E6E6E6;
 }
 
-.item-number {
+.buildwin-container .item-number {
     font-family: 'Pretendard', sans-serif;
     font-weight: 400;
     font-size: 18px;
@@ -733,7 +729,7 @@
 }
 
 /* Editable input styles */
-.editable-input {
+.buildwin-container .editable-input {
     width: 100%;
     border: none;
     background: transparent;
@@ -745,19 +741,19 @@
     outline: none;
 }
 
-.editable-input::placeholder {
+.buildwin-container .editable-input::placeholder {
     color: #999999;
 }
 
-.editable-input.highlight-input {
+.buildwin-container .editable-input.highlight-input {
     color: #E41833;
 }
 
-.editable-input.highlight-input::placeholder {
+.buildwin-container .editable-input.highlight-input::placeholder {
     color: #E41833;
 }
 
-.editable-textarea {
+.buildwin-container .editable-textarea {
     width: 100%;
     height: 100%;
     border: none;
@@ -772,11 +768,11 @@
     text-align: center;
 }
 
-.editable-textarea::placeholder {
+.buildwin-container .editable-textarea::placeholder {
     color: #999999;
 }
 
-.cell-input {
+.buildwin-container .cell-input {
     width: 100%;
     border: none;
     background: transparent;
@@ -788,7 +784,7 @@
     text-align: center;
 }
 
-.outcome-input {
+.buildwin-container .outcome-input {
     flex: 1;
     border: none;
     background: transparent;
@@ -800,15 +796,15 @@
     outline: none;
 }
 
-.outcome-input::placeholder {
+.buildwin-container .outcome-input::placeholder {
     color: #999999;
 }
 
-.help-text {
+.buildwin-container .help-text {
     color: #333333;
 }
 
-.cell-content {
+.buildwin-container .cell-content {
     font-family: 'Pretendard', sans-serif;
     font-weight: 400;
     font-size: 18px;
@@ -818,75 +814,70 @@
 }
 
 /* Clickable cells */
-.section-content,
-.task-content,
-.input-cell,
-.crisis-cell,
-.pain-cell,
-.teamwork-cell,
-.output-cell,
-.outcomes-cell {
+.buildwin-container .section-content,
+.buildwin-container .task-content,
+.buildwin-container .input-cell,
+.buildwin-container .crisis-cell,
+.buildwin-container .pain-cell,
+.buildwin-container .teamwork-cell,
+.buildwin-container .output-cell,
+.buildwin-container .outcomes-cell {
     cursor: pointer;
 }
 
 /* Task content with content - remove highlight background */
-.task-content.highlight.has-content {
+.buildwin-container .task-content.highlight.has-content {
     background: #FFFFFF;
     color: #333333;
 }
 
 /* Cell pencil icon positioning */
-.cell-pencil {
+.buildwin-container .cell-pencil {
     display: block;
     margin: 0 auto 8px auto;
 }
 
 /* 반응형 */
 @media (max-width: 1920px) {
-    .quickwin-container {
+    .buildwin-container {
         width: 100%;
         min-width: 1200px;
     }
 
-    .sub-header {
+    .buildwin-container .sub-header {
         width: 100%;
     }
 
-    .main-content-box {
+    .buildwin-container .main-content-box {
         width: 100%;
         padding: 24px 15px;
     }
 }
 
 @media (max-width: 1024px) {
-    .main-table {
+    .buildwin-container .main-table {
         overflow-x: scroll;
     }
 
-    .outcomes-content {
+    .buildwin-container .outcomes-content {
         grid-template-columns: 1fr;
-    }
-
-    .outcomes-column:first-child {
-        border-right: none;
-        border-bottom: 1px solid #e0e0e0;
     }
 }
 
 @media (max-width: 768px) {
-    .alignment-section,
-    .task-row {
+    .buildwin-container .alignment-section,
+    .buildwin-container .task-row {
         flex-direction: column;
     }
 
-    .section-label,
-    .task-label {
+    .buildwin-container .section-label,
+    .buildwin-container .task-label {
         width: 100%;
         min-width: auto;
     }
 
-    .section-content,
-    .task-content {
+    .buildwin-container .section-content,
+    .buildwin-container .task-content {
         border-left: none;
         border-top: 1px solid #e0e0e0;
     }

@@ -4,6 +4,7 @@ import ImpactCheckScreen from "./screens/ImpactCheckScreen";
 import IdentityCanvasScreen from "./screens/IdentityCanvasScreen";
 import PerformanceStreamScreen from "./screens/PerformanceStreamScreen";
 import QuickWinScreen from "./screens/QuickWinScreen";
+import BuildWinScreen from "./screens/BuildWinScreen";
 
 function App() {
     const [currentScreen, setCurrentScreen] = useState("start");
@@ -27,6 +28,8 @@ function App() {
             return <PerformanceStreamScreen onNavigate={handleNavigate} />;
         case "quickwin":
             return <QuickWinScreen onNavigate={handleNavigate} />;
+        case "buildwin":
+            return <BuildWinScreen onNavigate={handleNavigate} />;
         default:
             return <StartScreen onStart={handleStart} />;
     }
