@@ -66,9 +66,12 @@
 .description-text {
     width: 1275px;
     height: 24px;
-    font-size: 14px;
-    color: #555;
-    line-height: 24px;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 300;
+    font-size: 20px;
+    line-height: 100%;
+    letter-spacing: 0;
+    color: #000000;
     margin: 0;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -86,9 +89,12 @@
 .department-input label {
     width: 52px;
     height: 24px;
-    font-size: 14px;
+    font-family: 'Pretendard', sans-serif;
     font-weight: 500;
-    color: #333;
+    font-size: 20px;
+    line-height: 100%;
+    letter-spacing: 0;
+    color: #000000;
     white-space: nowrap;
     display: flex;
     align-items: center;
@@ -99,8 +105,9 @@
     width: 349px;
     height: 47px;
     padding: 0 16px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
+    border: 1px solid #CACACA;
+    border-radius: 4px;
+    background: #FFFFFF;
     font-size: 14px;
     box-sizing: border-box;
 }
@@ -174,8 +181,9 @@
 .questionnaire-table td {
     padding: 0 12px;
     height: 50px;
-    font-size: 13px;
-    color: #333;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 18px;
+    color: #333333;
     border-bottom: 1px solid #CACACA;
     text-align: center;
     vertical-align: middle;
@@ -184,6 +192,12 @@
 .questionnaire-table td.no-cell {
     width: 88px;
     border-right: 1px solid #CACACA;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 200%;
+    letter-spacing: 0;
+    color: #333333;
 }
 
 /* 1-12번 질문 셀 (colSpan=2로 합쳐짐) */
@@ -191,6 +205,12 @@
     text-align: left;
     border-right: 1px solid #CACACA;
     padding-left: 16px;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 200%;
+    letter-spacing: 0;
+    color: #333333;
 }
 
 .questionnaire-table td.rating-cell {
@@ -210,9 +230,12 @@
     min-height: 50px;
     border: none;
     background: white;
-    color: #666;
-    font-size: 14px;
+    font-family: 'Pretendard', sans-serif;
     font-weight: 500;
+    font-size: 18px;
+    line-height: 200%;
+    letter-spacing: 0;
+    color: #333333;
     cursor: pointer;
     transition: all 0.2s ease;
     display: inline-flex;
@@ -239,6 +262,12 @@
     padding: 7px 20px;
     border-right: 1px solid #CACACA;
     box-sizing: border-box;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 200%;
+    letter-spacing: 0;
+    color: #333333;
 }
 
 /* 주관식 입력 셀 - 782 x 50 (colSpan=6: 348 + 86.8*5 = 782) */
