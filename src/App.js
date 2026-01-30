@@ -5,6 +5,7 @@ import IdentityCanvasScreen from "./screens/IdentityCanvasScreen";
 import PerformanceStreamScreen from "./screens/PerformanceStreamScreen";
 import QuickWinScreen from "./screens/QuickWinScreen";
 import BuildWinScreen from "./screens/BuildWinScreen";
+import ReportScreen from "./screens/ReportScreen";
 
 function App() {
     const [currentScreen, setCurrentScreen] = useState("start");
@@ -30,6 +31,8 @@ function App() {
             return <QuickWinScreen onNavigate={handleNavigate} />;
         case "buildwin":
             return <BuildWinScreen onNavigate={handleNavigate} />;
+        case "review":
+            return <ReportScreen onNavigate={handleNavigate} />;
         default:
             return <StartScreen onStart={handleStart} />;
     }
