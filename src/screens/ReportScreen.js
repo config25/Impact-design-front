@@ -1,3 +1,6 @@
+import { useRef, useState } from "react";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 import "./ReportScreen.css";
 import coverImage from "../resource/report/cover01.png";
 import polygonImage from "../resource/report/Polygon 1.png";
@@ -6,8 +9,47 @@ import shinhanLogo from "../resource/report/신한은행.png";
 import image7Bg from "../resource/report/Image 7.png";
 import polygon2Image from "../resource/report/Polygon 2.png";
 import unionImage from "../resource/report/union.png";
+import frame27Bg from "../resource/report/Frame 27.png";
+import polygon3Image from "../resource/report/Polygon 3.png";
 
 const ReportScreen = ({ onNavigate }) => {
+    const containerRef = useRef(null);
+    const [isExporting, setIsExporting] = useState(false);
+
+    const handleDownloadPDF = async () => {
+        if (!containerRef.current || isExporting) return;
+        setIsExporting(true);
+
+        try {
+            const pages = containerRef.current.querySelectorAll(".report-page");
+            const pdf = new jsPDF({
+                orientation: "portrait",
+                unit: "px",
+                format: [1000, 1415],
+            });
+
+            for (let i = 0; i < pages.length; i++) {
+                const canvas = await html2canvas(pages[i], {
+                    scale: 2,
+                    useCORS: true,
+                    backgroundColor: null,
+                    width: 1000,
+                    height: 1415,
+                });
+
+                const imgData = canvas.toDataURL("image/jpeg", 0.95);
+
+                if (i > 0) pdf.addPage([1000, 1415]);
+                pdf.addImage(imgData, "JPEG", 0, 0, 1000, 1415);
+            }
+
+            pdf.save("Impact_Report.pdf");
+        } catch (err) {
+            console.error("PDF export failed:", err);
+        } finally {
+            setIsExporting(false);
+        }
+    };
     const blueprintSteps = [
         {
             roman: "I",
@@ -44,7 +86,15 @@ const ReportScreen = ({ onNavigate }) => {
     ];
 
     return (
-        <div className="report-container">
+        <div className="report-container" ref={containerRef}>
+            <button
+                className="pdf-download-btn"
+                onClick={handleDownloadPDF}
+                disabled={isExporting}
+            >
+                {isExporting ? "PDF 생성 중..." : "PDF 다운로드"}
+            </button>
+
             {/* Page 1 - Cover */}
             <div className="report-page report-page-cover">
                 <img src={coverImage} alt="THE IMPACT REPORT" className="cover-image" />
@@ -122,9 +172,9 @@ const ReportScreen = ({ onNavigate }) => {
                     {/* Bottom Quote */}
                     <div className="p2-quote-box">
                         <p className="p2-quote-text">
-                            "우리는 눈앞의 성과(Tactical KPI)와 미래를 위한 체질(Strategic KAI)을 동시에 관리하여,
+                            "우리는 눈앞의 성과(<span className="p2-quote-bold">Tactical KPI</span>)와 미래를 위한 체질(<span className="p2-quote-bold">Strategic KAI</span>)을 동시에 관리하여,
                             <br />
-                            지속가능한 성과를 만드는 구조(Structure)를 설계합니다."
+                            지속가능한 성과를 만드는 구조(<span className="p2-quote-bold">Structure</span>)를 설계합니다."
                         </p>
                     </div>
                 </div>
@@ -178,6 +228,7 @@ const ReportScreen = ({ onNavigate }) => {
                     </p>
                 </div>
 
+                <img src={polygon3Image} alt="" className="p3-polygon3" />
                 <img src={polygon2Image} alt="" className="p3-polygon2" />
             </div>
 
@@ -398,6 +449,7 @@ const ReportScreen = ({ onNavigate }) => {
                     </p>
                 </div>
 
+                <img src={polygon3Image} alt="" className="p3-polygon3" />
                 <img src={polygon2Image} alt="" className="p3-polygon2" />
             </div>
 
@@ -591,6 +643,7 @@ const ReportScreen = ({ onNavigate }) => {
                     </p>
                 </div>
 
+                <img src={polygon3Image} alt="" className="p3-polygon3" />
                 <img src={polygon2Image} alt="" className="p3-polygon2" />
             </div>
 
@@ -642,8 +695,8 @@ const ReportScreen = ({ onNavigate }) => {
                     </div>
                 </div>
 
+                <div className="p9-triangle" style={{ top: '720px' }}></div>
                 <div className="p9-triangle" style={{ top: '733px' }}></div>
-                <div className="p9-triangle" style={{ top: '749px' }}></div>
 
                 <p className="p9-result-text p9-result-text2">
                     귀사 구성원들이 제안한 새로운 미래 방향성은 아래와 같습니다
@@ -1109,7 +1162,186 @@ const ReportScreen = ({ onNavigate }) => {
                     </p>
                 </div>
 
+                <img src={polygon3Image} alt="" className="p3-polygon3" />
                 <img src={polygon2Image} alt="" className="p3-polygon2" />
+            </div>
+
+            {/* Page 20 - Quick Win */}
+            <div className="report-page report-page-20">
+                <div className="p4-topbar">
+                    <img src={shinhanLogo} alt="신한은행" className="p4-bank-logo" />
+                    <span className="p4-confidential" style={{ color: '#8990A3' }}>Confidential &amp; Proprietary</span>
+                </div>
+
+                <div className="p4-section-header" style={{ backgroundImage: `linear-gradient(rgba(43,74,193,0.6), rgba(43,74,193,0.4)), url("${image7Bg}")` }}>
+                    IV. Quick &amp; Build Win(실행과제 제안과 평가)
+                </div>
+
+                <div className="p20-desc-box">
+                    <h3 className="p20-title">전술적 실행과제 (Quick Win)</h3>
+                    <p className="p20-desc-text">
+                        전술적 실행과제(Quick Win)는 즉시 실행하여 가시적인 성과를 창출할 수 있는 '단기적 실행과제'입니다. 빠르게 축적된 '작은 성공(Small Success)'의 경험을 통해 조직에 변화의 모멘텀을 만들고, 단기적인 전술적 성과지표(Tactical KPI) 달성을 견인할 수
+                        <br />
+                        있습니다.
+                    </p>
+                </div>
+
+                <div className="p10-info-bar p20-info-bar">
+                    <span className="p10-info-text">구성원들은 성과체질 개선을 위한 전략적 실행과제</span>
+                    <span className="p10-count-badge">12 개</span>
+                    <span className="p10-info-text">를 제시했습니다.</span>
+                </div>
+
+                <div className="p20-subtitle-row">
+                    <span className="p20-subtitle-left">[별첨 1] Quick Win Canvas(전술적 실행과제) 모음집</span>
+                    <span className="p20-subtitle-right">* 점수와 순위는 참여한 교육생들이 평가한 결과입니다</span>
+                </div>
+
+                <table className="p20-table">
+                    <colgroup>
+                        <col style={{ width: '245px' }} />
+                        <col style={{ width: '435px' }} />
+                        <col style={{ width: '100px' }} />
+                        <col style={{ width: '100px' }} />
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>과제명</th>
+                            <th>주요내용</th>
+                            <th>점수</th>
+                            <th>순위</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>프리미엄 판매 비중</td>
+                            <td className="p20-td-center">8% 향상</td>
+                            <td className="p20-td-center">85</td>
+                            <td className="p20-td-center">1</td>
+                        </tr>
+                        {Array.from({ length: 21 }, (_, i) => (
+                            <tr key={i}>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+
+                <div className="p2-footer">
+                    <span className="p2-footer-text">Powered by Quantum Edu Solution Methodology</span>
+                    <span className="p2-footer-page">20</span>
+                    <img src={logoImage} alt="QUANTUM EDU SOLUTION" className="p2-footer-logo" />
+                </div>
+            </div>
+
+            {/* Page 21 - Build Win */}
+            <div className="report-page report-page-20">
+                <div className="p4-topbar">
+                    <img src={shinhanLogo} alt="신한은행" className="p4-bank-logo" />
+                    <span className="p4-confidential" style={{ color: '#8990A3' }}>Confidential &amp; Proprietary</span>
+                </div>
+
+                <div className="p4-section-header" style={{ backgroundImage: `linear-gradient(rgba(43,74,193,0.6), rgba(43,74,193,0.4)), url("${image7Bg}")` }}>
+                    IV. Quick &amp; Build Win(실행과제 제안과 평가)
+                </div>
+
+                <div className="p20-desc-box">
+                    <h3 className="p20-title">전략적 실행과제 (Build Win)</h3>
+                    <p className="p20-desc-text">
+                        전략적 실행과제(Build Win)는 조직의 미래 경쟁력을 확보하기 위해 긴 호흡으로 추진해야 할 '중장기 혁신 과제'입니다.
+                        <br />
+                        성과창출 체질과 토양을 만드는 '견고한 구조'를 구축하여,
+                        <br />
+                        지속 가능한 성장의 토대를 마련합니다.
+                    </p>
+                </div>
+
+                <div className="p10-info-bar p20-info-bar">
+                    <span className="p10-info-text">구성원들은 성과체질 개선을 위한 전략적 실행과제</span>
+                    <span className="p10-count-badge">18 개</span>
+                    <span className="p10-info-text">를 제시했습니다.</span>
+                </div>
+
+                <div className="p20-subtitle-row">
+                    <span className="p20-subtitle-left">[별첨 2] Build Win Canvas(전략적 실행과제) 모음집</span>
+                    <span className="p20-subtitle-right">* 점수와 순위는 참여한 교육생들이 평가한 결과입니다</span>
+                </div>
+
+                <table className="p20-table">
+                    <colgroup>
+                        <col style={{ width: '245px' }} />
+                        <col style={{ width: '435px' }} />
+                        <col style={{ width: '100px' }} />
+                        <col style={{ width: '100px' }} />
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>과제명</th>
+                            <th>주요내용</th>
+                            <th>점수</th>
+                            <th>순위</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>프리미엄 판매 비중</td>
+                            <td className="p20-td-center">8% 향상</td>
+                            <td className="p20-td-center">85</td>
+                            <td className="p20-td-center">1</td>
+                        </tr>
+                        {Array.from({ length: 21 }, (_, i) => (
+                            <tr key={i}>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+
+                <div className="p2-footer">
+                    <span className="p2-footer-text">Powered by Quantum Edu Solution Methodology</span>
+                    <span className="p2-footer-page">21</span>
+                    <img src={logoImage} alt="QUANTUM EDU SOLUTION" className="p2-footer-logo" />
+                </div>
+            </div>
+
+            {/* Page 22 - Back Cover */}
+            <div className="report-page report-page-22">
+                <img src={frame27Bg} alt="" className="p22-bg" />
+                <img src={polygon3Image} alt="" className="p22-polygon3" />
+
+                <span className="p22-word p22-we">WE</span>
+                <span className="p22-word p22-build">BUILD</span>
+                <span className="p22-word p22-win">WIN</span>
+                <span className="p22-word p22-together">TOGETHER</span>
+
+                <p className="p22-quote">" 성과를 설계하는 전략적 파트너 "</p>
+
+                <div className="p22-divider"></div>
+
+                <img src={logoImage} alt="QUANTUM EDU SOLUTION" className="p22-logo" />
+
+                <div className="p22-contact-card">
+                    <p className="p22-director">Director :  김영천 Ph.D.</p>
+                    <p className="p22-contact">yckim@qtedu.kr &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; 02-6953-9788</p>
+                </div>
+
+                <img src={polygon2Image} alt="" className="p22-polygon2" />
+
+                <p className="p22-confidential">CONFIDENTIAL &amp; PROPRIETARY</p>
+                <p className="p22-notice">
+                    This document contains proprietary information and intellectual property of Quantum Edu Solution.
+                    <br />
+                    It is submitted to the client on a confidential basis and may not be reproduced, shared,
+                    <br />
+                    or distributed without prior written permission.
+                </p>
+                <p className="p22-copyright">Copyright © 2026 Quantum Edu Solution. All Rights Reserved.</p>
             </div>
         </div>
     );

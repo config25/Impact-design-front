@@ -16,6 +16,34 @@
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
+/* PDF Download Button */
+.pdf-download-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    padding: 12px 28px;
+    background: #2B4AC1;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: background 0.2s;
+}
+
+.pdf-download-btn:hover {
+    background: #1E3A9F;
+}
+
+.pdf-download-btn:disabled {
+    background: #999999;
+    cursor: not-allowed;
+}
+
 /* ==============================
    Page 1 - Cover
    ============================== */
@@ -76,11 +104,11 @@
 }
 
 .p2-transparent-boxes {
-    margin-top: 40px;
+    margin-top: 60px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 12px;
+    gap: 25px;
 }
 
 .p2-transparent-box {
@@ -113,10 +141,10 @@
 
 .p2-polygon {
     position: absolute;
-    width: 181px;
-    height: 167px;
-    top: 527px;
-    left: 836px;
+    width: 161px;
+    height: 137px;
+    top: 517px;
+    left: 841px;
     pointer-events: none;
 }
 
@@ -284,6 +312,12 @@
     color: #1a1a1a;
 }
 
+.p2-quote-bold {
+    font-weight: 700;
+    font-size: 20px;
+    color: #333333;
+}
+
 /* Footer */
 .p2-footer {
     position: absolute;
@@ -425,6 +459,18 @@
     color: #ACB1BD;
 }
 
+/* Polygon 3 decoration (top-right) */
+.p3-polygon3 {
+    position: absolute;
+    width: 176px;
+    height: 180px;
+    top: 80px;
+    left: 744px;
+    opacity: 0.4;
+    z-index: 1;
+    pointer-events: none;
+}
+
 /* Polygon 2 decoration */
 .p3-polygon2 {
     position: absolute;
@@ -479,7 +525,7 @@
     font-size: 16px;
     line-height: 100%;
     text-align: right;
-    color: #333333;
+    color: #8990A3;
 }
 
 /* --- Section header bar --- */
@@ -548,12 +594,12 @@
     height: 40px;
     padding: 8px 15px;
     border-radius: 4px;
-    background: #0DA5BD;
+    background: #2B3D80;
     font-family: 'Pretendard', sans-serif;
     font-weight: 700;
     font-size: 20px;
     line-height: 100%;
-    color: #FFFFFF;
+    color: #ECFF6D;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -691,6 +737,7 @@
 
 .p4-quad-active {
     background: #0DA5BD;
+    position: relative;
 }
 
 .p4-quad-inactive {
@@ -705,8 +752,11 @@
     display: flex;
     align-items: center;
     gap: 6px;
-    margin-bottom: 10px;
-    position: relative;
+    position: absolute;
+    top: 12.5px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
 }
 
 .p4-score-pill::after {
@@ -930,7 +980,7 @@
     width: 880px;
     height: 80px;
     margin-top: 28px;
-    background: #EBF0FFE5;
+    background: #2D4088;
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
     display: flex;
@@ -950,14 +1000,14 @@
     font-weight: 700;
     font-size: 29px;
     line-height: 100%;
-    color: #314A8F;
+    color: #ECFF6D;
 }
 
 .p4-type-sep {
     font-family: 'Pretendard', sans-serif;
     font-weight: 600;
     font-size: 21px;
-    color: #656D8A;
+    color: #FFFFFF;
 }
 
 .p4-type-korean {
@@ -965,7 +1015,7 @@
     font-weight: 600;
     font-size: 21px;
     line-height: 100%;
-    color: #656D8A;
+    color: #FFFFFF;
 }
 
 .p4-type-pill {
@@ -1817,4 +1867,328 @@
 
 .report-page-16 .p3-main-box {
     margin-top: 0;
+}
+
+/* ==============================
+   Page 20 - Quick Win
+   ============================== */
+.report-page-20 {
+    background: #F2F4FA;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.p20-desc-box {
+    width: 880px;
+    height: 172px;
+    margin-top: 2px;
+    background: #FFFFFF;
+    box-sizing: border-box;
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.p20-title {
+    margin: 0;
+    width: 267px;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    line-height: 100%;
+    text-align: center;
+    color: #333333;
+}
+
+.p20-desc-text {
+    margin: 0;
+    margin-top: 20px;
+    width: 840px;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 160%;
+    color: #666666;
+}
+
+.p20-info-bar {
+    margin-top: 25px;
+}
+
+.p20-subtitle-row {
+    width: 880px;
+    margin-top: 30px;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+}
+
+.p20-subtitle-left {
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 100%;
+    color: #333333;
+}
+
+.p20-subtitle-right {
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 100%;
+    text-align: right;
+    color: #666666;
+}
+
+/* Quick Win table */
+.p20-table {
+    width: 880px;
+    border-collapse: collapse;
+    table-layout: fixed;
+    margin-top: 20px;
+}
+
+.p20-table th {
+    background: #3D4359;
+    color: #FFFFFF;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 150%;
+    height: 45px;
+    text-align: center;
+    vertical-align: middle;
+    border-right: 1px solid #ACB1BD;
+}
+
+.p20-table th:last-child {
+    border-right: none;
+}
+
+.p20-table td {
+    height: 36px;
+    padding: 0 10px;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 150%;
+    vertical-align: middle;
+    border-right: 1px solid #ACB1BD;
+    border-bottom: 1px solid #ACB1BD;
+    color: #333333;
+    background: #FFFFFF;
+}
+
+.p20-table td:last-child {
+    border-right: none;
+}
+
+.p20-td-center {
+    text-align: center;
+}
+
+/* ==============================
+   Page 22 - Back Cover
+   ============================== */
+.report-page-22 {
+    background: #3D4359;
+    position: relative;
+    overflow: hidden;
+}
+
+.p22-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1000px;
+    height: 1415px;
+    object-fit: cover;
+    z-index: 0;
+}
+
+.p22-polygon3 {
+    position: absolute;
+    width: 176px;
+    height: 180px;
+    top: 80px;
+    left: 744px;
+    opacity: 0.4;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.p22-word {
+    position: absolute;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 700;
+    font-size: 60px;
+    line-height: 160%;
+    letter-spacing: 0.26em;
+    text-align: center;
+    text-transform: uppercase;
+    color: #FFFFFF;
+    z-index: 1;
+}
+
+.p22-we {
+    width: 111px;
+    top: 129px;
+    left: 446px;
+    opacity: 0.3;
+}
+
+.p22-build {
+    width: 234px;
+    top: 225px;
+    left: 384px;
+    opacity: 0.5;
+}
+
+.p22-win {
+    width: 150px;
+    top: 321px;
+    left: 426px;
+    opacity: 0.7;
+}
+
+.p22-together {
+    width: 426px;
+    top: 417px;
+    left: 288px;
+    opacity: 0.9;
+}
+
+.p22-quote {
+    position: absolute;
+    margin: 0;
+    top: 553px;
+    left: 326px;
+    width: 348px;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 400;
+    font-size: 26px;
+    line-height: 100%;
+    text-align: center;
+    color: #FFFFFF;
+    z-index: 1;
+}
+
+.p22-divider {
+    position: absolute;
+    top: 620px;
+    left: 500px;
+    width: 1px;
+    height: 30px;
+    background: none;
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+    z-index: 1;
+}
+
+.p22-logo {
+    position: absolute;
+    width: 240px;
+    height: 55px;
+    top: 683px;
+    left: 380px;
+    z-index: 1;
+}
+
+.p22-contact-card {
+    position: absolute;
+    width: 470px;
+    height: 139px;
+    top: 809px;
+    left: 265px;
+    border-radius: 61px;
+    backdrop-filter: blur(84px);
+    -webkit-backdrop-filter: blur(84px);
+    background: rgba(255, 255, 255, 0.05);
+    opacity: 0.9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    z-index: 1;
+}
+
+.p22-director {
+    margin: 0;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    line-height: 160%;
+    text-align: center;
+    color: #FFFFFF;
+}
+
+.p22-contact {
+    margin: 0;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 160%;
+    text-align: center;
+    color: #FFFFFF;
+}
+
+.p22-polygon2 {
+    position: absolute;
+    width: 125px;
+    height: 175px;
+    bottom: 127px;
+    left: -2px;
+    opacity: 0.4;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.p22-confidential {
+    position: absolute;
+    margin: 0;
+    top: 1148px;
+    left: 385px;
+    width: 231px;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 160%;
+    text-align: center;
+    color: #FFFFFF;
+    opacity: 0.6;
+    z-index: 1;
+}
+
+.p22-notice {
+    position: absolute;
+    margin: 0;
+    top: 1200px;
+    left: 191px;
+    width: 619px;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 160%;
+    text-align: center;
+    color: #FFFFFF;
+    opacity: 0.4;
+    z-index: 1;
+}
+
+.p22-copyright {
+    position: absolute;
+    margin: 0;
+    top: 1290px;
+    left: 293px;
+    width: 415px;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 160%;
+    text-align: center;
+    color: #FFFFFF;
+    opacity: 0.4;
+    z-index: 1;
 }
