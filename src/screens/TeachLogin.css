@@ -1,0 +1,193 @@
+.tl-screen {
+    min-height: 100vh;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tl-overlay {
+    width: 100%;
+    min-height: 100vh;
+    background: rgba(55, 65, 100, 0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tl-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: -60px;
+}
+
+.tl-title {
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 700;
+    font-size: 50px;
+    line-height: 100%;
+    letter-spacing: 0;
+    text-align: center;
+    color: #FFFFFF;
+    margin: 0 0 20px 0;
+}
+
+.tl-subtitle {
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 300;
+    font-size: 20px;
+    line-height: 100%;
+    letter-spacing: 0;
+    text-align: center;
+    color: #FFFFFF;
+    margin: 0 0 60px 0;
+}
+
+/* 강사 로그인 탭 */
+.tl-tab-row {
+    width: 500px;
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+.tl-tab-active {
+    width: 113px;
+    height: 39px;
+    border-radius: 2px;
+    background: #292929;
+    padding: 10px 20px;
+    box-sizing: border-box;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 100%;
+    letter-spacing: 0;
+    text-align: center;
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 카드 */
+.tl-card {
+    width: 500px;
+    border-radius: 4px;
+    background: #20494199;
+    box-shadow: 0px 0px 54px 0px #1E2136B2;
+    box-sizing: border-box;
+    padding: 43px 50px 50px 50px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 입력 필드 그룹 */
+.tl-field {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+}
+
+.tl-label {
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 170%;
+    letter-spacing: 0;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 6px;
+}
+
+.tl-input {
+    width: 400px;
+    height: 51px;
+    border-radius: 4px;
+    background: #FFFFFF;
+    border: none;
+    padding: 12px 20px 12px 15px;
+    box-sizing: border-box;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 170%;
+    letter-spacing: 0;
+    color: #111111;
+    outline: none;
+}
+
+.tl-input::placeholder {
+    color: #A3A3A3;
+}
+
+/* 에러 메시지 */
+.tl-error-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.tl-error-dot {
+    width: 15px;
+    height: 16px;
+    border-radius: 10px;
+    background: #FF3969;
+    flex-shrink: 0;
+}
+
+.tl-error-text {
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 170%;
+    letter-spacing: 0;
+    color: #FF3969;
+}
+
+/* LOGIN 버튼 */
+.tl-btn-login {
+    width: 400px;
+    height: 58px;
+    border-radius: 4px;
+    background: #25AEA7;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 100%;
+    letter-spacing: 0;
+    color: #FAFAFA;
+    transition: opacity 0.2s ease;
+}
+
+.tl-btn-login:hover {
+    opacity: 0.85;
+}
+
+@media (max-width: 768px) {
+    .tl-title {
+        font-size: 32px;
+    }
+
+    .tl-subtitle {
+        font-size: 14px;
+        margin-bottom: 40px;
+    }
+
+    .tl-tab-row,
+    .tl-card {
+        width: 90vw;
+    }
+
+    .tl-input,
+    .tl-btn-login {
+        width: 100%;
+    }
+}

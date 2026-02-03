@@ -11,6 +11,7 @@ import polygon2Image from "../resource/report/Polygon 2.png";
 import unionImage from "../resource/report/union.png";
 import frame27Bg from "../resource/report/Frame 27.png";
 import polygon3Image from "../resource/report/Polygon 3.png";
+import longunionImg from "../resource/report/longunion.png";
 
 const ReportScreen = ({ onNavigate }) => {
     const containerRef = useRef(null);
@@ -252,139 +253,135 @@ const ReportScreen = ({ onNavigate }) => {
                     </p>
                 </div>
 
-                {/* Result line */}
-                <div className="p4-result-line">
-                    <span className="p4-result-text">귀사 구성원들이 바라보는 조직의 성과창출 스타일은</span>
-                    <span className="p4-result-badge">Burnout Runner</span>
-                    <span className="p4-result-text">입니다.</span>
+                {/* Blue divider line */}
+                <div className="p4-divider-line"></div>
+
+                {/* Result box */}
+                <div className="p4-result-box">
+                    <span className="p4-result-subtitle">귀사 구성원들이 바라보는 조직의 성과창출 스타일은</span>
+                    <div className="p4-result-title-row">
+                        <span className="p4-result-name">Burnout Runner</span>
+                        <span className="p4-result-korean">(지쳐가는 러너)</span>
+                    </div>
+                    <span className="p4-result-tagline">높은 성과 '인식'과 취약한 '기반'의 딜레마</span>
                 </div>
 
-                {/* Chart & Table box */}
-                <div className="p4-chart-box">
-                    {/* Matrix chart */}
-                    <div className="p4-matrix-area">
-                        <div className="p4-y-label">
-                            성과 창출력 (성과목표, 실행력)
-                        </div>
-                        <div className="p4-chart-inner">
-                            <div className="p4-axes-wrap">
-                                <span className="p4-y-high">High</span>
-                                <div className="p4-quad-grid">
-                                    {/* TL - Active */}
-                                    <div className="p4-quad p4-quad-active">
-                                        <div className="p4-score-pill">
-                                            <span className="p4-score-num">3.75</span>
-                                            <span className="p4-score-sep">|</span>
-                                            <span className="p4-score-num">2.50</span>
+                {/* Main box (chart + analysis) */}
+                <div className="p4-main-box">
+                    {/* Arrow images */}
+                    <img src={longunionImg} alt="" className="p4-arrow-img-y" />
+                    <img src={longunionImg} alt="" className="p4-arrow-img-x" />
+
+                    {/* Chart area */}
+                    <div className="p4-chart-area">
+                        {/* Matrix chart */}
+                        <div className="p4-matrix-section">
+                            <div className="p4-y-label">
+                                성과 창출력 (성과목표, 실행력)
+                            </div>
+                            <div className="p4-chart-inner">
+                                <div className="p4-axes-wrap">
+                                    <span className="p4-y-high">High</span>
+                                    <div className="p4-quad-grid">
+                                        {/* TL - Active (1사분면) */}
+                                        <div className="p4-quad p4-quad-active">
+                                            <strong className="p4-quad-name-w">Burnout Runner</strong>
+                                            <span className="p4-quad-sub-w">(지쳐가는 러너)</span>
+                                            <div className="p4-score-pill-new">
+                                                <span className="p4-pill-yellow">성과 창출력 : 3.75</span>
+                                            </div>
+                                            <div className="p4-score-pill-new">
+                                                <span className="p4-pill-green">미래 경쟁력 : 2.50</span>
+                                            </div>
                                         </div>
-                                        <strong className="p4-quad-name-w">Burnout Runner</strong>
-                                        <span className="p4-quad-sub-w">(지쳐가는 러너)</span>
+                                        {/* TR */}
+                                        <div className="p4-quad p4-quad-inactive">
+                                            <strong className="p4-quad-name-g">Impact Player</strong>
+                                            <span className="p4-quad-sub-g">(지속가능한 리더)</span>
+                                        </div>
+                                        {/* BL */}
+                                        <div className="p4-quad p4-quad-inactive">
+                                            <strong className="p4-quad-name-g">Survival Walker</strong>
+                                            <span className="p4-quad-sub-g">(생존형 보행자)</span>
+                                        </div>
+                                        {/* BR */}
+                                        <div className="p4-quad p4-quad-inactive">
+                                            <strong className="p4-quad-name-g">Idle Dreamer</strong>
+                                            <span className="p4-quad-sub-g">(잠자는 몽상가)</span>
+                                        </div>
                                     </div>
-                                    {/* TR */}
-                                    <div className="p4-quad p4-quad-inactive">
-                                        <strong className="p4-quad-name-g">Impact Player</strong>
-                                        <span className="p4-quad-sub-g">(지속가능한 리더)</span>
-                                    </div>
-                                    {/* BL */}
-                                    <div className="p4-quad p4-quad-inactive">
-                                        <strong className="p4-quad-name-g">Survival Walker</strong>
-                                        <span className="p4-quad-sub-g">(생존형 보행자)</span>
-                                    </div>
-                                    {/* BR */}
-                                    <div className="p4-quad p4-quad-inactive">
-                                        <strong className="p4-quad-name-g">Idle Dreamer</strong>
-                                        <span className="p4-quad-sub-g">(잠자는 몽상가)</span>
-                                    </div>
+                                    <span className="p4-y-low">Low</span>
+                                    <span className="p4-x-high">High</span>
                                 </div>
-                                <span className="p4-y-low">Low</span>
-                                <span className="p4-x-high">High</span>
+                                <div className="p4-x-label-row">
+                                    <span className="p4-x-label-text">미래 경쟁력 (아이덴티티, 시스템)</span>
+                                </div>
                             </div>
-                            <div className="p4-x-label-row">
-                                <span className="p4-x-label-text">미래 경쟁력 (아이덴티티, 시스템)</span>
-                            </div>
+                        </div>
+
+                        {/* Score table */}
+                        <div className="p4-table-wrap">
+                        <table className="p4-score-table">
+                            <colgroup>
+                                <col style={{ width: '27%' }} />
+                                <col style={{ width: '27%' }} />
+                                <col style={{ width: '20%' }} />
+                                <col style={{ width: '12%' }} />
+                                <col style={{ width: '14%' }} />
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th colSpan={2} className="p4-th-border">구분</th>
+                                    <th className="p4-th-border">요인</th>
+                                    <th colSpan={2}>Score</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td rowSpan={2} className="p4-td-category">
+                                        성과 창출력<br />(CP, Current Performan<br />ce)
+                                    </td>
+                                    <td rowSpan={2} className="p4-td-factor">
+                                        현재 성과 창출에 대한 인식
+                                    </td>
+                                    <td className="p4-td-item">성과목표</td>
+                                    <td className="p4-td-score">3.5</td>
+                                    <td rowSpan={2} className="p4-td-avg p4-td-avg-yellow">3.75</td>
+                                </tr>
+                                <tr>
+                                    <td className="p4-td-item">실행력</td>
+                                    <td className="p4-td-score">4.0</td>
+                                </tr>
+                                <tr>
+                                    <td rowSpan={2} className="p4-td-category p4-td-category-last">
+                                        미래 경쟁력<br />(FC, Future Competitive<br />ness)
+                                    </td>
+                                    <td rowSpan={2} className="p4-td-factor p4-td-factor-last">
+                                        미래 성과 창출에 대한 인식
+                                    </td>
+                                    <td className="p4-td-item">아이덴티티</td>
+                                    <td className="p4-td-score">2.5</td>
+                                    <td rowSpan={2} className="p4-td-avg p4-td-avg-green">2.50</td>
+                                </tr>
+                                <tr>
+                                    <td className="p4-td-item p4-td-item-last">시스템</td>
+                                    <td className="p4-td-score p4-td-score-last">2.5</td>
+                                </tr>
+                            </tbody>
+                        </table>
                         </div>
                     </div>
 
-                    {/* Score table */}
-                    <div className="p4-table-wrap">
-                    <table className="p4-score-table">
-                        <colgroup>
-                            <col style={{ width: '27%' }} />
-                            <col style={{ width: '27%' }} />
-                            <col style={{ width: '20%' }} />
-                            <col style={{ width: '12%' }} />
-                            <col style={{ width: '14%' }} />
-                        </colgroup>
-                        <thead>
-                            <tr>
-                                <th colSpan={2} className="p4-th-border">구분</th>
-                                <th className="p4-th-border">요인</th>
-                                <th colSpan={2}>Score</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td rowSpan={2} className="p4-td-category">
-                                    성과 창출력<br />(CP, Current Performan<br />ce)
-                                </td>
-                                <td rowSpan={2} className="p4-td-factor">
-                                    현재 성과 창출에 대한 인식
-                                </td>
-                                <td className="p4-td-item">성과목표</td>
-                                <td className="p4-td-score">3.5</td>
-                                <td rowSpan={2} className="p4-td-avg">3.75</td>
-                            </tr>
-                            <tr>
-                                <td className="p4-td-item">실행력</td>
-                                <td className="p4-td-score">4.0</td>
-                            </tr>
-                            <tr>
-                                <td rowSpan={2} className="p4-td-category p4-td-category-last">
-                                    미래 경쟁력<br />(FC, Future Competitive<br />ness)
-                                </td>
-                                <td rowSpan={2} className="p4-td-factor p4-td-factor-last">
-                                    미래 성과 창출에 대한 인식
-                                </td>
-                                <td className="p4-td-item">아이덴티티</td>
-                                <td className="p4-td-score">2.5</td>
-                                <td rowSpan={2} className="p4-td-avg">2.50</td>
-                            </tr>
-                            <tr>
-                                <td className="p4-td-item p4-td-item-last">시스템</td>
-                                <td className="p4-td-score p4-td-score-last">2.5</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    </div>
-                </div>
-
-                {/* Type header */}
-                <div className="p4-type-header">
-                    <div className="p4-type-title-group">
-                        <span className="p4-type-name">Burnout Runner</span>
-                        <span className="p4-type-sep">&nbsp;|&nbsp;</span>
-                        <span className="p4-type-korean">지쳐가는 러너</span>
-                    </div>
-                    <div className="p4-type-pill">
-                        높은 성과 '인식'과 취약한 '기반'의 딜레마
-                    </div>
-                </div>
-
-                {/* Analysis box */}
-                <div className="p4-analysis-box">
-                    {/* 진단 row */}
-                    <div className="p4-analysis-row">
-                        <div className="p4-label p4-label-diag">진단</div>
-                        <div className="p4-analysis-content">
+                    {/* Analysis area */}
+                    <div className="p4-analysis-area">
+                        <div className="p4-analysis-badge p4-badge-diag">진단</div>
+                        <div className="p4-analysis-content-box">
                             <p className="p4-analysis-text">
                                 구성원들은 현재 조직의 성과 창출 수준을 매우 높게 '인식(Perception)'하고 있습니다. 그러나 이는 탄탄한 시스템이나 명확한 목표 의식에 기반한 것이 아니라, 단순히 "우리는 열심히 하고 있다"는 주관적 자신감일 가능성이 큽니다. 지속가능한 성과 창출 시스템이 빈약하다고 판단하고 있기 때문에, 작은 환경 변화에도 그 자신감이 쉽게 무너질 수 있는 구조적 취약성을 안고 있습니다.
                             </p>
                         </div>
-                    </div>
-                    {/* 솔루션 row */}
-                    <div className="p4-analysis-row">
-                        <div className="p4-label p4-label-sol">솔루션</div>
-                        <div className="p4-analysis-content">
+                        <div className="p4-analysis-badge p4-badge-sol">솔루션</div>
+                        <div className="p4-analysis-content-box">
                             <p className="p4-analysis-text">
                                 <span className="p4-analysis-bold">
                                     지금 필요한 것은 막연한 '열심'이 아니라, 성공을 담아낼 그릇인 '시스템'입니다.

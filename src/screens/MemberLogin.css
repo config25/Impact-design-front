@@ -1,0 +1,193 @@
+.ml-screen {
+    min-height: 100vh;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ml-overlay {
+    width: 100%;
+    min-height: 100vh;
+    background: rgba(55, 65, 100, 0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ml-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: -60px;
+}
+
+.ml-title {
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 700;
+    font-size: 50px;
+    line-height: 100%;
+    letter-spacing: 0;
+    text-align: center;
+    color: #FFFFFF;
+    margin: 0 0 20px 0;
+}
+
+.ml-subtitle {
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 300;
+    font-size: 20px;
+    line-height: 100%;
+    letter-spacing: 0;
+    text-align: center;
+    color: #FFFFFF;
+    margin: 0 0 60px 0;
+}
+
+/* 회원 로그인 탭 */
+.ml-tab-row {
+    width: 500px;
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+.ml-tab-active {
+    width: 113px;
+    height: 39px;
+    border-radius: 2px;
+    background: #292929;
+    padding: 10px 20px;
+    box-sizing: border-box;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 100%;
+    letter-spacing: 0;
+    text-align: center;
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 로그인 카드 */
+.ml-card {
+    width: 500px;
+    border-radius: 4px;
+    background: #0D103199;
+    box-shadow: 0px 0px 54px 0px #1E2136B2;
+    box-sizing: border-box;
+    padding: 43px 50px 50px 50px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 입력 필드 그룹 */
+.ml-field {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+}
+
+.ml-label {
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 170%;
+    letter-spacing: 0;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 6px;
+}
+
+.ml-input {
+    width: 400px;
+    height: 51px;
+    border-radius: 4px;
+    background: #FFFFFF;
+    border: none;
+    padding: 12px 20px 12px 15px;
+    box-sizing: border-box;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 170%;
+    letter-spacing: 0;
+    color: #111111;
+    outline: none;
+}
+
+.ml-input::placeholder {
+    color: #A3A3A3;
+}
+
+/* 에러 메시지 */
+.ml-error-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.ml-error-dot {
+    width: 15px;
+    height: 16px;
+    border-radius: 10px;
+    background: #FF3969;
+    flex-shrink: 0;
+}
+
+.ml-error-text {
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 170%;
+    letter-spacing: 0;
+    color: #FF3969;
+}
+
+/* LOGIN 버튼 */
+.ml-btn-login {
+    width: 400px;
+    height: 58px;
+    border-radius: 4px;
+    background: #3D49BE;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 100%;
+    letter-spacing: 0;
+    color: #FAFAFA;
+    transition: opacity 0.2s ease;
+}
+
+.ml-btn-login:hover {
+    opacity: 0.85;
+}
+
+@media (max-width: 768px) {
+    .ml-title {
+        font-size: 32px;
+    }
+
+    .ml-subtitle {
+        font-size: 14px;
+        margin-bottom: 40px;
+    }
+
+    .ml-tab-row,
+    .ml-card {
+        width: 90vw;
+    }
+
+    .ml-input,
+    .ml-btn-login {
+        width: 100%;
+    }
+}
