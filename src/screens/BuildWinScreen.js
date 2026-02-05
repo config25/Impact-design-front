@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import GNB from "../components/common/GNB";
 import "./BuildWinScreen.css";
 import shinhanLogo from "../resource/flow/신한은행.png";
@@ -6,6 +6,7 @@ import component1 from "../resource/build/Component 1.png";
 import vector3 from "../resource/build/Vector 3.png";
 import pencil2 from "../resource/quick/pencil2.png";
 import pencil from "../resource/start/pencil.png";
+import { getBuildWinCanvas, saveBuildWinCanvas } from "../services/buildWinCanvasService";
 
 const BuildWinScreen = ({ onNavigate }) => {
     // Editable fields state
@@ -30,6 +31,64 @@ const BuildWinScreen = ({ onNavigate }) => {
 
     // Editing state
     const [editing, setEditing] = useState(null);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const result = await getBuildWinCanvas();
+            if (result.success && result.data) {
+                const d = result.data;
+                setAlignment(d.strategicGoal || "");
+                setTaskName(d.taskName || "");
+                setTaskContent(d.taskDescription || "");
+                setTriggerSignal(d.crisisSignal || "");
+                setPainPoint(d.painTouchPoint || "");
+
+                if (d.teamwork) {
+                    setTeamwork(d.teamwork.activityTeamwork || "");
+                    setOutput(d.teamwork.workType || "");
+                }
+
+                const inputs = d.taskInputs || [];
+                const activities = d.taskActivities || [];
+                const cells = Array(5).fill(null).map((_, i) => [
+                    inputs[i]?.resourceName || "",
+                    inputs[i]?.quantity != null ? String(inputs[i].quantity) : "",
+                    activities[i]?.processStep || "",
+                    activities[i]?.activityContent || "",
+                    activities[i]?.duration || "",
+                ]);
+                setTableCells(cells);
+
+                const taskOutcomes = d.taskOutcomes || [];
+                const qual = ["", "", ""];
+                const quant = ["", "", ""];
+                taskOutcomes.forEach((o) => {
+                    if (o.outcomeType === "QUALITATIVE") {
+                        const idx = o.orderNo - 1;
+                        if (idx >= 0 && idx < 3) qual[idx] = o.outcomeContent || "";
+                    } else if (o.outcomeType === "QUANTITATIVE") {
+                        const idx = o.orderNo - 4;
+                        if (idx >= 0 && idx < 3) quant[idx] = o.outcomeContent || "";
+                    }
+                });
+                setOutcomes({ qualitative: qual, quantitative: quant });
+            }
+        };
+        fetchData();
+    }, []);
+
+    const handleSave = async () => {
+        const result = await saveBuildWinCanvas({
+            strategicGoal: alignment, taskName, taskContent,
+            crisisSignal: triggerSignal, painPoint, tableCells,
+            teamwork, output, outcomes,
+        });
+        if (result.success) {
+            alert("저장되었습니다.");
+        } else {
+            alert(result.message);
+        }
+    };
 
     const handleEdit = (field) => {
         setEditing(field);
@@ -73,7 +132,7 @@ const BuildWinScreen = ({ onNavigate }) => {
                         <img src={pencil2} alt="" className="pencil-icon" />
                         <span className="tips-text"><span className="tips-text-bold">작성 Tips</span><span className="tips-text-regular">를 확인해보세요!</span></span>
                     </button>
-                    <button className="save-button">저장</button>
+                    <button className="save-button" onClick={handleSave}>저장</button>
                     <button className="submit-button">제출완료</button>
                 </div>
             </div>

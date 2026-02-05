@@ -1,3 +1,14 @@
+.report-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 24px;
+    color: #2B4AC1;
+    background-color: #e0e0e0;
+}
+
 .report-container {
     display: flex;
     flex-direction: column;

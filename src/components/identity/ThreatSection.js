@@ -1,38 +1,12 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import pencilIcon from "../../resource/identity/pencil.png";
 import polygon3 from "../../resource/identity/Polygon 3.png";
 import polygon2 from "../../resource/identity/Polygon 2.png";
+import { IdentityCanvasContext } from "../../contexts/IdentityCanvasContext";
 
 const ThreatSection = () => {
     const [editingCard, setEditingCard] = useState(null);
-    const [threatValues, setThreatValues] = useState({
-        macro: "",
-        tech: "",
-        customer: "",
-        competitor: ""
-    });
-    const [internalValues, setInternalValues] = useState({
-        capability: "",
-        culture: "",
-        structure: "",
-        etc: ""
-    });
-
-    const handleThreatEdit = (key) => {
-        setEditingCard(`threat-${key}`);
-    };
-
-    const handleInternalEdit = (key) => {
-        setEditingCard(`internal-${key}`);
-    };
-
-    const handleThreatChange = (key, value) => {
-        setThreatValues(prev => ({ ...prev, [key]: value }));
-    };
-
-    const handleInternalChange = (key, value) => {
-        setInternalValues(prev => ({ ...prev, [key]: value }));
-    };
+    const { values, updateField } = useContext(IdentityCanvasContext);
 
     const handleBlur = () => {
         setEditingCard(null);
@@ -46,7 +20,7 @@ const ThreatSection = () => {
 
     const renderThreatCard = (key, title, question) => {
         const isEditing = editingCard === `threat-${key}`;
-        const value = threatValues[key];
+        const value = values[key];
 
         return (
             <div className="threat-card">
@@ -56,14 +30,14 @@ const ThreatSection = () => {
                         <textarea
                             className="editable-input"
                             value={value}
-                            onChange={(e) => handleThreatChange(key, e.target.value)}
+                            onChange={(e) => updateField(key, e.target.value)}
                             onBlur={handleBlur}
                             onKeyDown={handleKeyDown}
                             autoFocus
                             placeholder="내용을 입력하세요"
                         />
                     ) : value ? (
-                        <div className="input-value" onClick={() => handleThreatEdit(key)}>
+                        <div className="input-value" onClick={() => setEditingCard(`threat-${key}`)}>
                             {value}
                         </div>
                     ) : (
@@ -75,7 +49,7 @@ const ThreatSection = () => {
                                 src={pencilIcon}
                                 alt=""
                                 className="pencil-icon"
-                                onClick={() => handleThreatEdit(key)}
+                                onClick={() => setEditingCard(`threat-${key}`)}
                             />
                         </>
                     )}
@@ -86,7 +60,7 @@ const ThreatSection = () => {
 
     const renderInternalCard = (key, title, question) => {
         const isEditing = editingCard === `internal-${key}`;
-        const value = internalValues[key];
+        const value = values[key];
 
         return (
             <div className="internal-card">
@@ -96,14 +70,14 @@ const ThreatSection = () => {
                         <textarea
                             className="editable-input"
                             value={value}
-                            onChange={(e) => handleInternalChange(key, e.target.value)}
+                            onChange={(e) => updateField(key, e.target.value)}
                             onBlur={handleBlur}
                             onKeyDown={handleKeyDown}
                             autoFocus
                             placeholder="내용을 입력하세요"
                         />
                     ) : value ? (
-                        <div className="input-value" onClick={() => handleInternalEdit(key)}>
+                        <div className="input-value" onClick={() => setEditingCard(`internal-${key}`)}>
                             {value}
                         </div>
                     ) : (
@@ -117,7 +91,7 @@ const ThreatSection = () => {
                                 src={pencilIcon}
                                 alt=""
                                 className="pencil-icon"
-                                onClick={() => handleInternalEdit(key)}
+                                onClick={() => setEditingCard(`internal-${key}`)}
                             />
                         </>
                     )}

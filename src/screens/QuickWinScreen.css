@@ -544,6 +544,7 @@
 .main-table .input-cell {
     background: #FFFFFF;
     height: 46px;
+    font-size: 18px;
 }
 
 /* 위기의 신호 셀 - 2행 span, 90px 높이 */

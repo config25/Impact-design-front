@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import GNB from "../components/common/GNB";
 import "./PerformanceStreamScreen.css";
 import shinhanLogo from "../resource/flow/신한은행.png";
@@ -6,13 +6,14 @@ import component1 from "../resource/flow/Component 1.png";
 import vector3 from "../resource/flow/Vector 3.png";
 import pencil2 from "../resource/quick/pencil2.png";
 import pencilIcon from "../resource/identity/pencil.png";
+import { getFlowCanvas, saveFlowCanvas } from "../services/flowCanvasService";
 
 const PerformanceStreamScreen = ({ onNavigate }) => {
     // Goal cards state
     const [goalCards, setGoalCards] = useState([
-        { title: "", content: "" },
-        { title: "", content: "" },
-        { title: "", content: "" }
+        { goalId: null, title: "", content: "" },
+        { goalId: null, title: "", content: "" },
+        { goalId: null, title: "", content: "" }
     ]);
     const [editingGoal, setEditingGoal] = useState(null); // { index, field: 'title' | 'content' }
 
@@ -44,19 +45,83 @@ const PerformanceStreamScreen = ({ onNavigate }) => {
 
     // Tactical Performance tables state (3 tables x 3 rows)
     const [tacticalTables, setTacticalTables] = useState([
-        [{ indicator: "", target: "" }, { indicator: "", target: "" }, { indicator: "", target: "" }],
-        [{ indicator: "", target: "" }, { indicator: "", target: "" }, { indicator: "", target: "" }],
-        [{ indicator: "", target: "" }, { indicator: "", target: "" }, { indicator: "", target: "" }]
+        [{ metricId: null, indicator: "", target: "" }, { metricId: null, indicator: "", target: "" }, { metricId: null, indicator: "", target: "" }],
+        [{ metricId: null, indicator: "", target: "" }, { metricId: null, indicator: "", target: "" }, { metricId: null, indicator: "", target: "" }],
+        [{ metricId: null, indicator: "", target: "" }, { metricId: null, indicator: "", target: "" }, { metricId: null, indicator: "", target: "" }]
     ]);
 
     // Strategic Activity tables state (3 tables x 3 rows)
     const [strategicTables, setStrategicTables] = useState([
-        [{ indicator: "", target: "" }, { indicator: "", target: "" }, { indicator: "", target: "" }],
-        [{ indicator: "", target: "" }, { indicator: "", target: "" }, { indicator: "", target: "" }],
-        [{ indicator: "", target: "" }, { indicator: "", target: "" }, { indicator: "", target: "" }]
+        [{ activityId: null, indicator: "", target: "" }, { activityId: null, indicator: "", target: "" }, { activityId: null, indicator: "", target: "" }],
+        [{ activityId: null, indicator: "", target: "" }, { activityId: null, indicator: "", target: "" }, { activityId: null, indicator: "", target: "" }],
+        [{ activityId: null, indicator: "", target: "" }, { activityId: null, indicator: "", target: "" }, { activityId: null, indicator: "", target: "" }]
     ]);
 
     const [editingMetric, setEditingMetric] = useState(null); // { type, tableIndex, rowIndex, field }
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const result = await getFlowCanvas();
+            if (result.success && result.data?.goals?.length) {
+                const goals = result.data.goals;
+
+                setGoalCards(goals.map((g) => ({
+                    goalId: g.goalId || null,
+                    title: g.goalTitle || "",
+                    content: g.goalDescription || "",
+                })));
+
+                setTacticalTables(goals.map((g) =>
+                    (g.tacticals || []).map((t) => ({
+                        metricId: t.metricId || null,
+                        indicator: t.tacticalMetric || "",
+                        target: t.tacticalGoal || "",
+                    }))
+                ));
+
+                setStrategicTables(goals.map((g) =>
+                    (g.strategicActivities || []).map((a) => ({
+                        activityId: a.activityId || null,
+                        indicator: a.activityMetric || "",
+                        target: a.interCriteria || "",
+                    }))
+                ));
+            }
+        };
+        fetchData();
+    }, []);
+
+    const handleSave = async () => {
+        const result = await saveFlowCanvas(goalCards, tacticalTables, strategicTables);
+        if (result.success) {
+            // 저장 후 응답의 ID를 반영하여 다음 저장 시 update 되도록 함
+            if (result.data?.goals?.length) {
+                const goals = result.data.goals;
+                setGoalCards(goals.map((g) => ({
+                    goalId: g.goalId || null,
+                    title: g.goalTitle || "",
+                    content: g.goalDescription || "",
+                })));
+                setTacticalTables(goals.map((g) =>
+                    (g.tacticals || []).map((t) => ({
+                        metricId: t.metricId || null,
+                        indicator: t.tacticalMetric || "",
+                        target: t.tacticalGoal || "",
+                    }))
+                ));
+                setStrategicTables(goals.map((g) =>
+                    (g.strategicActivities || []).map((a) => ({
+                        activityId: a.activityId || null,
+                        indicator: a.activityMetric || "",
+                        target: a.interCriteria || "",
+                    }))
+                ));
+            }
+            alert("저장되었습니다.");
+        } else {
+            alert(result.message);
+        }
+    };
 
     const handleMetricEdit = (type, tableIndex, rowIndex, field) => {
         setEditingMetric({ type, tableIndex, rowIndex, field });
@@ -104,7 +169,7 @@ const PerformanceStreamScreen = ({ onNavigate }) => {
                             <span className="tips-text-regular">를 확인해보세요!</span>
                         </span>
                     </button>
-                    <button className="save-button">저장</button>
+                    <button className="save-button" onClick={handleSave}>저장</button>
                     <button className="submit-button">제출완료</button>
                 </div>
             </div>

@@ -1,19 +1,40 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import "./MemberLogin.css";
 import backgroundImage from "../resource/start/background.jpg";
+import { login } from "../services/authService";
+import { AuthContext } from "../contexts/AuthContext";
 
 const MemberLogin = ({ onLogin }) => {
     const [id, setId] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
 
-    const handleLogin = () => {
+    const { saveTokens } = useContext(AuthContext);
+
+    const handleLogin = async () => {
         if (!id || !password) {
-            setError("패스워드가 일치하지 않습니다.");
+            setError("아이디와 패스워드를 입력해주세요.");
             return;
         }
+
         setError("");
-        onLogin();
+        setLoading(true);
+
+        try {
+            const result = await login(id, password);
+
+            if (result.success) {
+                saveTokens(result.accessToken, result.refreshToken);
+                onLogin();
+            } else {
+                setError(result.message);
+            }
+        } catch (e) {
+            setError("서버와 통신에 실패했습니다.");
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -62,8 +83,12 @@ const MemberLogin = ({ onLogin }) => {
                             </div>
                         )}
 
-                        <button className="ml-btn-login" onClick={handleLogin}>
-                            LOGIN
+                        <button
+                            className="ml-btn-login"
+                            onClick={handleLogin}
+                            disabled={loading}
+                        >
+                            {loading ? "로그인 중..." : "LOGIN"}
                         </button>
                     </div>
                 </div>

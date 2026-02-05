@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import "./ReportScreen.css";
@@ -12,10 +12,126 @@ import unionImage from "../resource/report/union.png";
 import frame27Bg from "../resource/report/Frame 27.png";
 import polygon3Image from "../resource/report/Polygon 3.png";
 import longunionImg from "../resource/report/longunion.png";
+import { getReport } from "../services/reportService";
 
 const ReportScreen = ({ onNavigate }) => {
     const containerRef = useRef(null);
     const [isExporting, setIsExporting] = useState(false);
+    const [reportData, setReportData] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchReport = async () => {
+            setLoading(true);
+            const result = await getReport();
+            if (result.success) {
+                setReportData(result.data);
+            }
+            setLoading(false);
+        };
+        fetchReport();
+    }, []);
+
+    // 점수 계산 함수들
+    const calculateScores = (impactCheckScores) => {
+        if (!impactCheckScores || impactCheckScores.length === 0) {
+            return { performanceGoal: 0, execution: 0, identity: 0, system: 0, performanceCreation: 0, futureCompetitiveness: 0 };
+        }
+
+        let totalPerformanceGoal = 0, totalExecution = 0, totalIdentity = 0, totalSystem = 0;
+        const count = impactCheckScores.length;
+
+        impactCheckScores.forEach(score => {
+            totalPerformanceGoal += (score.q4Score + score.q5Score + score.q6Score) / 3;
+            totalExecution += (score.q7Score + score.q8Score + score.q9Score) / 3;
+            totalIdentity += (score.q1Score + score.q2Score + score.q3Score) / 3;
+            totalSystem += (score.q10Score + score.q11Score + score.q12Score) / 3;
+        });
+
+        const performanceGoal = (totalPerformanceGoal / count).toFixed(2);
+        const execution = (totalExecution / count).toFixed(2);
+        const identity = (totalIdentity / count).toFixed(2);
+        const system = (totalSystem / count).toFixed(2);
+        const performanceCreation = ((parseFloat(performanceGoal) + parseFloat(execution)) / 2).toFixed(2);
+        const futureCompetitiveness = ((parseFloat(identity) + parseFloat(system)) / 2).toFixed(2);
+
+        return { performanceGoal, execution, identity, system, performanceCreation, futureCompetitiveness };
+    };
+
+    // 성과 프로파일 타입 결정 (X축: 미래경쟁력, Y축: 성과창출력)
+    // Coord_X = futureCompetitiveness, Coord_Y = performanceCreation
+    const getProfileType = (performanceCreation, futureCompetitiveness) => {
+        const coordY = parseFloat(performanceCreation); // Y축: 성과창출력
+        const coordX = parseFloat(futureCompetitiveness); // X축: 미래경쟁력
+
+        if (coordX >= 3.5 && coordY >= 3.5) {
+            return {
+                name: "Impact Player",
+                korean: "(지속가능한 리더)",
+                quadrant: "TR",
+                tagline: "높은 효능감과 시스템이 조화를 이룬 '확신'의 단계",
+                diagnosis: "구성원들은 현재의 성과뿐만 아니라, 미래를 위한 시스템과 비전에 대해서도 매우 긍정적으로 '인식(Perception)'하고 있습니다. 이는 조직의 성공 방식에 대한 내부 신뢰가 높다는 뜻이며, 성과와 시스템이 균형을 이룬 이상적인 상태입니다. 다만, 이 확신이 '자만'이 되지 않도록 현재의 성공을 객관화하는 작업이 필요합니다.",
+                solution: "지금의 성과는 '우연'이 아닙니다. 이 성공 모델을 조직 전체의 '표준(Standard)'으로 만들어야 합니다. 첫째, 특정 고성과자(High Performer)들의 암묵적인 노하우를 발굴하여 조직의 공용 자산으로 만드십시오. 둘째, 이 성공 방정식을 다른 부서나 차세대 리더들에게 확산(Spread)하여, 리더 한 명의 역량이 아닌 '시스템의 힘'으로 성과가 재생산되는 선순환 구조를 완성하십시오."
+            };
+        }
+        if (coordX < 3.5 && coordY >= 3.5) {
+            return {
+                name: "Burnout Runner",
+                korean: "(지쳐가는 러너)",
+                quadrant: "TL",
+                tagline: "높은 성과 '인식'과 취약한 '기반'의 딜레마",
+                diagnosis: "구성원들은 현재 조직의 성과 창출 수준을 매우 높게 '인식(Perception)'하고 있습니다. 그러나 이는 탄탄한 시스템이나 명확한 목표 의식에 기반한 것이 아니라, 단순히 \"우리는 열심히 하고 있다\"는 주관적 자신감일 가능성이 큽니다. 지속가능한 성과 창출 시스템이 빈약하다고 판단하고 있기 때문에, 작은 환경 변화에도 그 자신감이 쉽게 무너질 수 있는 구조적 취약성을 안고 있습니다.",
+                solution: "지금 필요한 것은 막연한 '열심'이 아니라, 성공을 담아낼 그릇인 '시스템'입니다. 첫째, 구성원들이 동일한 곳을 바라볼 수 있도록 명확한 목표(Clear Goal)를 재설정하여 방향성을 정렬(Alignment)해야 합니다. 둘째, 개인의 암묵지에 의존하던 업무 방식을 프로세스로 자산화하여, 어떤 환경 변화에도 흔들리지 않는 '이기는 구조'를 구축하십시오."
+            };
+        }
+        if (coordX >= 3.5 && coordY < 3.5) {
+            return {
+                name: "Idle Dreamer",
+                korean: "(잠자는 몽상가)",
+                quadrant: "BR",
+                tagline: "이상적인 '계획'과 빈약한 '실행'의 괴리 단계",
+                diagnosis: "구성원들은 미래를 위한 시스템과 비전에 대해서는 긍정적으로 인식하지만, 현재의 실질적인 성과 창출에 대해서는 회의적입니다. 좋은 계획과 전략은 있으나 실행력이 부족하여, 아이디어가 성과로 연결되지 못하는 상태입니다. '말만 많고 행동이 없는' 조직이 될 위험이 있습니다.",
+                solution: "책상 위의 완벽주의를 버리고, 거칠더라도 현장에서 부딪히는 '야생성(Wildness)'을 회복해야 합니다. 첫째, 계획 수립에 쓰는 시간을 절반으로 줄이고, 즉시 실행하고 실패를 통해 수정하는 '애자일(Agile) 방식'을 도입하십시오. 둘째, 말이 아닌 '행동'과 '결과'로 평가받는 문화를 정착시켜, 조직의 무게중심을 '생각'에서 '실행'으로 옮겨야 합니다."
+            };
+        }
+        return {
+            name: "Survival Walker",
+            korean: "(생존형 보행자)",
+            quadrant: "BL",
+            tagline: "낮은 성과 인식과 부족한 미래 준비의 '위기' 단계",
+            diagnosis: "구성원들은 현재의 성과 창출력도 낮고, 미래를 위한 준비도 부족하다고 인식(Perception)하고 있습니다. 이는 단순한 실적 부진을 넘어, 조직이 어디로 가야 할지 모른다는 '방향 상실감'과 해도 안 된다는 '무기력함'이 팽배해 있음을 시사합니다. 비전보다 생존이 급한 위험 신호입니다.",
+            solution: "지금 필요한 것은 거창한 '비전 선포'가 아니라, 당장 눈앞의 '작은 성공(Small Win)'입니다. 첫째, 불필요한 업무와 형식적인 절차를 과감히 제거(Cut)하여 구성원들의 숨통을 틔워주어야 합니다. 둘째, 단기간에 달성 가능한 구체적인 목표를 부여하고 이를 성취하게 함으로써, 바닥에 떨어진 조직의 '자기 효능감'부터 회복하는 것이 급선무입니다."
+        };
+    };
+
+    // 텍스트 자르기 유틸리티 함수
+    const truncateText = (text, maxLength) => {
+        if (!text) return "";
+        return text.length > maxLength ? text.substring(0, maxLength) + "..." : text;
+    };
+
+    const scores = reportData ? calculateScores(reportData.impactCheckScores) : null;
+    const profileType = scores ? getProfileType(scores.performanceCreation, scores.futureCompetitiveness) : null;
+
+    // 동적 페이지 번호 계산
+    const has11P = (reportData?.flowCanvasGoals?.goals?.length || 0) >= 21;
+    const has13P = (reportData?.tacticals?.length || 0) >= 45;
+    const has15P = (reportData?.strategicActivities?.length || 0) >= 45;
+
+    const getPageNumber = (basePage) => {
+        let offset = 0;
+        // 11P 이후 페이지들은 11P 존재 여부에 따라 조정
+        if (basePage > 10 && !has11P) offset -= 1;
+        // 13P 이후 페이지들은 13P 존재 여부에 따라 조정
+        if (basePage > 12 && !has13P) offset -= 1;
+        // 15P 이후 페이지들은 15P 존재 여부에 따라 조정
+        if (basePage > 14 && !has15P) offset -= 1;
+        return basePage + offset;
+    };
+
+    if (loading) {
+        return <div className="report-loading">리포트를 불러오는 중...</div>;
+    }
 
     const handleDownloadPDF = async () => {
         if (!containerRef.current || isExporting) return;
@@ -260,10 +376,10 @@ const ReportScreen = ({ onNavigate }) => {
                 <div className="p4-result-box">
                     <span className="p4-result-subtitle">귀사 구성원들이 바라보는 조직의 성과창출 스타일은</span>
                     <div className="p4-result-title-row">
-                        <span className="p4-result-name">Burnout Runner</span>
-                        <span className="p4-result-korean">(지쳐가는 러너)</span>
+                        <span className="p4-result-name">{profileType?.name || "Burnout Runner"}</span>
+                        <span className="p4-result-korean">{profileType?.korean || "(지쳐가는 러너)"}</span>
                     </div>
-                    <span className="p4-result-tagline">높은 성과 '인식'과 취약한 '기반'의 딜레마</span>
+                    <span className="p4-result-tagline">{profileType?.tagline || "높은 성과 '인식'과 취약한 '기반'의 딜레마"}</span>
                 </div>
 
                 {/* Main box (chart + analysis) */}
@@ -283,31 +399,65 @@ const ReportScreen = ({ onNavigate }) => {
                                 <div className="p4-axes-wrap">
                                     <span className="p4-y-high">High</span>
                                     <div className="p4-quad-grid">
-                                        {/* TL - Active (1사분면) */}
-                                        <div className="p4-quad p4-quad-active">
-                                            <strong className="p4-quad-name-w">Burnout Runner</strong>
-                                            <span className="p4-quad-sub-w">(지쳐가는 러너)</span>
-                                            <div className="p4-score-pill-new">
-                                                <span className="p4-pill-yellow">성과 창출력 : 3.75</span>
-                                            </div>
-                                            <div className="p4-score-pill-new">
-                                                <span className="p4-pill-green">미래 경쟁력 : 2.50</span>
-                                            </div>
+                                        {/* TL - Burnout Runner */}
+                                        <div className={`p4-quad ${profileType?.quadrant === "TL" ? "p4-quad-active" : "p4-quad-inactive"}`}>
+                                            <strong className={profileType?.quadrant === "TL" ? "p4-quad-name-w" : "p4-quad-name-g"}>Burnout Runner</strong>
+                                            <span className={profileType?.quadrant === "TL" ? "p4-quad-sub-w" : "p4-quad-sub-g"}>(지쳐가는 러너)</span>
+                                            {profileType?.quadrant === "TL" && (
+                                                <>
+                                                    <div className="p4-score-pill-new">
+                                                        <span className="p4-pill-yellow">성과 창출력 : {scores?.performanceCreation}</span>
+                                                    </div>
+                                                    <div className="p4-score-pill-new">
+                                                        <span className="p4-pill-green">미래 경쟁력 : {scores?.futureCompetitiveness}</span>
+                                                    </div>
+                                                </>
+                                            )}
                                         </div>
-                                        {/* TR */}
-                                        <div className="p4-quad p4-quad-inactive">
-                                            <strong className="p4-quad-name-g">Impact Player</strong>
-                                            <span className="p4-quad-sub-g">(지속가능한 리더)</span>
+                                        {/* TR - Impact Player */}
+                                        <div className={`p4-quad ${profileType?.quadrant === "TR" ? "p4-quad-active" : "p4-quad-inactive"}`}>
+                                            <strong className={profileType?.quadrant === "TR" ? "p4-quad-name-w" : "p4-quad-name-g"}>Impact Player</strong>
+                                            <span className={profileType?.quadrant === "TR" ? "p4-quad-sub-w" : "p4-quad-sub-g"}>(지속가능한 리더)</span>
+                                            {profileType?.quadrant === "TR" && (
+                                                <>
+                                                    <div className="p4-score-pill-new">
+                                                        <span className="p4-pill-yellow">성과 창출력 : {scores?.performanceCreation}</span>
+                                                    </div>
+                                                    <div className="p4-score-pill-new">
+                                                        <span className="p4-pill-green">미래 경쟁력 : {scores?.futureCompetitiveness}</span>
+                                                    </div>
+                                                </>
+                                            )}
                                         </div>
-                                        {/* BL */}
-                                        <div className="p4-quad p4-quad-inactive">
-                                            <strong className="p4-quad-name-g">Survival Walker</strong>
-                                            <span className="p4-quad-sub-g">(생존형 보행자)</span>
+                                        {/* BL - Survival Walker */}
+                                        <div className={`p4-quad ${profileType?.quadrant === "BL" ? "p4-quad-active" : "p4-quad-inactive"}`}>
+                                            <strong className={profileType?.quadrant === "BL" ? "p4-quad-name-w" : "p4-quad-name-g"}>Survival Walker</strong>
+                                            <span className={profileType?.quadrant === "BL" ? "p4-quad-sub-w" : "p4-quad-sub-g"}>(생존형 보행자)</span>
+                                            {profileType?.quadrant === "BL" && (
+                                                <>
+                                                    <div className="p4-score-pill-new">
+                                                        <span className="p4-pill-yellow">성과 창출력 : {scores?.performanceCreation}</span>
+                                                    </div>
+                                                    <div className="p4-score-pill-new">
+                                                        <span className="p4-pill-green">미래 경쟁력 : {scores?.futureCompetitiveness}</span>
+                                                    </div>
+                                                </>
+                                            )}
                                         </div>
-                                        {/* BR */}
-                                        <div className="p4-quad p4-quad-inactive">
-                                            <strong className="p4-quad-name-g">Idle Dreamer</strong>
-                                            <span className="p4-quad-sub-g">(잠자는 몽상가)</span>
+                                        {/* BR - Idle Dreamer */}
+                                        <div className={`p4-quad ${profileType?.quadrant === "BR" ? "p4-quad-active" : "p4-quad-inactive"}`}>
+                                            <strong className={profileType?.quadrant === "BR" ? "p4-quad-name-w" : "p4-quad-name-g"}>Idle Dreamer</strong>
+                                            <span className={profileType?.quadrant === "BR" ? "p4-quad-sub-w" : "p4-quad-sub-g"}>(잠자는 몽상가)</span>
+                                            {profileType?.quadrant === "BR" && (
+                                                <>
+                                                    <div className="p4-score-pill-new">
+                                                        <span className="p4-pill-yellow">성과 창출력 : {scores?.performanceCreation}</span>
+                                                    </div>
+                                                    <div className="p4-score-pill-new">
+                                                        <span className="p4-pill-green">미래 경쟁력 : {scores?.futureCompetitiveness}</span>
+                                                    </div>
+                                                </>
+                                            )}
                                         </div>
                                     </div>
                                     <span className="p4-y-low">Low</span>
@@ -345,12 +495,12 @@ const ReportScreen = ({ onNavigate }) => {
                                         현재 성과 창출에 대한 인식
                                     </td>
                                     <td className="p4-td-item">성과목표</td>
-                                    <td className="p4-td-score">3.5</td>
-                                    <td rowSpan={2} className="p4-td-avg p4-td-avg-yellow">3.75</td>
+                                    <td className="p4-td-score">{scores?.performanceGoal || "-"}</td>
+                                    <td rowSpan={2} className="p4-td-avg p4-td-avg-yellow">{scores?.performanceCreation || "-"}</td>
                                 </tr>
                                 <tr>
                                     <td className="p4-td-item">실행력</td>
-                                    <td className="p4-td-score">4.0</td>
+                                    <td className="p4-td-score">{scores?.execution || "-"}</td>
                                 </tr>
                                 <tr>
                                     <td rowSpan={2} className="p4-td-category p4-td-category-last">
@@ -360,12 +510,12 @@ const ReportScreen = ({ onNavigate }) => {
                                         미래 성과 창출에 대한 인식
                                     </td>
                                     <td className="p4-td-item">아이덴티티</td>
-                                    <td className="p4-td-score">2.5</td>
-                                    <td rowSpan={2} className="p4-td-avg p4-td-avg-green">2.50</td>
+                                    <td className="p4-td-score">{scores?.identity || "-"}</td>
+                                    <td rowSpan={2} className="p4-td-avg p4-td-avg-green">{scores?.futureCompetitiveness || "-"}</td>
                                 </tr>
                                 <tr>
                                     <td className="p4-td-item p4-td-item-last">시스템</td>
-                                    <td className="p4-td-score p4-td-score-last">2.5</td>
+                                    <td className="p4-td-score p4-td-score-last">{scores?.system || "-"}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -377,20 +527,13 @@ const ReportScreen = ({ onNavigate }) => {
                         <div className="p4-analysis-badge p4-badge-diag">진단</div>
                         <div className="p4-analysis-content-box">
                             <p className="p4-analysis-text">
-                                구성원들은 현재 조직의 성과 창출 수준을 매우 높게 '인식(Perception)'하고 있습니다. 그러나 이는 탄탄한 시스템이나 명확한 목표 의식에 기반한 것이 아니라, 단순히 "우리는 열심히 하고 있다"는 주관적 자신감일 가능성이 큽니다. 지속가능한 성과 창출 시스템이 빈약하다고 판단하고 있기 때문에, 작은 환경 변화에도 그 자신감이 쉽게 무너질 수 있는 구조적 취약성을 안고 있습니다.
+                                {profileType?.diagnosis || ""}
                             </p>
                         </div>
                         <div className="p4-analysis-badge p4-badge-sol">솔루션</div>
                         <div className="p4-analysis-content-box">
                             <p className="p4-analysis-text">
-                                <span className="p4-analysis-bold">
-                                    지금 필요한 것은 막연한 '열심'이 아니라, 성공을 담아낼 그릇인 '시스템'입니다.
-                                </span>
-                                <br />
-                                <span className="p4-analysis-span">
-                                    첫째, 구성원들이 동일한 곳을 바라볼 수 있도록 명확한 목표(Clear Goal)를 재설정하여 방향성을 정렬(Alignment)해야 합니다.
-                                    둘째, 개인의 암묵지에 의존하던 업무 방식을 프로세스로 자산화하여, 어떤 환경 변화에도 흔들리지 않는 '이기는 구조'를 구축하십시오.
-                                </span>
+                                {profileType?.solution || ""}
                             </p>
                         </div>
                     </div>
@@ -475,33 +618,35 @@ const ReportScreen = ({ onNavigate }) => {
                     <h3 className="p6-threats-title">외부의 위협신호</h3>
                     <p className="p6-threats-subtitle">(External Threats)</p>
                     <div className="p6-threat-items">
-                        <div className="p6-threat-item">
-                            <p className="p6-threat-text">1. 교육생이 작성한 외부 위협신호를 취합하여 AI가 3개로 요약해서 제시</p>
-                        </div>
-                        <div className="p6-threat-item">
-                            <p className="p6-threat-text">2. 교육생이 작성한 외부 위협신호를 취합하여 AI가 3개로 요약해서 제시</p>
-                        </div>
-                        <div className="p6-threat-item">
-                            <p className="p6-threat-text">3. 교육생이 작성한 외부 위협신호를 취합하여 AI가 3개로 요약해서 제시  교육생이 작성한 외부 위협신호를 취합하여 AI가 3개로 요약해서 제시 한 줄이 넘어갈 경우</p>
-                        </div>
+                        {reportData?.externalThreats?.aiSummary?.map((summary, idx) => (
+                            <div className="p6-threat-item" key={idx}>
+                                <p className="p6-threat-text">{idx + 1}. {summary}</p>
+                            </div>
+                        )) || (
+                            <>
+                                <div className="p6-threat-item"><p className="p6-threat-text">1. -</p></div>
+                                <div className="p6-threat-item"><p className="p6-threat-text">2. -</p></div>
+                                <div className="p6-threat-item"><p className="p6-threat-text">3. -</p></div>
+                            </>
+                        )}
                     </div>
                 </div>
 
                 <div className="p6-voice-section">
                     <h3 className="p6-voice-title">Voice of Employee</h3>
                     <div className="p6-voice-bubbles">
-                        <div className="p6-voice-bubble" style={{ width: '709px' }}>
-                            <p className="p6-voice-text">"경쟁사들은 이미 AI 기반으로 단가를 낮추고 들어오는데, 우리는 여전히 맨파워로만 싸우려니 버겁습니다."</p>
-                        </div>
-                        <div className="p6-voice-bubble" style={{ width: '852px' }}>
-                            <p className="p6-voice-text">"고객들은 더 이상 우리 브랜드만 보고 찾아오지 않습니다. '가성비' 아니면 '확실한 차별점'을 요구하는데 우리는 둘 다 애매합니다."</p>
-                        </div>
-                        <div className="p6-voice-bubble" style={{ width: '673px' }}>
-                            <p className="p6-voice-text">"업계 판도가 바뀌고 있다는 게 느껴집니다. 지금의 성공 방식이 내년에도 통할지 솔직히 두렵습니다."</p>
-                        </div>
-                        <div className="p6-voice-bubble" style={{ width: '709px' }}>
-                            <p className="p6-voice-text">"경쟁사들은 이미 AI 기반으로 단가를 낮추고 들어오는데, 우리는 여전히 맨파워로만 싸우려니 버겁습니다."</p>
-                        </div>
+                        {reportData?.externalThreats?.top4?.slice(0, 4).map((item, idx) => (
+                            <div className="p6-voice-bubble" key={idx} style={{ width: 'auto', maxWidth: '852px' }}>
+                                <p className="p6-voice-text">"{item.content}"</p>
+                            </div>
+                        )) || (
+                            <>
+                                <div className="p6-voice-bubble" style={{ width: '709px' }}><p className="p6-voice-text">-</p></div>
+                                <div className="p6-voice-bubble" style={{ width: '709px' }}><p className="p6-voice-text">-</p></div>
+                                <div className="p6-voice-bubble" style={{ width: '709px' }}><p className="p6-voice-text">-</p></div>
+                                <div className="p6-voice-bubble" style={{ width: '709px' }}><p className="p6-voice-text">-</p></div>
+                            </>
+                        )}
                     </div>
                 </div>
 
@@ -511,15 +656,21 @@ const ReportScreen = ({ onNavigate }) => {
                 <img src={unionImage} alt="" className="p6-union-icon" style={{ left: '787px' }} />
 
                 <div className="p6-keywords-row">
-                    <div className="p6-keyword-box"><span className="p6-keyword-text"># 주요 키워드</span></div>
-                    <div className="p6-keyword-box"><span className="p6-keyword-text"># 주요 키워드</span></div>
-                    <div className="p6-keyword-box"><span className="p6-keyword-text"># 주요 키워드</span></div>
-                    <div className="p6-keyword-box"><span className="p6-keyword-text"># 주요 키워드</span></div>
+                    {reportData?.externalThreats?.keywords?.slice(0, 4).map((keyword, idx) => (
+                        <div className="p6-keyword-box" key={idx}><span className="p6-keyword-text"># {keyword}</span></div>
+                    )) || (
+                        <>
+                            <div className="p6-keyword-box"><span className="p6-keyword-text"># -</span></div>
+                            <div className="p6-keyword-box"><span className="p6-keyword-text"># -</span></div>
+                            <div className="p6-keyword-box"><span className="p6-keyword-text"># -</span></div>
+                            <div className="p6-keyword-box"><span className="p6-keyword-text"># -</span></div>
+                        </>
+                    )}
                 </div>
 
                 <div className="p2-footer">
                     <span className="p2-footer-text">Powered by Quantum Edu Solution Methodology</span>
-                    <span className="p2-footer-page">9</span>
+                    <span className="p2-footer-page">6</span>
                     <img src={logoImage} alt="QUANTUM EDU SOLUTION" className="p2-footer-logo" />
                 </div>
             </div>
@@ -549,33 +700,35 @@ const ReportScreen = ({ onNavigate }) => {
                     <h3 className="p6-threats-title">내부의 한계점</h3>
                     <p className="p6-threats-subtitle">(Internal Limits)</p>
                     <div className="p6-threat-items">
-                        <div className="p6-threat-item">
-                            <p className="p6-threat-text">1. 교육생이 작성한 외부 위협신호를 취합하여 AI가 3개로 요약해서 제시</p>
-                        </div>
-                        <div className="p6-threat-item">
-                            <p className="p6-threat-text">2. 교육생이 작성한 외부 위협신호를 취합하여 AI가 3개로 요약해서 제시</p>
-                        </div>
-                        <div className="p6-threat-item">
-                            <p className="p6-threat-text">3. 교육생이 작성한 외부 위협신호를 취합하여 AI가 3개로 요약해서 제시  교육생이 작성한 외부 위협신호를 취합하여 AI가 3개로 요약해서 제시 한 줄이 넘어갈 경우</p>
-                        </div>
+                        {reportData?.internalLimitations?.aiSummary?.map((summary, idx) => (
+                            <div className="p6-threat-item" key={idx}>
+                                <p className="p6-threat-text">{idx + 1}. {summary}</p>
+                            </div>
+                        )) || (
+                            <>
+                                <div className="p6-threat-item"><p className="p6-threat-text">1. -</p></div>
+                                <div className="p6-threat-item"><p className="p6-threat-text">2. -</p></div>
+                                <div className="p6-threat-item"><p className="p6-threat-text">3. -</p></div>
+                            </>
+                        )}
                     </div>
                 </div>
 
                 <div className="p6-voice-section">
                     <h3 className="p6-voice-title">Voice of Employee</h3>
                     <div className="p6-voice-bubbles">
-                        <div className="p6-voice-bubble" style={{ width: '740px' }}>
-                            <p className="p6-voice-text">"옆 팀이 무슨 프로젝트를 하는지 전혀 모릅니다. 나중에 보면 똑같은 일을 따로 하고 있을 때가 많습니다."</p>
-                        </div>
-                        <div className="p6-voice-bubble" style={{ width: '830px' }}>
-                            <p className="p6-voice-text">"시스템으로 10분이면 할 일을, 엑셀 펴놓고 3시간씩 하고 있습니다. '삽질'한다는 느낌을 지울 수 없습니다."</p>
-                        </div>
-                        <div className="p6-voice-bubble" style={{ width: '760px' }}>
-                            <p className="p6-voice-text">"열심히는 하는데, '왜' 해야 하는지 모르고 달릴 때가 많습니다. 그냥 위에서 시키니까 하는 느낌입니다."</p>
-                        </div>
-                        <div className="p6-voice-bubble" style={{ width: '200px' }}>
-                            <p className="p6-voice-text">"… … … …"</p>
-                        </div>
+                        {reportData?.internalLimitations?.top4?.slice(0, 4).map((item, idx) => (
+                            <div className="p6-voice-bubble" key={idx} style={{ width: 'auto', maxWidth: '830px' }}>
+                                <p className="p6-voice-text">"{item.content}"</p>
+                            </div>
+                        )) || (
+                            <>
+                                <div className="p6-voice-bubble" style={{ width: '740px' }}><p className="p6-voice-text">-</p></div>
+                                <div className="p6-voice-bubble" style={{ width: '740px' }}><p className="p6-voice-text">-</p></div>
+                                <div className="p6-voice-bubble" style={{ width: '740px' }}><p className="p6-voice-text">-</p></div>
+                                <div className="p6-voice-bubble" style={{ width: '200px' }}><p className="p6-voice-text">-</p></div>
+                            </>
+                        )}
                     </div>
                 </div>
 
@@ -585,15 +738,21 @@ const ReportScreen = ({ onNavigate }) => {
                 <img src={unionImage} alt="" className="p6-union-icon" style={{ left: '787px' }} />
 
                 <div className="p6-keywords-row">
-                    <div className="p6-keyword-box"><span className="p6-keyword-text"># 주요 키워드</span></div>
-                    <div className="p6-keyword-box"><span className="p6-keyword-text"># 주요 키워드</span></div>
-                    <div className="p6-keyword-box"><span className="p6-keyword-text"># 주요 키워드</span></div>
-                    <div className="p6-keyword-box"><span className="p6-keyword-text"># 주요 키워드</span></div>
+                    {reportData?.internalLimitations?.keywords?.slice(0, 4).map((keyword, idx) => (
+                        <div className="p6-keyword-box" key={idx}><span className="p6-keyword-text"># {keyword}</span></div>
+                    )) || (
+                        <>
+                            <div className="p6-keyword-box"><span className="p6-keyword-text"># -</span></div>
+                            <div className="p6-keyword-box"><span className="p6-keyword-text"># -</span></div>
+                            <div className="p6-keyword-box"><span className="p6-keyword-text"># -</span></div>
+                            <div className="p6-keyword-box"><span className="p6-keyword-text"># -</span></div>
+                        </>
+                    )}
                 </div>
 
                 <div className="p2-footer">
                     <span className="p2-footer-text">Powered by Quantum Edu Solution Methodology</span>
-                    <span className="p2-footer-page">10</span>
+                    <span className="p2-footer-page">7</span>
                     <img src={logoImage} alt="QUANTUM EDU SOLUTION" className="p2-footer-logo" />
                 </div>
             </div>
@@ -668,7 +827,7 @@ const ReportScreen = ({ onNavigate }) => {
                                 <span className="p9-col-label">미션 (Mission)</span>
                             </div>
                             <div className="p9-col-content">
-                                <p className="p9-col-text">(재정의된 존재 이유)<br />우리가 선택한 존재 이유</p>
+                                <p className="p9-col-text">{reportData?.visionMissionValue?.aiMission || "(재정의된 존재 이유)"}</p>
                             </div>
                         </div>
                         <div className="p9-col-outer">
@@ -677,7 +836,7 @@ const ReportScreen = ({ onNavigate }) => {
                                 <span className="p9-col-label">비전 (Vision)</span>
                             </div>
                             <div className="p9-col-content">
-                                <p className="p9-col-text">(재정의된 존재 이유)<br />우리가 선택한 존재 이유</p>
+                                <p className="p9-col-text">{reportData?.visionMissionValue?.aiVision || "(재정의된 목표)"}</p>
                             </div>
                         </div>
                         <div className="p9-col-outer">
@@ -686,7 +845,7 @@ const ReportScreen = ({ onNavigate }) => {
                                 <span className="p9-col-label">핵심가치 (Value)</span>
                             </div>
                             <div className="p9-col-content">
-                                <p className="p9-col-text">(재정의된 존재 이유)<br />우리가 선택한 존재 이유</p>
+                                <p className="p9-col-text">{reportData?.visionMissionValue?.aiValue || "(재정의된 핵심가치)"}</p>
                             </div>
                         </div>
                     </div>
@@ -702,30 +861,27 @@ const ReportScreen = ({ onNavigate }) => {
                 <div className="p9-stream-row">
                     <div className="p9-stream-col">
                         <h4 className="p9-stream-title">Mission</h4>
-                        <div className="p9-stream-item"></div>
-                        <div className="p9-stream-item"></div>
-                        <div className="p9-stream-item"></div>
-                        <div className="p9-stream-item"></div>
+                        {reportData?.visionMissionValue?.missionTop4?.slice(0, 4).map((item, idx) => (
+                            <div className="p9-stream-item" key={idx}>{item.content}</div>
+                        )) || Array.from({ length: 4 }, (_, i) => <div className="p9-stream-item" key={i}></div>)}
                     </div>
                     <div className="p9-stream-col">
                         <h4 className="p9-stream-title">Vision</h4>
-                        <div className="p9-stream-item"></div>
-                        <div className="p9-stream-item"></div>
-                        <div className="p9-stream-item"></div>
-                        <div className="p9-stream-item"></div>
+                        {reportData?.visionMissionValue?.visionTop4?.slice(0, 4).map((item, idx) => (
+                            <div className="p9-stream-item" key={idx}>{item.content}</div>
+                        )) || Array.from({ length: 4 }, (_, i) => <div className="p9-stream-item" key={i}></div>)}
                     </div>
                     <div className="p9-stream-col">
                         <h4 className="p9-stream-title">Value</h4>
-                        <div className="p9-stream-item"></div>
-                        <div className="p9-stream-item"></div>
-                        <div className="p9-stream-item"></div>
-                        <div className="p9-stream-item"></div>
+                        {reportData?.visionMissionValue?.valueTop4?.slice(0, 4).map((item, idx) => (
+                            <div className="p9-stream-item" key={idx}>{item.content}</div>
+                        )) || Array.from({ length: 4 }, (_, i) => <div className="p9-stream-item" key={i}></div>)}
                     </div>
                 </div>
 
                 <div className="p2-footer">
                     <span className="p2-footer-text">Powered by Quantum Edu Solution Methodology</span>
-                    <span className="p2-footer-page">12</span>
+                    <span className="p2-footer-page">9</span>
                     <img src={logoImage} alt="QUANTUM EDU SOLUTION" className="p2-footer-logo" />
                 </div>
             </div>
@@ -754,15 +910,21 @@ const ReportScreen = ({ onNavigate }) => {
                 </p>
 
                 <div className="p10-keyword-row">
-                    <div className="p10-keyword-box"><span className="p10-keyword-text"># 주요 키워드</span></div>
-                    <div className="p10-keyword-box"><span className="p10-keyword-text"># 주요 키워드</span></div>
-                    <div className="p10-keyword-box"><span className="p10-keyword-text"># 주요 키워드</span></div>
-                    <div className="p10-keyword-box"><span className="p10-keyword-text"># 주요 키워드</span></div>
+                    {reportData?.flowCanvasGoals?.keywords?.slice(0, 4).map((keyword, idx) => (
+                        <div className="p10-keyword-box" key={idx}><span className="p10-keyword-text"># {keyword}</span></div>
+                    )) || (
+                        <>
+                            <div className="p10-keyword-box"><span className="p10-keyword-text"># -</span></div>
+                            <div className="p10-keyword-box"><span className="p10-keyword-text"># -</span></div>
+                            <div className="p10-keyword-box"><span className="p10-keyword-text"># -</span></div>
+                            <div className="p10-keyword-box"><span className="p10-keyword-text"># -</span></div>
+                        </>
+                    )}
                 </div>
 
                 <div className="p10-info-bar">
                     <span className="p10-info-text">본 과정에서 구성원들은 비전달성을 위한 전략목표</span>
-                    <span className="p10-count-badge">25개</span>
+                    <span className="p10-count-badge">{reportData?.flowCanvasGoals?.goals?.length || 0}개</span>
                     <span className="p10-info-text">를 제시했습니다.</span>
                 </div>
 
@@ -788,24 +950,47 @@ const ReportScreen = ({ onNavigate }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {Array.from({ length: 20 }, (_, i) => (
-                            <tr key={i}>
-                                <td>1</td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                        ))}
+                        {(() => {
+                            const goals = reportData?.flowCanvasGoals?.goals || [];
+                            const has11P = goals.length >= 21;
+                            const displayGoals = goals.slice(0, 20);
+                            const rows = displayGoals.map((goal, i) => (
+                                <tr key={i}>
+                                    <td>{i + 1}</td>
+                                    <td>{truncateText(goal.title, 20)}</td>
+                                    <td>{truncateText(goal.description || "", 50)}</td>
+                                </tr>
+                            ));
+                            // 50개 이상인데 11P가 없을 때만 ... 표시
+                            if (goals.length >= 50 && !has11P) {
+                                rows.push(
+                                    <tr key="ellipsis">
+                                        <td>...</td>
+                                        <td>...</td>
+                                        <td>...</td>
+                                    </tr>
+                                );
+                            }
+                            return rows.length > 0 ? rows : Array.from({ length: 20 }, (_, i) => (
+                                <tr key={i}>
+                                    <td>{i + 1}</td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            ));
+                        })()}
                     </tbody>
                 </table>
 
                 <div className="p2-footer">
                     <span className="p2-footer-text">Powered by Quantum Edu Solution Methodology</span>
-                    <span className="p2-footer-page">13</span>
+                    <span className="p2-footer-page">10</span>
                     <img src={logoImage} alt="QUANTUM EDU SOLUTION" className="p2-footer-logo" />
                 </div>
             </div>
 
-            {/* Page 11 - Performance Stream: Strategic Goals (continued) */}
+            {/* Page 11 - Performance Stream: Strategic Goals (continued) - 21개 이상일 때만 표시 */}
+            {(reportData?.flowCanvasGoals?.goals?.length || 0) >= 21 && (
             <div className="report-page report-page-11">
                 <div className="p4-topbar">
                     <img src={shinhanLogo} alt="신한은행" className="p4-bank-logo" />
@@ -838,22 +1023,37 @@ const ReportScreen = ({ onNavigate }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {Array.from({ length: 29 }, (_, i) => (
-                            <tr key={i}>
-                                <td>{i + 22}</td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                        ))}
+                        {(() => {
+                            const goals = reportData?.flowCanvasGoals?.goals || [];
+                            const page2Goals = goals.slice(20, Math.min(49, goals.length));
+                            const rows = page2Goals.map((goal, i) => (
+                                <tr key={i}>
+                                    <td>{i + 21}</td>
+                                    <td>{truncateText(goal.title, 20)}</td>
+                                    <td>{truncateText(goal.description || "", 50)}</td>
+                                </tr>
+                            ));
+                            if (goals.length >= 50) {
+                                rows.push(
+                                    <tr key="ellipsis">
+                                        <td>...</td>
+                                        <td>...</td>
+                                        <td>...</td>
+                                    </tr>
+                                );
+                            }
+                            return rows;
+                        })()}
                     </tbody>
                 </table>
 
                 <div className="p2-footer">
                     <span className="p2-footer-text">Powered by Quantum Edu Solution Methodology</span>
-                    <span className="p2-footer-page">14</span>
+                    <span className="p2-footer-page">11</span>
                     <img src={logoImage} alt="QUANTUM EDU SOLUTION" className="p2-footer-logo" />
                 </div>
             </div>
+            )}
 
             {/* Page 12 - Performance Stream: Tactical KPI */}
             <div className="report-page report-page-12">
@@ -881,7 +1081,7 @@ const ReportScreen = ({ onNavigate }) => {
 
                 <div className="p10-info-bar p12-info-bar">
                     <span className="p10-info-text">구성원들은 전략목표 달성을 위한 전술적 성과지표</span>
-                    <span className="p10-count-badge">78 개</span>
+                    <span className="p10-count-badge">{reportData?.tacticals?.length || 0} 개</span>
                     <span className="p10-info-text">를 제시했습니다.</span>
                 </div>
 
@@ -906,31 +1106,37 @@ const ReportScreen = ({ onNavigate }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>프리미엄 판매 비중</td>
-                            <td className="p12-td-center">8% 향상</td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        {Array.from({ length: 22 }, (_, i) => (
-                            <tr key={i}>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                        ))}
+                        {(() => {
+                            const tacticals = reportData?.tacticals || [];
+                            const itemsOnPage = Math.min(44, tacticals.length);
+                            const maxRows = Math.ceil(itemsOnPage / 2);
+                            const rows = [];
+                            for (let i = 0; i < maxRows; i++) {
+                                const leftIdx = i * 2;
+                                const rightIdx = i * 2 + 1;
+                                rows.push(
+                                    <tr key={i}>
+                                        <td>{truncateText(tacticals[leftIdx]?.metric, 20) || ""}</td>
+                                        <td className="p12-td-center">{truncateText(tacticals[leftIdx]?.goal, 15) || ""}</td>
+                                        <td>{truncateText(tacticals[rightIdx]?.metric, 20) || ""}</td>
+                                        <td className="p12-td-center">{truncateText(tacticals[rightIdx]?.goal, 15) || ""}</td>
+                                    </tr>
+                                );
+                            }
+                            return rows;
+                        })()}
                     </tbody>
                 </table>
 
                 <div className="p2-footer">
                     <span className="p2-footer-text">Powered by Quantum Edu Solution Methodology</span>
-                    <span className="p2-footer-page">15</span>
+                    <span className="p2-footer-page">{getPageNumber(12)}</span>
                     <img src={logoImage} alt="QUANTUM EDU SOLUTION" className="p2-footer-logo" />
                 </div>
             </div>
 
-            {/* Page 13 - Performance Stream: Tactical KPI (continued) */}
+            {/* Page 13 - Performance Stream: Tactical KPI (continued) - 45개 이상일 때만 표시 */}
+            {(reportData?.tacticals?.length || 0) >= 45 && (
             <div className="report-page report-page-13">
                 <div className="p4-topbar">
                     <img src={shinhanLogo} alt="신한은행" className="p4-bank-logo" />
@@ -962,29 +1168,47 @@ const ReportScreen = ({ onNavigate }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>프리미엄 판매 비중</td>
-                            <td className="p12-td-center">8% 향상</td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        {Array.from({ length: 28 }, (_, i) => (
-                            <tr key={i}>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                        ))}
+                        {(() => {
+                            const tacticals = reportData?.tacticals || [];
+                            const startIdx = 44;
+                            const remainingItems = Math.min(44, tacticals.length - 44);
+                            const maxRows = Math.ceil(remainingItems / 2);
+                            const rows = [];
+                            for (let i = 0; i < maxRows; i++) {
+                                const leftIdx = startIdx + i * 2;
+                                const rightIdx = startIdx + i * 2 + 1;
+                                rows.push(
+                                    <tr key={i}>
+                                        <td>{truncateText(tacticals[leftIdx]?.metric, 20) || ""}</td>
+                                        <td className="p12-td-center">{truncateText(tacticals[leftIdx]?.goal, 15) || ""}</td>
+                                        <td>{truncateText(tacticals[rightIdx]?.metric, 20) || ""}</td>
+                                        <td className="p12-td-center">{truncateText(tacticals[rightIdx]?.goal, 15) || ""}</td>
+                                    </tr>
+                                );
+                            }
+                            // 88개 이상이면 ... 표시 (44 + 44)
+                            if (tacticals.length > 88) {
+                                rows.push(
+                                    <tr key="ellipsis">
+                                        <td>...</td>
+                                        <td className="p12-td-center">...</td>
+                                        <td>...</td>
+                                        <td className="p12-td-center">...</td>
+                                    </tr>
+                                );
+                            }
+                            return rows;
+                        })()}
                     </tbody>
                 </table>
 
                 <div className="p2-footer">
                     <span className="p2-footer-text">Powered by Quantum Edu Solution Methodology</span>
-                    <span className="p2-footer-page">16</span>
+                    <span className="p2-footer-page">{getPageNumber(13)}</span>
                     <img src={logoImage} alt="QUANTUM EDU SOLUTION" className="p2-footer-logo" />
                 </div>
             </div>
+            )}
 
             {/* Page 14 - Performance Stream: Strategic KAI */}
             <div className="report-page report-page-14">
@@ -1011,8 +1235,8 @@ const ReportScreen = ({ onNavigate }) => {
                 </div>
 
                 <div className="p10-info-bar p12-info-bar">
-                    <span className="p10-info-text">구성원들은 전략목표 달성을 위한 전술적 성과지표</span>
-                    <span className="p10-count-badge">56 개</span>
+                    <span className="p10-info-text">구성원들은 전략목표 달성을 위한 전략적 행동지표</span>
+                    <span className="p10-count-badge">{reportData?.strategicActivities?.length || 0} 개</span>
                     <span className="p10-info-text">를 제시했습니다.</span>
                 </div>
 
@@ -1030,38 +1254,45 @@ const ReportScreen = ({ onNavigate }) => {
                     </colgroup>
                     <thead>
                         <tr>
-                            <th>전술적 성과지표</th>
-                            <th>목표</th>
-                            <th>전술적 성과지표</th>
-                            <th>목표</th>
+                            <th>전략적 행동지표</th>
+                            <th>내재화 기준</th>
+                            <th>전략적 행동지표</th>
+                            <th>내재화 기준</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>프리미엄 판매 비중</td>
-                            <td className="p12-td-center">8% 향상</td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        {Array.from({ length: 21 }, (_, i) => (
-                            <tr key={i}>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                        ))}
+                        {(() => {
+                            const strategicItems = reportData?.strategicActivities || [];
+                            const totalPairs = strategicItems.length;
+                            const itemsOnPage = Math.min(44, totalPairs);
+                            const maxRows = Math.ceil(itemsOnPage / 2);
+                            const rows = [];
+                            for (let i = 0; i < maxRows; i++) {
+                                const leftIdx = i * 2;
+                                const rightIdx = i * 2 + 1;
+                                rows.push(
+                                    <tr key={i}>
+                                        <td>{truncateText(strategicItems[leftIdx]?.activityMetric, 20) || ""}</td>
+                                        <td className="p12-td-center">{truncateText(strategicItems[leftIdx]?.interCriteria, 15) || ""}</td>
+                                        <td>{truncateText(strategicItems[rightIdx]?.activityMetric, 20) || ""}</td>
+                                        <td className="p12-td-center">{truncateText(strategicItems[rightIdx]?.interCriteria, 15) || ""}</td>
+                                    </tr>
+                                );
+                            }
+                            return rows;
+                        })()}
                     </tbody>
                 </table>
 
                 <div className="p2-footer">
                     <span className="p2-footer-text">Powered by Quantum Edu Solution Methodology</span>
-                    <span className="p2-footer-page">17</span>
+                    <span className="p2-footer-page">{getPageNumber(14)}</span>
                     <img src={logoImage} alt="QUANTUM EDU SOLUTION" className="p2-footer-logo" />
                 </div>
             </div>
 
-            {/* Page 15 - Performance Stream: Strategic KAI (continued) */}
+            {/* Page 15 - Performance Stream: Strategic KAI (continued) - 45개 이상일 때만 표시 */}
+            {(reportData?.strategicActivities?.length || 0) >= 45 && (
             <div className="report-page report-page-15">
                 <div className="p4-topbar">
                     <img src={shinhanLogo} alt="신한은행" className="p4-bank-logo" />
@@ -1086,36 +1317,55 @@ const ReportScreen = ({ onNavigate }) => {
                     </colgroup>
                     <thead>
                         <tr>
-                            <th>전술적 성과지표</th>
-                            <th>목표</th>
-                            <th>전술적 성과지표</th>
-                            <th>목표</th>
+                            <th>전략적 행동지표</th>
+                            <th>내재화 기준</th>
+                            <th>전략적 행동지표</th>
+                            <th>내재화 기준</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>프리미엄 판매 비중</td>
-                            <td className="p12-td-center">8% 향상</td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        {Array.from({ length: 28 }, (_, i) => (
-                            <tr key={i}>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                        ))}
+                        {(() => {
+                            const strategicItems = reportData?.strategicActivities || [];
+                            const totalPairs = strategicItems.length;
+                            const startIdx = 44;
+                            const remainingItems = Math.min(44, totalPairs - 44);
+                            const maxRows = Math.ceil(remainingItems / 2);
+                            const rows = [];
+                            for (let i = 0; i < maxRows; i++) {
+                                const leftIdx = startIdx + i * 2;
+                                const rightIdx = startIdx + i * 2 + 1;
+                                rows.push(
+                                    <tr key={i}>
+                                        <td>{truncateText(strategicItems[leftIdx]?.activityMetric, 20) || ""}</td>
+                                        <td className="p12-td-center">{truncateText(strategicItems[leftIdx]?.interCriteria, 15) || ""}</td>
+                                        <td>{truncateText(strategicItems[rightIdx]?.activityMetric, 20) || ""}</td>
+                                        <td className="p12-td-center">{truncateText(strategicItems[rightIdx]?.interCriteria, 15) || ""}</td>
+                                    </tr>
+                                );
+                            }
+                            // 88개 이상이면 ... 표시 (44 + 44)
+                            if (totalPairs > 88) {
+                                rows.push(
+                                    <tr key="ellipsis">
+                                        <td>...</td>
+                                        <td className="p12-td-center">...</td>
+                                        <td>...</td>
+                                        <td className="p12-td-center">...</td>
+                                    </tr>
+                                );
+                            }
+                            return rows;
+                        })()}
                     </tbody>
                 </table>
 
                 <div className="p2-footer">
                     <span className="p2-footer-text">Powered by Quantum Edu Solution Methodology</span>
-                    <span className="p2-footer-page">18</span>
+                    <span className="p2-footer-page">{getPageNumber(15)}</span>
                     <img src={logoImage} alt="QUANTUM EDU SOLUTION" className="p2-footer-logo" />
                 </div>
             </div>
+            )}
 
             {/* Page 16 - Quick & Build Win Contents */}
             <div className="report-page report-page-16">
@@ -1163,7 +1413,7 @@ const ReportScreen = ({ onNavigate }) => {
                 <img src={polygon2Image} alt="" className="p3-polygon2" />
             </div>
 
-            {/* Page 20 - Quick Win */}
+            {/* Page 17 - Quick Win */}
             <div className="report-page report-page-20">
                 <div className="p4-topbar">
                     <img src={shinhanLogo} alt="신한은행" className="p4-bank-logo" />
@@ -1184,8 +1434,8 @@ const ReportScreen = ({ onNavigate }) => {
                 </div>
 
                 <div className="p10-info-bar p20-info-bar">
-                    <span className="p10-info-text">구성원들은 성과체질 개선을 위한 전략적 실행과제</span>
-                    <span className="p10-count-badge">12 개</span>
+                    <span className="p10-info-text">구성원들은 성과체질 개선을 위한 전술적 실행과제</span>
+                    <span className="p10-count-badge">{reportData?.quickWinCanvasList?.length || 0} 개</span>
                     <span className="p10-info-text">를 제시했습니다.</span>
                 </div>
 
@@ -1210,31 +1460,47 @@ const ReportScreen = ({ onNavigate }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>프리미엄 판매 비중</td>
-                            <td className="p20-td-center">8% 향상</td>
-                            <td className="p20-td-center">85</td>
-                            <td className="p20-td-center">1</td>
-                        </tr>
-                        {Array.from({ length: 21 }, (_, i) => (
-                            <tr key={i}>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                        ))}
+                        {(() => {
+                            const list = reportData?.quickWinCanvasList || [];
+                            const displayList = list.slice(0, Math.min(22, list.length));
+                            const rows = displayList.map((item, i) => (
+                                <tr key={i}>
+                                    <td>{truncateText(item.taskName, 20) || "-"}</td>
+                                    <td>{truncateText(item.taskDescription, 40) || "-"}</td>
+                                    <td className="p20-td-center">{item.totalScore || 0}</td>
+                                    <td className="p20-td-center">{i + 1}</td>
+                                </tr>
+                            ));
+                            if (list.length >= 23) {
+                                rows.push(
+                                    <tr key="ellipsis">
+                                        <td>...</td>
+                                        <td>...</td>
+                                        <td className="p20-td-center">...</td>
+                                        <td className="p20-td-center">...</td>
+                                    </tr>
+                                );
+                            }
+                            return rows.length > 0 ? rows : Array.from({ length: 22 }, (_, i) => (
+                                <tr key={i}>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            ));
+                        })()}
                     </tbody>
                 </table>
 
                 <div className="p2-footer">
                     <span className="p2-footer-text">Powered by Quantum Edu Solution Methodology</span>
-                    <span className="p2-footer-page">20</span>
+                    <span className="p2-footer-page">{getPageNumber(17)}</span>
                     <img src={logoImage} alt="QUANTUM EDU SOLUTION" className="p2-footer-logo" />
                 </div>
             </div>
 
-            {/* Page 21 - Build Win */}
+            {/* Page 18 - Build Win */}
             <div className="report-page report-page-20">
                 <div className="p4-topbar">
                     <img src={shinhanLogo} alt="신한은행" className="p4-bank-logo" />
@@ -1258,7 +1524,7 @@ const ReportScreen = ({ onNavigate }) => {
 
                 <div className="p10-info-bar p20-info-bar">
                     <span className="p10-info-text">구성원들은 성과체질 개선을 위한 전략적 실행과제</span>
-                    <span className="p10-count-badge">18 개</span>
+                    <span className="p10-count-badge">{reportData?.buildWinCanvasList?.length || 0} 개</span>
                     <span className="p10-info-text">를 제시했습니다.</span>
                 </div>
 
@@ -1283,31 +1549,47 @@ const ReportScreen = ({ onNavigate }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>프리미엄 판매 비중</td>
-                            <td className="p20-td-center">8% 향상</td>
-                            <td className="p20-td-center">85</td>
-                            <td className="p20-td-center">1</td>
-                        </tr>
-                        {Array.from({ length: 21 }, (_, i) => (
-                            <tr key={i}>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                        ))}
+                        {(() => {
+                            const list = reportData?.buildWinCanvasList || [];
+                            const displayList = list.slice(0, Math.min(22, list.length));
+                            const rows = displayList.map((item, i) => (
+                                <tr key={i}>
+                                    <td>{truncateText(item.taskName, 20) || "-"}</td>
+                                    <td>{truncateText(item.taskDescription, 40) || "-"}</td>
+                                    <td className="p20-td-center">{item.totalScore || 0}</td>
+                                    <td className="p20-td-center">{i + 1}</td>
+                                </tr>
+                            ));
+                            if (list.length >= 23) {
+                                rows.push(
+                                    <tr key="ellipsis">
+                                        <td>...</td>
+                                        <td>...</td>
+                                        <td className="p20-td-center">...</td>
+                                        <td className="p20-td-center">...</td>
+                                    </tr>
+                                );
+                            }
+                            return rows.length > 0 ? rows : Array.from({ length: 22 }, (_, i) => (
+                                <tr key={i}>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            ));
+                        })()}
                     </tbody>
                 </table>
 
                 <div className="p2-footer">
                     <span className="p2-footer-text">Powered by Quantum Edu Solution Methodology</span>
-                    <span className="p2-footer-page">21</span>
+                    <span className="p2-footer-page">{getPageNumber(18)}</span>
                     <img src={logoImage} alt="QUANTUM EDU SOLUTION" className="p2-footer-logo" />
                 </div>
             </div>
 
-            {/* Page 22 - Back Cover */}
+            {/* Page 19 - Back Cover */}
             <div className="report-page report-page-22">
                 <img src={frame27Bg} alt="" className="p22-bg" />
                 <img src={polygon3Image} alt="" className="p22-polygon3" />

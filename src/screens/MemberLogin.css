@@ -133,11 +133,23 @@
 }
 
 .ml-error-dot {
-    width: 15px;
+    width: 16px;
     height: 16px;
-    border-radius: 10px;
+    border-radius: 50%;
     background: #FF3969;
     flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 700;
+    font-size: 11px;
+    line-height: 1;
+    color: #FFFFFF;
+}
+
+.ml-error-dot::after {
+    content: "!";
 }
 
 .ml-error-text {

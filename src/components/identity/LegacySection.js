@@ -1,20 +1,17 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import pencil from "../../resource/start/pencil.png";
+import { IdentityCanvasContext } from "../../contexts/IdentityCanvasContext";
 
 const LegacySection = () => {
     const [editingField, setEditingField] = useState(null);
-    const [values, setValues] = useState({
-        mission: "",
-        vision: "",
-        value: ""
-    });
+    const { values, updateField } = useContext(IdentityCanvasContext);
 
     const handleEdit = (key) => {
         setEditingField(key);
     };
 
     const handleChange = (key, value) => {
-        setValues(prev => ({ ...prev, [key]: value }));
+        updateField(key, value);
     };
 
     const handleBlur = () => {

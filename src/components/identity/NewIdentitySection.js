@@ -1,20 +1,17 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import pencil from "../../resource/start/pencil.png";
+import { IdentityCanvasContext } from "../../contexts/IdentityCanvasContext";
 
 const NewIdentitySection = () => {
     const [editingField, setEditingField] = useState(null);
-    const [values, setValues] = useState({
-        mission: "",
-        vision: "",
-        value: ""
-    });
+    const { values, updateField } = useContext(IdentityCanvasContext);
 
     const handleEdit = (key) => {
         setEditingField(key);
     };
 
     const handleChange = (key, value) => {
-        setValues(prev => ({ ...prev, [key]: value }));
+        updateField(key, value);
     };
 
     const handleBlur = () => {
@@ -74,9 +71,9 @@ const NewIdentitySection = () => {
             </div>
 
             <div className="new-identity-content">
-                {renderItem("mission", "New 미션(Mission)", "(재정의된 존재 이유)", "우리가 선택한 존재 이유")}
-                {renderItem("vision", "New 비전(Vision)", "(새롭게 그리는 미래)", "우리가 도달할 구체적 모습")}
-                {renderItem("value", "New 핵심가치(Value)", "(새로운 행동/판단기준)", "비전 달성을 위한 새로운 원칙")}
+                {renderItem("newMission", "New 미션(Mission)", "(재정의된 존재 이유)", "우리가 선택한 존재 이유")}
+                {renderItem("newVision", "New 비전(Vision)", "(새롭게 그리는 미래)", "우리가 도달할 구체적 모습")}
+                {renderItem("newValue", "New 핵심가치(Value)", "(새로운 행동/판단기준)", "비전 달성을 위한 새로운 원칙")}
             </div>
         </section>
     );

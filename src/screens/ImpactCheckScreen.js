@@ -1,11 +1,31 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import GNB from "../components/common/GNB";
 import "./ImpactCheckScreen.css";
 import pencilIcon from "../resource/start/pencil.png";
+import { getImpactCheck, saveImpactCheck } from "../services/impactCheckService";
 
 const ImpactCheckScreen = ({ onNavigate }) => {
     const [department, setDepartment] = useState("");
     const [answers, setAnswers] = useState({});
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const result = await getImpactCheck();
+            if (result.success && result.data) {
+                const data = result.data;
+                const loaded = {};
+                for (let i = 1; i <= 12; i++) {
+                    if (data[`q${i}Score`] != null) loaded[i] = data[`q${i}Score`];
+                }
+                if (data.q13Text) loaded[13] = data.q13Text;
+                if (data.q14Text) loaded[14] = data.q14Text;
+                if (data.q15Text) loaded[15] = data.q15Text;
+                if (data.q16Text) loaded[16] = data.q16Text;
+                setAnswers(loaded);
+            }
+        };
+        fetchData();
+    }, []);
 
     const questions = [
         { no: 1, text: "[방향성] 나는 우리 조직이 나아가려는 '미래의 모습(Vision)'이 무엇인지 머릿속에 명확하게 그려진다." },
@@ -46,10 +66,13 @@ const ImpactCheckScreen = ({ onNavigate }) => {
         return (answeredQuestions / totalQuestions) * 100;
     };
 
-    const handleSubmit = () => {
-        console.log("제출된 답변:", answers);
-        console.log("부서명:", department);
-        alert("진단이 완료되었습니다.");
+    const handleSubmit = async () => {
+        const result = await saveImpactCheck(answers);
+        if (result.success) {
+            alert("진단이 완료되었습니다.");
+        } else {
+            alert(result.message);
+        }
     };
 
     return (

@@ -1,28 +1,62 @@
 import { useState } from "react";
 import "./MemberRegister.css";
 import backgroundImage from "../resource/start/background.jpg";
+import { checkLoginId, checkCode, signup } from "../services/authService";
 
 const MemberRegister = ({ onRegister }) => {
     const [id, setId] = useState("");
     const [password, setPassword] = useState("");
     const [code, setCode] = useState("");
     const [idChecked, setIdChecked] = useState(false);
+    const [idCheckMsg, setIdCheckMsg] = useState("");
+    const [idCheckError, setIdCheckError] = useState(false);
     const [codeConfirmed, setCodeConfirmed] = useState(false);
+    const [codeMsg, setCodeMsg] = useState("");
+    const [codeError, setCodeError] = useState(false);
+    const [teams, setTeams] = useState([]);
     const [team, setTeam] = useState("");
 
-    const handleIdCheck = () => {
+    const handleIdCheck = async () => {
         if (!id) return;
-        setIdChecked(true);
+        const result = await checkLoginId(id);
+        if (result.success) {
+            setIdChecked(true);
+            setIdCheckMsg("사용 가능한 아이디입니다.");
+            setIdCheckError(false);
+        } else {
+            setIdChecked(false);
+            setIdCheckMsg(result.message);
+            setIdCheckError(true);
+        }
     };
 
-    const handleCodeCheck = () => {
+    const handleCodeCheck = async () => {
         if (!code) return;
-        setCodeConfirmed(true);
+        const result = await checkCode(code);
+        if (result.success) {
+            setCodeConfirmed(true);
+            setCodeMsg("확인되었습니다");
+            setCodeError(false);
+            setTeams(result.teams);
+            setTeam("");
+        } else {
+            setCodeConfirmed(false);
+            setCodeMsg(result.message);
+            setCodeError(true);
+            setTeams([]);
+            setTeam("");
+        }
     };
 
-    const handleRegister = () => {
-        if (!id || !password || !code || !codeConfirmed || !team) return;
-        onRegister();
+    const handleRegister = async () => {
+        if (!id || !password || !code || !idChecked || !codeConfirmed || !team) return;
+        const result = await signup(id, password, code, Number(team));
+        if (result.success) {
+            alert("회원가입이 완료되었습니다.");
+            onRegister();
+        } else {
+            alert(result.message);
+        }
     };
 
     return (
@@ -54,6 +88,8 @@ const MemberRegister = ({ onRegister }) => {
                                     onChange={(e) => {
                                         setId(e.target.value);
                                         setIdChecked(false);
+                                        setIdCheckMsg("");
+                                        setIdCheckError(false);
                                     }}
                                 />
                                 <button
@@ -63,6 +99,11 @@ const MemberRegister = ({ onRegister }) => {
                                     중복확인
                                 </button>
                             </div>
+                            {idCheckMsg && (
+                                <span className={idCheckError ? "mr-error-msg" : "mr-confirm-msg"}>
+                                    {idCheckMsg}
+                                </span>
+                            )}
                         </div>
 
                         {/* PASSWORD */}
@@ -89,6 +130,10 @@ const MemberRegister = ({ onRegister }) => {
                                     onChange={(e) => {
                                         setCode(e.target.value);
                                         setCodeConfirmed(false);
+                                        setCodeMsg("");
+                                        setCodeError(false);
+                                        setTeams([]);
+                                        setTeam("");
                                     }}
                                 />
                                 <button
@@ -98,8 +143,10 @@ const MemberRegister = ({ onRegister }) => {
                                     코드확인
                                 </button>
                             </div>
-                            {codeConfirmed && (
-                                <span className="mr-confirm-msg">확인되었습니다</span>
+                            {codeMsg && (
+                                <span className={codeError ? "mr-error-msg" : "mr-confirm-msg"}>
+                                    {codeMsg}
+                                </span>
                             )}
                         </div>
 
@@ -113,11 +160,11 @@ const MemberRegister = ({ onRegister }) => {
                                     onChange={(e) => setTeam(e.target.value)}
                                 >
                                     <option value="" disabled>팀을 선택하세요</option>
-                                    <option value="team1">팀 1</option>
-                                    <option value="team2">팀 2</option>
-                                    <option value="team3">팀 3</option>
-                                    <option value="team4">팀 4</option>
-                                    <option value="team5">팀 5</option>
+                                    {teams.map((t) => (
+                                        <option key={t.teamId} value={t.teamId}>
+                                            {t.name}
+                                        </option>
+                                    ))}
                                 </select>
                             </div>
                         )}
@@ -125,6 +172,7 @@ const MemberRegister = ({ onRegister }) => {
                         <button
                             className="mr-btn-register"
                             onClick={handleRegister}
+                            disabled={!idChecked || !codeConfirmed}
                         >
                             계정등록
                         </button>
