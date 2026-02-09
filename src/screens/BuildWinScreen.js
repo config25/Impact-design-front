@@ -6,7 +6,7 @@ import component1 from "../resource/build/Component 1.png";
 import vector3 from "../resource/build/Vector 3.png";
 import pencil2 from "../resource/quick/pencil2.png";
 import pencil from "../resource/start/pencil.png";
-import { getBuildWinCanvas, saveBuildWinCanvas } from "../services/buildWinCanvasService";
+import { getBuildWinCanvas, saveBuildWinCanvas, submitBuildWinCanvas } from "../services/buildWinCanvasService";
 
 const BuildWinScreen = ({ onNavigate }) => {
     // Editable fields state
@@ -31,6 +31,9 @@ const BuildWinScreen = ({ onNavigate }) => {
 
     // Editing state
     const [editing, setEditing] = useState(null);
+
+    // Submit state
+    const [submitted, setSubmitted] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -72,6 +75,8 @@ const BuildWinScreen = ({ onNavigate }) => {
                     }
                 });
                 setOutcomes({ qualitative: qual, quantitative: quant });
+
+                setSubmitted(d.submitted || false);
             }
         };
         fetchData();
@@ -85,6 +90,18 @@ const BuildWinScreen = ({ onNavigate }) => {
         });
         if (result.success) {
             alert("저장되었습니다.");
+        } else {
+            alert(result.message);
+        }
+    };
+
+    const handleSubmit = async () => {
+        if (submitted) return;
+        if (!window.confirm("제출완료 후에는 수정이 불가능합니다. 제출하시겠습니까?")) return;
+        const result = await submitBuildWinCanvas();
+        if (result.success) {
+            setSubmitted(true);
+            alert("제출이 완료되었습니다.");
         } else {
             alert(result.message);
         }
@@ -132,8 +149,8 @@ const BuildWinScreen = ({ onNavigate }) => {
                         <img src={pencil2} alt="" className="pencil-icon" />
                         <span className="tips-text"><span className="tips-text-bold">작성 Tips</span><span className="tips-text-regular">를 확인해보세요!</span></span>
                     </button>
-                    <button className="save-button" onClick={handleSave}>저장</button>
-                    <button className="submit-button">제출완료</button>
+                    <button className="save-button" onClick={handleSave} disabled={submitted}>저장</button>
+                    <button className="submit-button" onClick={handleSubmit} disabled={submitted}>{submitted ? "제출됨" : "제출완료"}</button>
                 </div>
             </div>
 

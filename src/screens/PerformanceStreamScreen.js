@@ -6,7 +6,7 @@ import component1 from "../resource/flow/Component 1.png";
 import vector3 from "../resource/flow/Vector 3.png";
 import pencil2 from "../resource/quick/pencil2.png";
 import pencilIcon from "../resource/identity/pencil.png";
-import { getFlowCanvas, saveFlowCanvas } from "../services/flowCanvasService";
+import { getFlowCanvas, saveFlowCanvas, submitFlowCanvas } from "../services/flowCanvasService";
 
 const PerformanceStreamScreen = ({ onNavigate }) => {
     // Goal cards state
@@ -59,6 +59,9 @@ const PerformanceStreamScreen = ({ onNavigate }) => {
 
     const [editingMetric, setEditingMetric] = useState(null); // { type, tableIndex, rowIndex, field }
 
+    // Submit state
+    const [submitted, setSubmitted] = useState(false);
+
     useEffect(() => {
         const fetchData = async () => {
             const result = await getFlowCanvas();
@@ -86,6 +89,8 @@ const PerformanceStreamScreen = ({ onNavigate }) => {
                         target: a.interCriteria || "",
                     }))
                 ));
+
+                setSubmitted(result.data.submitted || false);
             }
         };
         fetchData();
@@ -118,6 +123,18 @@ const PerformanceStreamScreen = ({ onNavigate }) => {
                 ));
             }
             alert("저장되었습니다.");
+        } else {
+            alert(result.message);
+        }
+    };
+
+    const handleSubmit = async () => {
+        if (submitted) return;
+        if (!window.confirm("제출완료 후에는 수정이 불가능합니다. 제출하시겠습니까?")) return;
+        const result = await submitFlowCanvas();
+        if (result.success) {
+            setSubmitted(true);
+            alert("제출이 완료되었습니다.");
         } else {
             alert(result.message);
         }
@@ -169,8 +186,8 @@ const PerformanceStreamScreen = ({ onNavigate }) => {
                             <span className="tips-text-regular">를 확인해보세요!</span>
                         </span>
                     </button>
-                    <button className="save-button" onClick={handleSave}>저장</button>
-                    <button className="submit-button">제출완료</button>
+                    <button className="save-button" onClick={handleSave} disabled={submitted}>저장</button>
+                    <button className="submit-button" onClick={handleSubmit} disabled={submitted}>{submitted ? "제출됨" : "제출완료"}</button>
                 </div>
             </div>
 
