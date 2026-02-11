@@ -1,0 +1,184 @@
+/* TeacherHeader - JSP tutor-header.jsp 기반 */
+/* navbar.navbar-fixed-top.bg-dark */
+
+.th-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background-color: #3b3f4f;
+    display: flex;
+    align-items: center;
+    z-index: 1030;
+    font-family: 'Pretendard', sans-serif;
+}
+
+/* .navbar-branding - 로고 영역 (사이드바 너비만큼) */
+.th-branding {
+    position: relative;
+    overflow: hidden;
+    float: left;
+    width: 230px;
+    min-width: 230px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+/* a.navbar-brand - 로고 */
+.th-brand-link {
+    display: flex;
+    align-items: center;
+    height: 30px;
+    margin: 15px;
+    text-decoration: none;
+}
+
+.th-brand-logo {
+    height: 24px;
+    width: auto;
+    object-fit: contain;
+}
+
+/* #toggle_sidemenu_l - 햄버거 버튼 */
+.th-toggle-btn {
+    color: #999;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 58px;
+    width: 60px;
+    height: 60px;
+    text-align: center;
+    padding: 0;
+}
+
+.th-toggle-btn:hover {
+    color: #fff;
+}
+
+/* .navbar-left.navbar-slogan */
+.th-slogan {
+    padding: 17px 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.7);
+    white-space: nowrap;
+    flex: 1;
+}
+
+/* 오른쪽 프로필 영역 */
+.th-profile-area {
+    position: relative;
+    margin-left: auto;
+    padding-right: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.th-divider {
+    color: rgba(255, 255, 255, 0.15);
+    font-size: 5px;
+    margin-right: 10px;
+}
+
+.th-profile-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: rgba(255, 255, 255, 0.7);
+    font-family: 'Pretendard', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.th-profile-btn:hover {
+    color: #fff;
+    background-color: #2e313d;
+}
+
+.th-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 64px;
+    object-fit: cover;
+}
+
+.th-caret {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin-left: 2px;
+    vertical-align: middle;
+    border-top: 4px dashed;
+    border-right: 4px solid transparent;
+    border-left: 4px solid transparent;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* 드롭다운 메뉴 */
+.th-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    min-width: 250px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 0 0 4px 4px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    z-index: 1100;
+}
+
+.th-dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 10px 15px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #333;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 13px;
+    text-align: left;
+}
+
+.th-dropdown-item:hover {
+    background: #f5f5f5;
+}
+
+.th-dropdown-footer {
+    border-top: 1px solid #e5e5e5;
+}
+
+.th-dropdown-footer .th-dropdown-item {
+    color: #666;
+}
+
+@media (max-width: 768px) {
+    .th-branding {
+        width: 60px;
+        min-width: 60px;
+    }
+    .th-brand-link {
+        width: 30px;
+        margin: 15px 10px;
+    }
+    .th-slogan {
+        display: none;
+    }
+    .th-caret {
+        display: none;
+    }
+}

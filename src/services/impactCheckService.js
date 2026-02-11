@@ -36,3 +36,19 @@ export const saveImpactCheck = async (answers) => {
 
     return { success: false, message: result.data?.message || "저장에 실패했습니다." };
 };
+
+export const submitImpactCheck = async () => {
+    const response = await authFetch(`${BASE_URL}/submit`, {
+        method: "PATCH",
+    });
+    const result = await response.json();
+
+    if (response.ok) {
+        return { success: true, data: result.data };
+    }
+    if (response.status === 409) {
+        return { success: false, message: "이미 제출되었습니다." };
+    }
+
+    return { success: false, message: result.data?.message || "제출에 실패했습니다." };
+};

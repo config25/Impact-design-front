@@ -1,0 +1,140 @@
+/* TeachDashboard - teacher/index.jsp 기반 */
+/* prefix: tdb- */
+
+.tdb-container {
+    font-family: 'Pretendard', sans-serif;
+}
+
+/* .title-heading */
+.tdb-title-heading {
+    padding: 0 20px;
+    margin-bottom: 10px;
+}
+
+.tdb-title-heading h2 {
+    font-size: 24px;
+    font-weight: 300;
+    color: #666;
+    margin: 0 0 5px 0;
+}
+
+.tdb-title-heading p {
+    font-size: 13px;
+    color: #888;
+    margin: 0;
+}
+
+/* .panel */
+.tdb-panel {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.05);
+}
+
+/* .panel-heading (기본: 밝은 회색 배경) */
+.tdb-panel-heading {
+    position: relative;
+    height: 40px;
+    line-height: 36px;
+    padding: 0 15px;
+    background: #f9f9f9;
+    color: #666;
+    font-size: 14px;
+    border-bottom: 1px solid #ddd;
+    border-radius: 3px 3px 0 0;
+}
+
+/* .panel-title */
+.tdb-panel-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #666;
+}
+
+/* .panel-body (min-height: 600px from JSP) */
+.tdb-panel-body {
+    padding: 0;
+    min-height: 600px;
+}
+
+/* .table.txtcenter.table-bordered.mbn.table-color */
+.tdb-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 13px;
+    text-align: center;
+    margin-bottom: 0;
+}
+
+.tdb-table th,
+.tdb-table td {
+    padding: 8px 10px;
+    border: 1px solid #ddd;
+    vertical-align: middle;
+}
+
+/* thead tr.primary + .table-color th override */
+.tdb-table thead tr {
+    background-color: #3e4955;
+    color: #fff;
+}
+
+.tdb-table thead th {
+    color: #fff;
+    font-weight: 600;
+    font-size: 13px;
+    border-color: #dfdfdf;
+}
+
+.tdb-table tbody tr:hover {
+    background: #f9f9f9;
+}
+
+.tdb-table tbody td {
+    color: #555;
+}
+
+/* btn btn-rounded btn-xs btn-primary btn-block (강의실명 버튼) */
+.tdb-btn-classroom {
+    display: block;
+    width: 100%;
+    background-color: #2a74d6;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    line-height: 1.5;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    box-sizing: border-box;
+}
+
+.tdb-btn-classroom:hover {
+    background-color: #2262b8;
+    color: #fff;
+}
+
+/* 의사결정현황 색상 */
+.tdb-status-undecided {
+    color: red;
+}
+
+.tdb-status-decided {
+    color: #006699;
+}
+
+/* empty state */
+.tdb-empty {
+    padding: 30px 10px !important;
+    color: #999;
+}

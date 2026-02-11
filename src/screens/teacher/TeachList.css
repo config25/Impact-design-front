@@ -1,0 +1,231 @@
+/* TeachList - teacher/list.jsp 기반 */
+/* prefix: tls- */
+
+.tls-container {
+    font-family: 'Pretendard', sans-serif;
+}
+
+/* 타이틀 */
+.tls-title-heading {
+    padding: 0 0 10px 0;
+    margin-bottom: 10px;
+}
+
+.tls-title-heading h2 {
+    font-size: 24px;
+    font-weight: 300;
+    color: #666;
+    margin: 0 0 5px 0;
+}
+
+.tls-title-heading p {
+    font-size: 13px;
+    color: #888;
+    margin: 0;
+}
+
+/* 2컬럼 레이아웃 */
+.tls-row {
+    display: flex;
+    gap: 20px;
+}
+
+.tls-col-left {
+    flex: 1;
+    min-width: 0;
+}
+
+.tls-col-right {
+    flex: 1;
+    min-width: 0;
+}
+
+/* 패널 */
+.tls-panel {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.05);
+}
+
+.tls-panel-heading {
+    height: 40px;
+    line-height: 36px;
+    padding: 0 15px;
+    background: #f9f9f9;
+    color: #666;
+    font-size: 14px;
+    border-bottom: 1px solid #ddd;
+    border-radius: 3px 3px 0 0;
+}
+
+.tls-panel-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #666;
+}
+
+.tls-panel-body {
+    padding: 0;
+}
+
+/* 스크롤 영역 */
+.tls-scroll-xl {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.tls-scroll-sm {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+/* 테이블 공통 */
+.tls-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    text-align: center;
+    margin-bottom: 0;
+}
+
+.tls-table th,
+.tls-table td {
+    padding: 8px 10px;
+    border: 1px solid #ddd;
+    vertical-align: middle;
+}
+
+.tls-table thead th {
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.tls-table tbody tr:hover {
+    background: #f9f9f9;
+}
+
+.tls-table tbody td {
+    color: #555;
+}
+
+/* 진행중 강의실 헤더 (어두운색) */
+.tls-table.tls-primary thead tr {
+    background-color: #3e4955;
+    color: #fff;
+}
+
+.tls-table.tls-primary thead th {
+    color: #fff;
+    border-color: #555;
+}
+
+/* 설정중 강의실 헤더 (빨간색/분홍색) */
+.tls-table.tls-danger thead tr {
+    background-color: #d9534f;
+    color: #fff;
+}
+
+.tls-table.tls-danger thead th {
+    color: #fff;
+    border-color: #d43f3a;
+}
+
+/* 종료된 강의실 헤더 (회색) */
+.tls-table.tls-dark thead tr {
+    background-color: #555;
+    color: #fff;
+}
+
+.tls-table.tls-dark thead th {
+    color: #fff;
+    border-color: #444;
+}
+
+/* 강의실명 버튼 - 파란색 (진행중) */
+.tls-btn-primary {
+    display: block;
+    width: 100%;
+    background-color: #2a74d6;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    cursor: pointer;
+    text-align: center;
+    line-height: 1.5;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    box-sizing: border-box;
+}
+
+.tls-btn-primary:hover {
+    background-color: #2262b8;
+}
+
+/* 강의실명 버튼 - 빨간색 (설정중) */
+.tls-btn-danger {
+    display: block;
+    width: 100%;
+    background-color: #d9534f;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    cursor: pointer;
+    text-align: center;
+    line-height: 1.5;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    box-sizing: border-box;
+}
+
+.tls-btn-danger:hover {
+    background-color: #c9302c;
+}
+
+/* 강의실명 버튼 - 회색 (종료) */
+.tls-btn-default {
+    display: block;
+    width: 100%;
+    background-color: #e0e0e0;
+    color: #333;
+    border: none;
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    cursor: pointer;
+    text-align: center;
+    line-height: 1.5;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    box-sizing: border-box;
+}
+
+.tls-btn-default:hover {
+    background-color: #ccc;
+}
+
+/* 빈 상태 */
+.tls-empty {
+    padding: 30px 10px !important;
+    color: #999;
+}
+
+@media (max-width: 1200px) {
+    .tls-row {
+        flex-direction: column;
+    }
+}

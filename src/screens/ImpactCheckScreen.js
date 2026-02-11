@@ -2,11 +2,12 @@ import { useState, useEffect } from "react";
 import GNB from "../components/common/GNB";
 import "./ImpactCheckScreen.css";
 import pencilIcon from "../resource/start/pencil.png";
-import { getImpactCheck, saveImpactCheck } from "../services/impactCheckService";
+import { getImpactCheck, saveImpactCheck, submitImpactCheck } from "../services/impactCheckService";
 
 const ImpactCheckScreen = ({ onNavigate }) => {
     const [department, setDepartment] = useState("");
     const [answers, setAnswers] = useState({});
+    const [submitted, setSubmitted] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -22,6 +23,8 @@ const ImpactCheckScreen = ({ onNavigate }) => {
                 if (data.q15Text) loaded[15] = data.q15Text;
                 if (data.q16Text) loaded[16] = data.q16Text;
                 setAnswers(loaded);
+                setSubmitted(data.submitted || false);
+                if (data.gameName) setDepartment(data.gameName);
             }
         };
         fetchData();
@@ -66,9 +69,21 @@ const ImpactCheckScreen = ({ onNavigate }) => {
         return (answeredQuestions / totalQuestions) * 100;
     };
 
-    const handleSubmit = async () => {
+    const handleSave = async () => {
         const result = await saveImpactCheck(answers);
         if (result.success) {
+            alert("저장되었습니다.");
+        } else {
+            alert(result.message);
+        }
+    };
+
+    const handleSubmit = async () => {
+        if (submitted) return;
+        if (!window.confirm("진단완료 후에는 수정이 불가능합니다. 제출하시겠습니까?")) return;
+        const result = await submitImpactCheck();
+        if (result.success) {
+            setSubmitted(true);
             alert("진단이 완료되었습니다.");
         } else {
             alert(result.message);
@@ -83,9 +98,12 @@ const ImpactCheckScreen = ({ onNavigate }) => {
             {/* 헤더 */}
             <header className="impact-header">
                 <h1 className="impact-title">IMPACT Check 16</h1>
-                <button className="submit-btn" onClick={handleSubmit}>
-                    진단완료
-                </button>
+                <div className="impact-header-actions">
+                    <button className="save-btn" onClick={handleSave} disabled={submitted}>저장</button>
+                    <button className="submit-btn" onClick={handleSubmit} disabled={submitted}>
+                        {submitted ? "진단완료됨" : "진단완료"}
+                    </button>
+                </div>
             </header>
 
             {/* 설명 */}

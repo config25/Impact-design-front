@@ -174,8 +174,8 @@ const BuildWinScreen = ({ onNavigate }) => {
                             </p>
                         </div>
                     </div>
-                    <div className="logo-container">
-                        <img src={shinhanLogo} alt="신한은행" />
+                    <div className="logo-wrapper">
+                        <img src={shinhanLogo} alt="신한은행" className="logo-img" />
                     </div>
                 </header>
 

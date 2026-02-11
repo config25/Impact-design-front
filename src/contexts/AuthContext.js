@@ -7,9 +7,10 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ onLogout, children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-    const saveTokens = (accessToken, refreshToken) => {
+    const saveTokens = (accessToken, refreshToken, userRole) => {
         localStorage.setItem("accessToken", accessToken);
         localStorage.setItem("refreshToken", refreshToken);
+        if (userRole) localStorage.setItem("userRole", userRole);
         setIsLoggedIn(true);
     };
 
@@ -17,6 +18,7 @@ export const AuthProvider = ({ onLogout, children }) => {
         await logoutApi();
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
+        localStorage.removeItem("userRole");
         setIsLoggedIn(false);
         if (onLogout) onLogout();
     };

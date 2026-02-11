@@ -1,0 +1,179 @@
+/* StudentList - student_list.jsp 기반 */
+/* prefix: sl- */
+
+.sl-container {
+    font-family: 'Pretendard', sans-serif;
+}
+
+/* 타이틀 */
+.sl-title-heading {
+    padding: 0 0 10px 0;
+}
+
+.sl-title-heading h2 {
+    font-size: 24px;
+    font-weight: 300;
+    color: #666;
+    margin: 0;
+}
+
+/* 팀 필터 영역 */
+.sl-filter {
+    margin-bottom: 15px;
+}
+
+.sl-filter-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-bottom: 0;
+}
+
+.sl-filter-table th,
+.sl-filter-table td {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    vertical-align: middle;
+}
+
+.sl-filter-table th {
+    background: #8a7cb8;
+    color: #fff;
+    font-weight: 600;
+    width: 120px;
+    text-align: center;
+    font-size: 13px;
+}
+
+.sl-filter-table td {
+    background: #fff;
+}
+
+.sl-team-select {
+    width: 100%;
+    max-width: 300px;
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-size: 13px;
+    font-family: 'Pretendard', sans-serif;
+}
+
+/* 학생 테이블 */
+.sl-panel-body {
+    background: #fff;
+    padding: 0;
+    margin-bottom: 10px;
+}
+
+.sl-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    text-align: center;
+    margin-bottom: 0;
+}
+
+.sl-table th,
+.sl-table td {
+    padding: 8px 10px;
+    border: 1px solid #ddd;
+    vertical-align: middle;
+}
+
+.sl-table thead tr {
+    background: #8a7cb8;
+    color: #fff;
+}
+
+.sl-table thead th {
+    color: #fff;
+    font-weight: 600;
+    font-size: 13px;
+    border-color: #7a6ca8;
+}
+
+.sl-table tbody tr:hover {
+    background: #f9f9f9;
+}
+
+.sl-table tbody td {
+    color: #555;
+}
+
+/* 체크박스 셀 */
+.sl-table td.sl-check-cell {
+    width: 40px;
+}
+
+.sl-table td.sl-check-cell input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+/* 인라인 편집 가능한 링크 */
+.sl-editable {
+    color: #337ab7;
+    cursor: pointer;
+    text-decoration: none;
+    background: none;
+    border: none;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 13px;
+    padding: 0;
+}
+
+.sl-editable:hover {
+    text-decoration: underline;
+    color: #23527c;
+}
+
+/* 이메일 아이콘 */
+.sl-mail-icon {
+    color: #337ab7;
+    font-size: 14px;
+}
+
+/* 하단 버튼 영역 */
+.sl-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.sl-btn-default {
+    padding: 5px 14px;
+    background: #fff;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-size: 13px;
+    cursor: pointer;
+    font-family: 'Pretendard', sans-serif;
+}
+
+.sl-btn-default:hover {
+    background: #e6e6e6;
+}
+
+.sl-btn-primary {
+    padding: 5px 14px;
+    background: #337ab7;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    font-size: 13px;
+    cursor: pointer;
+    font-family: 'Pretendard', sans-serif;
+}
+
+.sl-btn-primary:hover {
+    background: #286090;
+}
+
+/* 빈 상태 */
+.sl-empty {
+    padding: 30px 10px !important;
+    color: #999;
+}

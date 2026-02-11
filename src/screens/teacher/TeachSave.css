@@ -1,0 +1,189 @@
+/* TeachSave - teacher/save.jsp 기반 */
+/* prefix: tsv- */
+
+.tsv-container {
+    font-family: 'Pretendard', sans-serif;
+    display: flex;
+    justify-content: center;
+    padding-top: 10px;
+}
+
+/* 패널 */
+.tsv-panel {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    width: 700px;
+    max-width: 100%;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.05);
+}
+
+.tsv-panel-heading {
+    padding: 12px 20px;
+    background: #f9f9f9;
+    border-bottom: 1px solid #ddd;
+    border-radius: 3px 3px 0 0;
+}
+
+.tsv-panel-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #333;
+}
+
+.tsv-panel-body {
+    padding: 20px 30px;
+}
+
+.tsv-panel-footer {
+    padding: 12px 20px;
+    border-top: 1px solid #ddd;
+    background: #f9f9f9;
+    text-align: center;
+    border-radius: 0 0 3px 3px;
+}
+
+/* 폼 테이블 */
+.tsv-form-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.tsv-form-table th,
+.tsv-form-table td {
+    padding: 12px 0;
+    vertical-align: middle;
+}
+
+.tsv-form-table th {
+    width: 120px;
+    text-align: right;
+    padding-right: 20px;
+    color: #555;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.tsv-form-table td {
+    color: #333;
+}
+
+/* 강의실 유형 셀렉트 (Basic 드롭다운) */
+.tsv-select-type {
+    padding: 6px 16px;
+    background-color: #337ab7;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    appearance: auto;
+}
+
+.tsv-select-type option {
+    background: #fff;
+    color: #333;
+}
+
+/* 라디오 */
+.tsv-radio {
+    font-size: 13px;
+    color: #555;
+    margin-right: 15px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* 강의실 명 인풋 */
+.tsv-input-name {
+    width: 300px;
+    max-width: 100%;
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 13px;
+    color: #333;
+}
+
+.tsv-input-name:focus {
+    outline: none;
+    border-color: #66afe9;
+}
+
+/* 팀수 / 팀원수 셀렉트 */
+.tsv-select-num {
+    padding: 5px 10px;
+    background-color: #337ab7;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    appearance: auto;
+}
+
+.tsv-select-num option {
+    background: #fff;
+    color: #333;
+}
+
+.tsv-unit {
+    font-size: 13px;
+    color: #555;
+    margin-left: 6px;
+}
+
+/* 파일 업로드 */
+.tsv-file-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.tsv-file-input {
+    display: none;
+}
+
+.tsv-file-btn {
+    display: inline-block;
+    padding: 5px 12px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-size: 12px;
+    color: #555;
+    background: #fff;
+    cursor: pointer;
+}
+
+.tsv-file-btn:hover {
+    background: #f5f5f5;
+}
+
+.tsv-file-name {
+    font-size: 12px;
+    color: #999;
+}
+
+/* 강의실 생성 버튼 */
+.tsv-btn-submit {
+    background-color: #337ab7;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    padding: 8px 24px;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.tsv-btn-submit:hover {
+    background-color: #286090;
+}

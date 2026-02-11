@@ -34,6 +34,37 @@
     align-items: center;
 }
 
+/* 헤더 버튼 그룹 */
+.impact-header-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+/* 저장 버튼 */
+.save-btn {
+    min-width: 100px;
+    height: 56px;
+    padding: 0 24px;
+    background: #FFFFFF;
+    color: #353B72;
+    border: 2px solid #353B72;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.save-btn:hover {
+    background: #F3F5F9;
+}
+
+.save-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 /* 진단완료 버튼 - 134 x 56 (hug) */
 .submit-btn {
     min-width: 134px;
@@ -51,6 +82,11 @@
 
 .submit-btn:hover {
     background: #2a2f5c;
+}
+
+.submit-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 /* 설명 영역 */

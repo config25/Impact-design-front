@@ -15,6 +15,7 @@ const PerformanceStreamScreen = ({ onNavigate }) => {
         { goalId: null, title: "", content: "" },
         { goalId: null, title: "", content: "" }
     ]);
+    const [newVision, setNewVision] = useState("");
     const [editingGoal, setEditingGoal] = useState(null); // { index, field: 'title' | 'content' }
 
     const handleGoalEdit = (index, field) => {
@@ -65,8 +66,12 @@ const PerformanceStreamScreen = ({ onNavigate }) => {
     useEffect(() => {
         const fetchData = async () => {
             const result = await getFlowCanvas();
-            if (result.success && result.data?.goals?.length) {
-                const goals = result.data.goals;
+            if (result.success && result.data) {
+                if (result.data.newVision) {
+                    setNewVision(result.data.newVision);
+                }
+                const goals = result.data.goals || [];
+                if (!goals.length) return;
 
                 setGoalCards(goals.map((g) => ({
                     goalId: g.goalId || null,
@@ -211,8 +216,8 @@ const PerformanceStreamScreen = ({ onNavigate }) => {
                             </p>
                         </div>
                     </div>
-                    <div className="logo-container">
-                        <img src={shinhanLogo} alt="신한은행" />
+                    <div className="logo-wrapper">
+                        <img src={shinhanLogo} alt="신한은행" className="logo-img" />
                     </div>
                 </header>
 
@@ -220,7 +225,7 @@ const PerformanceStreamScreen = ({ onNavigate }) => {
                 <div className="vision-banner">
                     <span className="vision-label">New Vision</span>
                     <div className="vision-content">
-                        <span className="vision-text">1단계에서 작성했던 New Vision이 자동으로 들어옴</span>
+                        <span className="vision-text">{newVision || "1단계에서 작성했던 New Vision이 자동으로 들어옵니다."}</span>
                     </div>
                 </div>
 

@@ -7,7 +7,12 @@
       "Bash(npm run build:*)",
       "Bash(node node_modules/.bin/react-scripts:*)",
       "Bash(node node_modules/react-scripts/bin/react-scripts.js build:*)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(node -e:*)",
+      "Bash(find:*)",
+      "Bash(CI=true npx react-scripts build:*)",
+      "Bash(node_modules/.bin/react-scripts build:*)",
+      "Bash(node -c:*)"
     ]
   }
 }

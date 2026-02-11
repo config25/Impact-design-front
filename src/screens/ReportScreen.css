@@ -59,13 +59,218 @@
    Page 1 - Cover
    ============================== */
 .report-page-cover {
-    background: radial-gradient(127.84% 127.84% at 50% 30.07%, #122B71 25%, #4D515B 100%);
+    background: linear-gradient(206.92deg, #435AAD 1.08%, #071742 100%);
 }
 
-.cover-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+/* 왼쪽 세로 텍스트: MAKE IMPACT */
+.cover-vertical-left {
+    position: absolute;
+    top: 31px;
+    left: 34px;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 800;
+    font-size: 19px;
+    line-height: 210%;
+    letter-spacing: 0.3em;
+    text-align: center;
+    text-transform: uppercase;
+    color: #6778A7;
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    opacity: 0.6;
+}
+
+/* 오른쪽 세로 텍스트: KEEP BALANCE */
+.cover-vertical-right {
+    position: absolute;
+    top: 414px;
+    right: 30px;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 800;
+    font-size: 19px;
+    line-height: 210%;
+    letter-spacing: 0.3em;
+    text-align: center;
+    text-transform: uppercase;
+    color: #6778A7;
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+}
+
+/* 우측 장식 세로선 1 */
+.cover-line-1 {
+    position: absolute;
+    top: 65px;
+    left: 936px;
+    width: 1px;
+    height: 431px;
+    background: linear-gradient(180deg, rgba(217, 217, 217, 0.3) 0%, rgba(59, 86, 158, 0.3) 100%);
+}
+
+/* 우측 장식 세로선 2 */
+.cover-line-2 {
+    position: absolute;
+    top: -145px;
+    left: 957px;
+    width: 1px;
+    height: 431px;
+    background: linear-gradient(180deg, rgba(217, 217, 217, 0.3) 0%, rgba(59, 86, 158, 0.3) 100%);
+}
+
+/* 부제 */
+.cover-subtitle {
+    position: absolute;
+    top: 227px;
+    left: 104px;
+    margin: 0;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 600;
+    font-size: 26px;
+    line-height: 100%;
+    letter-spacing: 0;
+    color: #FFFFFF;
+}
+
+.cover-subtitle-bar {
+    opacity: 0.6;
+}
+
+/* 메인 타이틀 */
+.cover-main-title {
+    position: absolute;
+    top: 298px;
+    left: 104px;
+    margin: 0;
+    font-family: 'Geologica', sans-serif;
+    font-weight: 700;
+    font-size: 90px;
+    line-height: 120%;
+    letter-spacing: 0.02em;
+    color: #FFFFFF;
+    white-space: nowrap;
+}
+
+.cover-main-title-thin {
+    font-weight: 100;
+}
+
+/* Polygon 1 장식 */
+.cover-polygon1 {
+    position: absolute;
+    top: 343px;
+    left: 715px;
+    width: 176px;
+    height: 180px;
+}
+
+/* 태그라인 */
+.cover-tagline {
+    position: absolute;
+    top: 594px;
+    left: 109px;
+    margin: 0;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 600;
+    font-size: 23px;
+    line-height: 100%;
+    letter-spacing: 0.1em;
+    color: #AEB4C6;
+    opacity: 0.7;
+}
+
+/* 구분선 */
+.cover-divider {
+    position: absolute;
+    top: 692px;
+    left: -15px;
+    width: 652px;
+    height: 6px;
+    border-radius: 5px 0 0 5px;
+    background: linear-gradient(270deg, rgba(217, 217, 217, 0.3) -17.42%, rgba(59, 86, 158, 0) 100%);
+    transform: rotate(180deg);
+}
+
+/* 메인 일러스트 */
+.cover-main-image {
+    position: absolute;
+    top: 709px;
+    left: 554px;
+    width: 408px;
+    height: 511px;
+    object-fit: contain;
+}
+
+/* 정보 섹션 */
+.cover-info {
+    position: absolute;
+    top: 803px;
+    left: 102px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.cover-info-item {
+    margin-bottom: 34px;
+}
+
+.cover-info-label {
+    margin: 0 0 14px 0;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+    line-height: 100%;
+    letter-spacing: 0;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.cover-info-bar {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.cover-info-value {
+    margin: 0;
+    padding-left: 14px;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 100%;
+    letter-spacing: 0;
+    color: #FFFFFF;
+}
+
+/* Polygon 5 장식 */
+.cover-polygon5 {
+    position: absolute;
+    top: 1040px;
+    left: 220px;
+    width: 230px;
+    height: 280px;
+}
+
+/* 하단 로고 */
+.cover-logo {
+    position: absolute;
+    top: 1279px;
+    left: 420px;
+    width: 160px;
+    height: 37px;
+}
+
+/* Powered by 텍스트 */
+.cover-powered {
+    position: absolute;
+    top: 1335px;
+    left: 0;
+    width: 1000px;
+    margin: 0;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 100%;
+    letter-spacing: 0;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.4);
 }
 
 /* ==============================
