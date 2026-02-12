@@ -100,6 +100,11 @@
     color: #ffffff;
 }
 
+.save-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 /* 제출완료 버튼 */
 .submit-button {
     width: 134px;
@@ -118,6 +123,11 @@
 
 .submit-button:hover {
     background: #2a2f5c;
+}
+
+.submit-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 /* 반응형 */

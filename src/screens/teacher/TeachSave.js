@@ -22,7 +22,7 @@ const TeachSave = ({ onNavigate }) => {
             numTeam: teamCount,
             numMember: memberCount,
             classType: classType,
-        });
+        }, imageFile);
 
         if (result.success) {
             alert("강의실이 생성되었습니다.");

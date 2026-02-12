@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { getTeachDetail2, getTeamInfo, updateTeamInfo, startClass, endClass, restoreClass, deleteTeamMembers } from "../../services/teacherService";
-import { API_BASE } from "../../services/apiConfig";
+import { getLogoUrl } from "../../utils/logoUtil";
 import "./TeachDetail.css";
 
 /* 날짜 포맷 */
@@ -23,13 +23,6 @@ const statusText = (status) => {
         case 100: return "종료됨";
         default: return "설정중";
     }
-};
-
-/* 로고 URL 생성 */
-const getLogoUrl = (gameLogo) => {
-    if (!gameLogo || !gameLogo.newFilenm) return null;
-    const serverBase = API_BASE.replace("/api", "");
-    return `${serverBase}${gameLogo.extDir}${gameLogo.newFilenm}`;
 };
 
 const TeachDetail = ({ onNavigate, params }) => {

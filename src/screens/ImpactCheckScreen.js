@@ -146,8 +146,16 @@ const ImpactCheckScreen = ({ onNavigate }) => {
                                     <td className="text-question-cell">{q.text}</td>
                                     <td className="text-input-cell" colSpan={6}>
                                         <div className="text-input-wrapper">
-                                            <img src={pencilIcon} alt="pencil" className="pencil-icon" />
+                                            {!answers[q.no] && (
+                                                <img
+                                                    src={pencilIcon}
+                                                    alt="pencil"
+                                                    className="pencil-icon"
+                                                    onClick={() => document.getElementById(`text-input-${q.no}`).focus()}
+                                                />
+                                            )}
                                             <input
+                                                id={`text-input-${q.no}`}
                                                 type="text"
                                                 className="text-input"
                                                 value={answers[q.no] || ""}

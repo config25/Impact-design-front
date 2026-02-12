@@ -10,6 +10,7 @@ import PerformanceStreamScreen from "./screens/PerformanceStreamScreen";
 import QuickWinScreen from "./screens/QuickWinScreen";
 import BuildWinScreen from "./screens/BuildWinScreen";
 import ReportScreen from "./screens/ReportScreen";
+import ImpactReviewScreen from "./screens/ImpactReviewScreen";
 import { AuthProvider } from "./contexts/AuthContext";
 
 // Teacher screens
@@ -91,6 +92,8 @@ function App() {
             case "buildwin":
                 return <BuildWinScreen onNavigate={handleNavigate} />;
             case "review":
+                return <ImpactReviewScreen onNavigate={handleNavigate} />;
+            case "report":
                 return <ReportScreen onNavigate={handleNavigate} />;
             default:
                 return <Main onLogin={() => handleNavigate("start")} onRegister={() => handleNavigate("start")} />;
@@ -98,7 +101,7 @@ function App() {
     };
 
     return (
-        <AuthProvider onLogout={() => handleNavigate("login")}>
+        <AuthProvider onLogout={(wasTeacher) => handleNavigate(wasTeacher ? "teachlogin" : "login")}>
             {renderScreen()}
         </AuthProvider>
     );

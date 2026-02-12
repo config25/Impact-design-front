@@ -4,9 +4,7 @@ import ThreatSection from "./ThreatSection";
 import NewIdentitySection from "./NewIdentitySection";
 import component1Img from "../../resource/identity/Component 1.png";
 import vector3Img from "../../resource/identity/Vector 3.png";
-import shinhanLogo from "../../resource/flow/신한은행.png";
-
-const IdentityCanvasLayout = () => {
+const IdentityCanvasLayout = ({ logoUrl }) => {
     return (
         <div className="identity-container">
             <div className="identity-canvas-wrapper">
@@ -28,9 +26,11 @@ const IdentityCanvasLayout = () => {
                         </div>
                     </div>
 
-                    <div className="logo-wrapper">
-                        <img src={shinhanLogo} alt="신한은행" className="logo-img" />
-                    </div>
+                    {logoUrl && (
+                        <div className="logo-wrapper">
+                            <img src={logoUrl} alt="logo" className="logo-img" />
+                        </div>
+                    )}
                 </header>
 
                 <div className="identity-grid">

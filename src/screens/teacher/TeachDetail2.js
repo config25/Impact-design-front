@@ -1,7 +1,403 @@
-import { useState, useEffect } from "react";
-import { getTeachDetail, updateClass, saveStep, addTeam, addEvaluationTeam, deleteTeam, getDeletedTeams, restoreTeam, getTeamInfo, updateTeamInfo, getSubmissionList, getImpactCheckByTeam, getIdentityCanvasByTeam, getFlowCanvasByTeam, getQuickWinByTeam, getBuildWinByTeam, endClass, deleteTeamMembers } from "../../services/teacherService";
-import { API_BASE } from "../../services/apiConfig";
+import { useState, useEffect, useRef } from "react";
+import { getTeachDetail, updateClass, saveStep, addTeam, addEvaluationTeam, deleteTeam, getDeletedTeams, restoreTeam, getTeamInfo, updateTeamInfo, getSubmissionList, getImpactCheckByTeam, getIdentityCanvasByTeam, getFlowCanvasByTeam, getQuickWinByTeam, getBuildWinByTeam, getFundingByTeam, getFundingResultByTeam, endClass, deleteTeamMembers } from "../../services/teacherService";
+import { getLogoUrl } from "../../utils/logoUtil";
+import { Chart, BarController, BarElement, DoughnutController, ArcElement, LineController, LineElement, PointElement, CategoryScale, LinearScale, Tooltip, Legend } from "chart.js";
 import "./TeachDetail2.css";
+import "../ImpactReviewScreen.css";
+
+Chart.register(BarController, BarElement, DoughnutController, ArcElement, LineController, LineElement, PointElement, CategoryScale, LinearScale, Tooltip, Legend);
+
+const CHART_COLORS = [
+    "rgba(0,0,139,0.6)", "rgba(30,144,255,0.6)", "rgba(65,105,225,0.6)",
+    "rgba(0,0,205,0.6)", "rgba(25,25,112,0.6)", "rgba(0,191,255,0.6)",
+];
+const CHART_BORDERS = [
+    "rgba(0,0,139,1)", "rgba(30,144,255,1)", "rgba(65,105,225,1)",
+    "rgba(0,0,205,1)", "rgba(25,25,112,1)", "rgba(0,191,255,1)",
+];
+
+const formatNumber = (num) => Number(num).toLocaleString();
+
+const SCORE_MAP = { A1: "score1", A2: "score2", B1: "score3", B2: "score4", B3: "score5", C1: "score6", C2: "score7", D1: "score8", D2: "score9" };
+
+const QUICK_WIN_QUESTIONS = [
+    { category: "Problem\n(문제정의)", rowSpan: 2, items: [
+        { no: "A1", q: "[현실성] 성과를 가로막는 구체적인 병목(Bottleneck)이나 장애요인을 정확히 포착했는가?", score: 10 },
+        { no: "A2", q: "[시급성] 왜 '지금 당장' 이 문제를 해결해야 하는지에 대한 이유가 설득력 있는가?", score: 5 },
+    ]},
+    { category: "Solution\n(솔루션)", rowSpan: 3, items: [
+        { no: "B1", q: "[구체성] 내일 당장 실행에 옮길 수 있을 만큼 행동 계획(Action Plan)이 구체적인가?", score: 10 },
+        { no: "B2", q: "[신속성] 거창한 예산이나 긴 시간 없이, 현재 자원으로 즉시 해결 가능한 방법인가?", score: 5 },
+        { no: "B3", q: "[차별성] 기존의 관행을 깨고 장애물을 단숨에 제거할 수 있는 차별화된 접근인가?", score: 15 },
+    ]},
+    { category: "Action\n(실행력)", rowSpan: 2, items: [
+        { no: "C1", q: "[검증성] 완벽함보다 빠르게 시도(Test)하고 수정(Fix)할 수 있는 구조인가?", score: 10 },
+        { no: "C2", q: "[가시성] 실행 결과가 모호하지 않고, O/X로 명확하게 확인 가능한 과제인가?", score: 15 },
+    ]},
+    { category: "Effect\n(파급효과)", rowSpan: 2, items: [
+        { no: "D1", q: "[성과] 6개월 이내에 조직 분위기를 바꿀 수 있는 '작은 성공(Small Success)'을 만드는가?", score: 15 },
+        { no: "D2", q: "[효율] 실행 즉시, 일하는 방식이나 판단 흐름에 눈에 보이는 변화를 만드는가?", score: 15 },
+    ]},
+];
+
+const BUILD_WIN_QUESTIONS = [
+    { category: "Problem\n(문제정의)", rowSpan: 2, items: [
+        { no: "A1", q: "[중요성] 표면적 현상이 아닌, 조직 경쟁력을 강화하는 수준의 과제인가?", score: 10 },
+        { no: "A2", q: "[정합성] 과제의 해결이 조직의 장기적 비전 및 핵심가치와 긴밀하게 연결(Align)되는가?", score: 15 },
+    ]},
+    { category: "Solution\n(솔루션)", rowSpan: 3, items: [
+        { no: "B1", q: "[타당성] 단순히 감이나 주장이 아닌, 합리적인 근거(Facts/Logic)에 기반하여 제시하고 있는가?", score: 10 },
+        { no: "B2", q: "[지속성] 특정인의 역량에 의존하지 않고, '프로세스'에 의해 일관된 결과가 나올 수 있는가?", score: 10 },
+        { no: "B3", q: "[자산화] 일회성 해결을 넘어, 우리 조직만의 고유한 자산(노하우, 방법론)으로 남는가?", score: 10 },
+    ]},
+    { category: "Scale up\n(확장성)", rowSpan: 2, items: [
+        { no: "C1", q: "[확장성] 특정 개인/부서를 넘어, 전사적으로 연계될 수 있는 제안인가?", score: 10 },
+        { no: "C2", q: "[표준화] 이해당사자들이 누구나 직관적으로 이해하고 실행할 수 있는가?", score: 10 },
+    ]},
+    { category: "Effect\n(파급효과)", rowSpan: 2, items: [
+        { no: "D1", q: "[펀더멘털] 미래의 시장 변화나 위기에 대응할 수 있는 펀더멘털을 높이는가?", score: 15 },
+        { no: "D2", q: "[내재화] 일회성 이벤트로 끝나지 않고, 새로운 문화나 제도로 정착(Embed)될 수 있는가?", score: 10 },
+    ]},
+];
+
+/* ── 실행과제 검증 모달 본문 (ImpactReviewScreen 1차/2차 탭과 동일 레이아웃) ── */
+const FundingModalBody = ({ data, type, teamId }) => {
+    const [selectedIdx, setSelectedIdx] = useState(0);
+    const donutRef = useRef(null);
+    const lineRef = useRef(null);
+    const donutChartRef = useRef(null);
+    const lineChartRef = useRef(null);
+
+    // 자기 자신(선택된 팀) 제외
+    const filtered = data.filter(d => d.investmentTarget !== teamId);
+
+    const questions = type === "quick" ? QUICK_WIN_QUESTIONS : BUILD_WIN_QUESTIONS;
+    const current = filtered[selectedIdx] || null;
+
+    // 도넛 차트 (투자 포트폴리오 현황)
+    useEffect(() => {
+        if (!donutRef.current) return;
+        if (donutChartRef.current) donutChartRef.current.destroy();
+
+        const invested = filtered.filter(d => d.investmentPrice && Number(d.investmentPrice) > 0);
+        if (invested.length === 0) return;
+
+        donutChartRef.current = new Chart(donutRef.current, {
+            type: "doughnut",
+            data: {
+                labels: invested.map(d => d.teamName),
+                datasets: [{
+                    data: invested.map(d => Number(d.investmentPrice)),
+                    backgroundColor: CHART_COLORS.slice(0, invested.length),
+                    borderColor: CHART_BORDERS.slice(0, invested.length),
+                    borderWidth: 1,
+                }],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: "right", labels: { font: { family: "Pretendard", size: 13 } } },
+                    tooltip: { callbacks: { label: (ctx) => `${ctx.label}: ${formatNumber(ctx.raw)}원` } },
+                },
+                animation: { animateRotate: true, animateScale: true, duration: 1000 },
+            },
+        });
+
+        return () => { if (donutChartRef.current) donutChartRef.current.destroy(); };
+    }, [filtered]);
+
+    // 라인 차트 (평가자별 점수 현황)
+    useEffect(() => {
+        if (!lineRef.current) return;
+        if (lineChartRef.current) lineChartRef.current.destroy();
+
+        if (filtered.length === 0) return;
+
+        lineChartRef.current = new Chart(lineRef.current, {
+            type: "line",
+            data: {
+                labels: ["Problem", "Solution", type === "quick" ? "Action" : "Scale up", "Effect"],
+                datasets: filtered.map((d, i) => ({
+                    label: d.teamName,
+                    data: [
+                        (d.score1 || 0) + (d.score2 || 0),
+                        (d.score3 || 0) + (d.score4 || 0) + (d.score5 || 0),
+                        (d.score6 || 0) + (d.score7 || 0),
+                        (d.score8 || 0) + (d.score9 || 0),
+                    ],
+                    borderColor: CHART_BORDERS[i % CHART_BORDERS.length],
+                    backgroundColor: CHART_COLORS[i % CHART_COLORS.length],
+                    tension: 0.3,
+                    pointRadius: 5,
+                    pointHoverRadius: 7,
+                    fill: false,
+                })),
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { suggestedMin: 0, suggestedMax: 30, ticks: { font: { family: "Pretendard" } } },
+                    x: { ticks: { color: "#d32f2f", font: { family: "Pretendard", weight: "bold" } } },
+                },
+                plugins: {
+                    legend: { position: "top", labels: { font: { family: "Pretendard", size: 12 } } },
+                },
+                animation: { duration: 1200, easing: "easeOutQuart" },
+            },
+        });
+
+        return () => { if (lineChartRef.current) lineChartRef.current.destroy(); };
+    }, [filtered, type]);
+
+    // 문항 행 렌더
+    const renderRows = () => {
+        const rows = [];
+        questions.forEach((group) => {
+            group.items.forEach((item, idx) => {
+                const scoreField = SCORE_MAP[item.no];
+                const val = current ? current[scoreField] : null;
+                rows.push(
+                    <tr key={item.no}>
+                        {idx === 0 && (
+                            <td className="ir-eval-category" rowSpan={group.rowSpan} style={{ whiteSpace: "pre-line" }}>
+                                {group.category}
+                            </td>
+                        )}
+                        <td className="ir-eval-no">{item.no}</td>
+                        <td className="ir-eval-question">{item.q}</td>
+                        <td className="ir-eval-score">{item.score}</td>
+                        <td className="ir-eval-select-cell">
+                            <span className="ir-score-display">{val != null ? val : "-"}</span>
+                        </td>
+                    </tr>
+                );
+            });
+        });
+        return rows;
+    };
+
+    const investments = filtered.filter(d => d.investmentPrice && Number(d.investmentPrice) > 0);
+
+    return (
+        <div className="ir-body" style={{ padding: "20px 24px 30px" }}>
+            {/* 왼쪽: 평가 폼 (읽기전용) */}
+            <div className="ir-left" style={{ flex: "0 0 680px" }}>
+                <div className="ir-form-title" style={{ fontSize: 20 }}>
+                    {type === "quick" ? "Quick Win 실행과제 평가" : "Build Win 실행과제 평가"}
+                </div>
+
+                <table className="ir-info-table">
+                    <tbody>
+                        <tr>
+                            <td className="ir-info-label">평가자</td>
+                            <td className="ir-info-value" colSpan="3">
+                                <select
+                                    className="ir-info-select"
+                                    value={selectedIdx}
+                                    onChange={(e) => setSelectedIdx(Number(e.target.value))}
+                                >
+                                    {filtered.map((d, i) => (
+                                        <option key={i} value={i}>
+                                            {d.teamName}{d.submitted ? " (제출완료)" : " (미제출)"}
+                                        </option>
+                                    ))}
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td className="ir-info-label">실행 과제명</td>
+                            <td className="ir-info-value" colSpan="3">
+                                <input className="ir-info-input" style={{ textAlign: "left" }} value={current?.businessName || ""} readOnly />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td className="ir-info-label">투자 예산</td>
+                            <td className="ir-info-value" colSpan="3" style={{ display: "flex", alignItems: "center" }}>
+                                <input className="ir-info-input" value={current?.investmentPrice ? formatNumber(Number(current.investmentPrice)) : "-"} readOnly />
+                                <span className="ir-info-unit">원</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table className="ir-eval-table">
+                    <thead>
+                        <tr>
+                            <th className="ir-th-category">구분</th>
+                            <th className="ir-th-no">번호</th>
+                            <th>검증 문항</th>
+                            <th className="ir-th-score"></th>
+                            <th className="ir-th-select">점수</th>
+                        </tr>
+                    </thead>
+                    <tbody>{renderRows()}</tbody>
+                </table>
+
+                <div className="ir-opinion-row">
+                    <div className="ir-opinion-label">종합의견</div>
+                    <textarea className="ir-opinion-textarea" value={current?.opinion || ""} readOnly placeholder="의견 없음" />
+                </div>
+            </div>
+
+            {/* 오른쪽: 포트폴리오 + 차트 */}
+            <div className="ir-right">
+                <div>
+                    <div className="ir-section-title">예산 투자 포트폴리오</div>
+                    <div className="ir-portfolio-list">
+                        <div className="ir-portfolio-header">
+                            <span>투자 대상</span>
+                            <span>투자 금액</span>
+                        </div>
+                        {investments.map((p, i) => (
+                            <div key={i} className="ir-portfolio-row">
+                                <span className="ir-portfolio-name">{p.teamName}</span>
+                                <span className="ir-portfolio-amount">{formatNumber(Number(p.investmentPrice))} 원</span>
+                            </div>
+                        ))}
+                        {investments.length === 0 && (
+                            <div className="ir-portfolio-row" style={{ justifyContent: "center", color: "#999" }}>투자 내역이 없습니다.</div>
+                        )}
+                    </div>
+                </div>
+
+                <div>
+                    <div className="ir-chart-title">투자 포트폴리오 현황</div>
+                    <div className="ir-chart-box"><canvas ref={donutRef} /></div>
+                </div>
+
+                <div>
+                    <div className="ir-chart-title">평가 현황</div>
+                    <div className="ir-chart-box"><canvas ref={lineRef} /></div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+/* ── F-3 최종 결과 모달 본문 (ImpactReviewScreen ResultTab과 동일) ── */
+const FundingResultModalBody = ({ data }) => {
+    const qwBarRef = useRef(null);
+    const bwBarRef = useRef(null);
+    const qwChart = useRef(null);
+    const bwChart = useRef(null);
+
+    useEffect(() => {
+        if (!data) return;
+
+        const qwScores = data.quick?.scores;
+        const bwScores = data.build?.scores;
+
+        if (qwBarRef.current) {
+            if (qwChart.current) qwChart.current.destroy();
+            qwChart.current = createBarChart(qwBarRef.current,
+                qwScores ? [qwScores.problemScore, qwScores.solutionScore, qwScores.scaleUpScore, qwScores.effectScore] : [0, 0, 0, 0],
+                ["Problem\n(문제정의)", "Solution\n(솔루션)", "Action\n(실행력)", "Effect\n(파급효과)"]
+            );
+        }
+        if (bwBarRef.current) {
+            if (bwChart.current) bwChart.current.destroy();
+            bwChart.current = createBarChart(bwBarRef.current,
+                bwScores ? [bwScores.problemScore, bwScores.solutionScore, bwScores.scaleUpScore, bwScores.effectScore] : [0, 0, 0, 0],
+                ["Problem\n(문제정의)", "Solution\n(솔루션)", "Scale up\n(확장성)", "Effect\n(파급효과)"]
+            );
+        }
+
+        return () => {
+            if (qwChart.current) qwChart.current.destroy();
+            if (bwChart.current) bwChart.current.destroy();
+        };
+    }, [data]);
+
+    const createBarChart = (canvas, chartData, labels) => {
+        if (!canvas) return null;
+        return new Chart(canvas, {
+            type: "bar",
+            data: {
+                labels: labels.map(l => l.split("\n")),
+                datasets: [{
+                    label: "획득 점수",
+                    data: chartData,
+                    backgroundColor: "#37474f",
+                    hoverBackgroundColor: "#1a237e",
+                    borderRadius: 4,
+                    barPercentage: 0.5,
+                }],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { suggestedMin: 0, suggestedMax: 30, ticks: { stepSize: 5, font: { family: "Pretendard" } } },
+                    x: { ticks: { font: { family: "Pretendard", size: 11 } } },
+                },
+                plugins: {
+                    legend: { display: false },
+                    title: { display: true, text: "부문별 획득 점수", align: "start", font: { family: "Pretendard", size: 14, weight: "bold" } },
+                    tooltip: { callbacks: { label: (ctx) => `${ctx.raw}점` } },
+                },
+                animations: {
+                    y: {
+                        from: (ctx) => ctx.chart.scales.y.getPixelForValue(0),
+                        duration: 1500,
+                        easing: "easeOutBounce",
+                        delay: (ctx) => ctx.type === "data" ? ctx.dataIndex * 300 : 0,
+                    },
+                },
+            },
+        });
+    };
+
+    const qwOpinions = data?.quick?.opinions || [];
+    const bwOpinions = data?.build?.opinions || [];
+    const qwCount = data?.quick?.scores?.evaluatorCount || 0;
+    const bwCount = data?.build?.scores?.evaluatorCount || 0;
+
+    return (
+        <div className="ir-result-body">
+            <div className="ir-result-section">
+                <div className="ir-result-title">Quick Win 실행과제 검증결과</div>
+                <div className="ir-result-content">
+                    <div className="ir-result-chart">
+                        <canvas ref={qwBarRef} />
+                    </div>
+                    <div className="ir-result-opinions">
+                        <div className="ir-opinions-header">평가 참가자 의견 ({qwCount}명)</div>
+                        <div className="ir-opinions-badge">전체 코멘트</div>
+                        <div className="ir-opinions-list">
+                            {qwOpinions.length > 0 ? qwOpinions.map((o, i) => (
+                                <div key={i} className="ir-opinion-card">{o}</div>
+                            )) : (
+                                <div className="ir-opinion-card" style={{ color: "#999", textAlign: "center" }}>아직 등록된 의견이 없습니다.</div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className="ir-result-section">
+                <div className="ir-result-title">Build Win 실행과제 검증결과</div>
+                <div className="ir-result-content">
+                    <div className="ir-result-chart">
+                        <canvas ref={bwBarRef} />
+                    </div>
+                    <div className="ir-result-opinions">
+                        <div className="ir-opinions-header">평가 참가자 의견 ({bwCount}명)</div>
+                        <div className="ir-opinions-badge">전체 코멘트</div>
+                        <div className="ir-opinions-list">
+                            {bwOpinions.length > 0 ? bwOpinions.map((o, i) => (
+                                <div key={i} className="ir-opinion-card">{o}</div>
+                            )) : (
+                                <div className="ir-opinion-card" style={{ color: "#999", textAlign: "center" }}>아직 등록된 의견이 없습니다.</div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
 
 /* 단계 설정 데이터 */
 const stepConfig = [
@@ -117,13 +513,6 @@ const impactQuestions = [
     { no: 16, text: "지금 당장 성과를 내는 데 방해가 되는 '결정적 장애물'은 무엇입니까?", type: "text" },
 ];
 
-/* 로고 URL 생성 */
-const getLogoUrl = (gameLogo) => {
-    if (!gameLogo || !gameLogo.newFilenm) return null;
-    const serverBase = API_BASE.replace("/api", "");
-    return `${serverBase}${gameLogo.extDir}${gameLogo.newFilenm}`;
-};
-
 const TeachDetail2 = ({ onNavigate, params }) => {
     const [gameId] = useState(params?.gameId);
     const [gameInfo, setGameInfo] = useState(null);
@@ -156,6 +545,17 @@ const TeachDetail2 = ({ onNavigate, params }) => {
     const [showBuildWinModal, setShowBuildWinModal] = useState(false);
     const [buildWinModalTitle, setBuildWinModalTitle] = useState("");
     const [buildWinModalData, setBuildWinModalData] = useState(null);
+
+    /* 실행과제 검증 열람 모달 (F-1, F-2) */
+    const [showFundingModal, setShowFundingModal] = useState(false);
+    const [fundingModalTitle, setFundingModalTitle] = useState("");
+    const [fundingModalData, setFundingModalData] = useState(null);
+    const [fundingModalType, setFundingModalType] = useState("quick");
+
+    /* 최종 결과 열람 모달 (F-3) */
+    const [showResultModal, setShowResultModal] = useState(false);
+    const [resultModalTitle, setResultModalTitle] = useState("");
+    const [resultModalData, setResultModalData] = useState(null);
 
     const [showDeletedModal, setShowDeletedModal] = useState(false);
     const [deletedTeams, setDeletedTeams] = useState([]);
@@ -452,6 +852,35 @@ const TeachDetail2 = ({ onNavigate, params }) => {
                 setBuildWinModalTitle(`${teamName} - 전략적 실행과제`);
                 setBuildWinModalData(result.data);
                 setShowBuildWinModal(true);
+            } else {
+                alert(result.message);
+            }
+        } else if (missionCode === "F-1") {
+            const result = await getFundingByTeam("quick", teamId);
+            if (result.success) {
+                setFundingModalTitle(`${teamName} - Quick Win 평가`);
+                setFundingModalData(result.data);
+                setFundingModalType("quick");
+                setShowFundingModal(true);
+            } else {
+                alert(result.message);
+            }
+        } else if (missionCode === "F-2") {
+            const result = await getFundingByTeam("build", teamId);
+            if (result.success) {
+                setFundingModalTitle(`${teamName} - Build Win 평가`);
+                setFundingModalData(result.data);
+                setFundingModalType("build");
+                setShowFundingModal(true);
+            } else {
+                alert(result.message);
+            }
+        } else if (missionCode === "F-3") {
+            const result = await getFundingResultByTeam(teamId);
+            if (result.success) {
+                setResultModalTitle(`${teamName} - 최종 결과 확인`);
+                setResultModalData(result.data);
+                setShowResultModal(true);
             } else {
                 alert(result.message);
             }
@@ -847,7 +1276,7 @@ const TeachDetail2 = ({ onNavigate, params }) => {
                                                 <td className="td2-impact-no-cell">{q.no}</td>
                                                 <td className="td2-impact-q-cell">{q.text}</td>
                                                 <td colSpan={5} className="td2-impact-text-cell">
-                                                    {missionModalData[`q${q.no}Text`] || "-"}
+                                                    {missionModalData[`q${q.no}Text`] || ""}
                                                 </td>
                                             </tr>
                                         ) : (
@@ -887,15 +1316,15 @@ const TeachDetail2 = ({ onNavigate, params }) => {
                                     <div className="td2-id-section-header td2-id-legacy">기존 가치체계 (Current Legacy)</div>
                                     <div className="td2-id-card">
                                         <div className="td2-id-card-title">미션 (Mission)</div>
-                                        <div className="td2-id-card-body">{identityModalData.mission || "-"}</div>
+                                        <div className="td2-id-card-body">{identityModalData.mission || ""}</div>
                                     </div>
                                     <div className="td2-id-card">
                                         <div className="td2-id-card-title">비전 (Vision)</div>
-                                        <div className="td2-id-card-body">{identityModalData.vision || "-"}</div>
+                                        <div className="td2-id-card-body">{identityModalData.vision || ""}</div>
                                     </div>
                                     <div className="td2-id-card">
                                         <div className="td2-id-card-title">핵심가치 (Value)</div>
-                                        <div className="td2-id-card-body">{identityModalData.value || "-"}</div>
+                                        <div className="td2-id-card-body">{identityModalData.value || ""}</div>
                                     </div>
                                 </div>
 
@@ -905,19 +1334,19 @@ const TeachDetail2 = ({ onNavigate, params }) => {
                                     <div className="td2-id-threat-grid">
                                         <div className="td2-id-mini-card">
                                             <div className="td2-id-mini-title">정책/경제</div>
-                                            <div className="td2-id-mini-body">{identityModalData.macro || "-"}</div>
+                                            <div className="td2-id-mini-body">{identityModalData.macro || ""}</div>
                                         </div>
                                         <div className="td2-id-mini-card">
                                             <div className="td2-id-mini-title">기술</div>
-                                            <div className="td2-id-mini-body">{identityModalData.tech || "-"}</div>
+                                            <div className="td2-id-mini-body">{identityModalData.tech || ""}</div>
                                         </div>
                                         <div className="td2-id-mini-card">
                                             <div className="td2-id-mini-title">고객/사회</div>
-                                            <div className="td2-id-mini-body">{identityModalData.customer || "-"}</div>
+                                            <div className="td2-id-mini-body">{identityModalData.customer || ""}</div>
                                         </div>
                                         <div className="td2-id-mini-card">
                                             <div className="td2-id-mini-title">경쟁</div>
-                                            <div className="td2-id-mini-body">{identityModalData.competitor || "-"}</div>
+                                            <div className="td2-id-mini-body">{identityModalData.competitor || ""}</div>
                                         </div>
                                     </div>
 
@@ -925,19 +1354,19 @@ const TeachDetail2 = ({ onNavigate, params }) => {
                                     <div className="td2-id-threat-grid">
                                         <div className="td2-id-mini-card">
                                             <div className="td2-id-mini-title">역량</div>
-                                            <div className="td2-id-mini-body">{identityModalData.capability || "-"}</div>
+                                            <div className="td2-id-mini-body">{identityModalData.capability || ""}</div>
                                         </div>
                                         <div className="td2-id-mini-card">
                                             <div className="td2-id-mini-title">문화</div>
-                                            <div className="td2-id-mini-body">{identityModalData.culture || "-"}</div>
+                                            <div className="td2-id-mini-body">{identityModalData.culture || ""}</div>
                                         </div>
                                         <div className="td2-id-mini-card">
                                             <div className="td2-id-mini-title">구조</div>
-                                            <div className="td2-id-mini-body">{identityModalData.structure || "-"}</div>
+                                            <div className="td2-id-mini-body">{identityModalData.structure || ""}</div>
                                         </div>
                                         <div className="td2-id-mini-card">
                                             <div className="td2-id-mini-title">기타</div>
-                                            <div className="td2-id-mini-body">{identityModalData.etc || "-"}</div>
+                                            <div className="td2-id-mini-body">{identityModalData.etc || ""}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -947,15 +1376,15 @@ const TeachDetail2 = ({ onNavigate, params }) => {
                                     <div className="td2-id-section-header td2-id-new">미래 방향성 (New Identity)</div>
                                     <div className="td2-id-card">
                                         <div className="td2-id-card-title">New 미션 (Mission)</div>
-                                        <div className="td2-id-card-body">{identityModalData.newMission || "-"}</div>
+                                        <div className="td2-id-card-body">{identityModalData.newMission || ""}</div>
                                     </div>
                                     <div className="td2-id-card">
                                         <div className="td2-id-card-title">New 비전 (Vision)</div>
-                                        <div className="td2-id-card-body">{identityModalData.newVision || "-"}</div>
+                                        <div className="td2-id-card-body">{identityModalData.newVision || ""}</div>
                                     </div>
                                     <div className="td2-id-card">
                                         <div className="td2-id-card-title">New 핵심가치 (Value)</div>
-                                        <div className="td2-id-card-body">{identityModalData.newValue || "-"}</div>
+                                        <div className="td2-id-card-body">{identityModalData.newValue || ""}</div>
                                     </div>
                                 </div>
                             </div>
@@ -976,7 +1405,7 @@ const TeachDetail2 = ({ onNavigate, params }) => {
                             {/* New Vision 배너 */}
                             <div className="td2-flow-vision">
                                 <span className="td2-flow-vision-label">New Vision</span>
-                                <span className="td2-flow-vision-text">{flowModalData.newVision || "-"}</span>
+                                <span className="td2-flow-vision-text">{flowModalData.newVision || ""}</span>
                             </div>
 
                             {/* 전략목표 카드 */}
@@ -985,7 +1414,7 @@ const TeachDetail2 = ({ onNavigate, params }) => {
                                 {(flowModalData.goals || []).map((goal, idx) => (
                                     <div className="td2-flow-goal-card" key={goal.goalId || idx}>
                                         <div className="td2-flow-goal-title">{goal.goalTitle || `전략목표 ${idx + 1}`}</div>
-                                        <div className="td2-flow-goal-desc">{goal.goalDescription || "-"}</div>
+                                        <div className="td2-flow-goal-desc">{goal.goalDescription || ""}</div>
                                     </div>
                                 ))}
                             </div>
@@ -1006,8 +1435,8 @@ const TeachDetail2 = ({ onNavigate, params }) => {
                                                 <tr><td colSpan="2" className="td2-flow-empty">-</td></tr>
                                             ) : (goal.tacticals || []).map((t, ti) => (
                                                 <tr key={t.metricId || ti}>
-                                                    <td>{t.tacticalMetric || "-"}</td>
-                                                    <td>{t.tacticalGoal || "-"}</td>
+                                                    <td>{t.tacticalMetric || ""}</td>
+                                                    <td>{t.tacticalGoal || ""}</td>
                                                 </tr>
                                             ))}
                                         </tbody>
@@ -1031,8 +1460,8 @@ const TeachDetail2 = ({ onNavigate, params }) => {
                                                 <tr><td colSpan="2" className="td2-flow-empty">-</td></tr>
                                             ) : (goal.strategicActivities || []).map((a, ai) => (
                                                 <tr key={a.activityId || ai}>
-                                                    <td>{a.activityMetric || "-"}</td>
-                                                    <td>{a.interCriteria || "-"}</td>
+                                                    <td>{a.activityMetric || ""}</td>
+                                                    <td>{a.interCriteria || ""}</td>
                                                 </tr>
                                             ))}
                                         </tbody>
@@ -1056,7 +1485,7 @@ const TeachDetail2 = ({ onNavigate, params }) => {
                             {/* 전략목표 Alignment */}
                             <div className="td2-qw-align-row">
                                 <span className="td2-qw-align-label">전략목표 Alignment</span>
-                                <span className="td2-qw-align-value">{quickWinModalData.strategicGoal || "-"}</span>
+                                <span className="td2-qw-align-value">{quickWinModalData.strategicGoal || ""}</span>
                             </div>
 
                             {/* 과제명 + 주요내용 */}
@@ -1065,11 +1494,11 @@ const TeachDetail2 = ({ onNavigate, params }) => {
                                 <div className="td2-qw-task-fields">
                                     <div className="td2-qw-task-field">
                                         <span className="td2-qw-task-label">과제명</span>
-                                        <span className="td2-qw-task-value highlight">{quickWinModalData.taskName || "-"}</span>
+                                        <span className="td2-qw-task-value highlight">{quickWinModalData.taskName || ""}</span>
                                     </div>
                                     <div className="td2-qw-task-field">
                                         <span className="td2-qw-task-label">주요 내용</span>
-                                        <span className="td2-qw-task-value">{quickWinModalData.taskDescription || "-"}</span>
+                                        <span className="td2-qw-task-value">{quickWinModalData.taskDescription || ""}</span>
                                     </div>
                                 </div>
                             </div>
@@ -1106,11 +1535,11 @@ const TeachDetail2 = ({ onNavigate, params }) => {
                                                         <td rowSpan={maxRows} className="td2-qw-situation-cell">
                                                             <div className="td2-qw-situation-top">
                                                                 <strong>위기의 신호</strong>
-                                                                <div>{quickWinModalData.crisisSignal || "-"}</div>
+                                                                <div>{quickWinModalData.crisisSignal || ""}</div>
                                                             </div>
                                                             <div className="td2-qw-situation-divider">Pain/Touch point</div>
                                                             <div className="td2-qw-situation-bottom">
-                                                                {quickWinModalData.painTouchPoint || "-"}
+                                                                {quickWinModalData.painTouchPoint || ""}
                                                             </div>
                                                         </td>
                                                     )}
@@ -1122,10 +1551,10 @@ const TeachDetail2 = ({ onNavigate, params }) => {
                                                     {i === 0 && (
                                                         <>
                                                             <td rowSpan={maxRows} className="td2-qw-teamwork-cell">
-                                                                {quickWinModalData.teamwork?.activityTeamwork || "-"}
+                                                                {quickWinModalData.teamwork?.activityTeamwork || ""}
                                                             </td>
                                                             <td rowSpan={maxRows} className="td2-qw-teamwork-cell">
-                                                                {quickWinModalData.teamwork?.workType || "-"}
+                                                                {quickWinModalData.teamwork?.workType || ""}
                                                             </td>
                                                         </>
                                                     )}
@@ -1148,7 +1577,7 @@ const TeachDetail2 = ({ onNavigate, params }) => {
                                             .sort((a, b) => a.orderNo - b.orderNo)
                                             .map((o, i) => (
                                                 <div className="td2-qw-outcomes-item" key={o.outcomeNo || i}>
-                                                    {i + 1}. {o.outcomeContent || "-"}
+                                                    {i + 1}. {o.outcomeContent || ""}
                                                 </div>
                                             ))}
                                         {(quickWinModalData.taskOutcomes || []).filter(o => o.outcomeType === "QUALITATIVE").length === 0 && (
@@ -1162,7 +1591,7 @@ const TeachDetail2 = ({ onNavigate, params }) => {
                                             .sort((a, b) => a.orderNo - b.orderNo)
                                             .map((o, i) => (
                                                 <div className="td2-qw-outcomes-item" key={o.outcomeNo || i}>
-                                                    {i + 1}. {o.outcomeContent || "-"}
+                                                    {i + 1}. {o.outcomeContent || ""}
                                                 </div>
                                             ))}
                                         {(quickWinModalData.taskOutcomes || []).filter(o => o.outcomeType === "QUANTITATIVE").length === 0 && (
@@ -1188,7 +1617,7 @@ const TeachDetail2 = ({ onNavigate, params }) => {
                             {/* 전략목표 Alignment */}
                             <div className="td2-qw-align-row">
                                 <span className="td2-qw-align-label">전략목표 Alignment</span>
-                                <span className="td2-qw-align-value">{buildWinModalData.strategicGoal || "-"}</span>
+                                <span className="td2-qw-align-value">{buildWinModalData.strategicGoal || ""}</span>
                             </div>
 
                             {/* 과제명 + 주요내용 */}
@@ -1197,11 +1626,11 @@ const TeachDetail2 = ({ onNavigate, params }) => {
                                 <div className="td2-qw-task-fields">
                                     <div className="td2-qw-task-field">
                                         <span className="td2-qw-task-label">과제명</span>
-                                        <span className="td2-qw-task-value highlight">{buildWinModalData.taskName || "-"}</span>
+                                        <span className="td2-qw-task-value highlight">{buildWinModalData.taskName || ""}</span>
                                     </div>
                                     <div className="td2-qw-task-field">
                                         <span className="td2-qw-task-label">주요 내용</span>
-                                        <span className="td2-qw-task-value">{buildWinModalData.taskDescription || "-"}</span>
+                                        <span className="td2-qw-task-value">{buildWinModalData.taskDescription || ""}</span>
                                     </div>
                                 </div>
                             </div>
@@ -1238,11 +1667,11 @@ const TeachDetail2 = ({ onNavigate, params }) => {
                                                         <td rowSpan={maxRows} className="td2-qw-situation-cell">
                                                             <div className="td2-qw-situation-top">
                                                                 <strong>위기의 신호</strong>
-                                                                <div>{buildWinModalData.crisisSignal || "-"}</div>
+                                                                <div>{buildWinModalData.crisisSignal || ""}</div>
                                                             </div>
                                                             <div className="td2-qw-situation-divider">Pain/Touch point</div>
                                                             <div className="td2-qw-situation-bottom">
-                                                                {buildWinModalData.painTouchPoint || "-"}
+                                                                {buildWinModalData.painTouchPoint || ""}
                                                             </div>
                                                         </td>
                                                     )}
@@ -1254,10 +1683,10 @@ const TeachDetail2 = ({ onNavigate, params }) => {
                                                     {i === 0 && (
                                                         <>
                                                             <td rowSpan={maxRows} className="td2-qw-teamwork-cell">
-                                                                {buildWinModalData.teamwork?.activityTeamwork || "-"}
+                                                                {buildWinModalData.teamwork?.activityTeamwork || ""}
                                                             </td>
                                                             <td rowSpan={maxRows} className="td2-qw-teamwork-cell">
-                                                                {buildWinModalData.teamwork?.workType || "-"}
+                                                                {buildWinModalData.teamwork?.workType || ""}
                                                             </td>
                                                         </>
                                                     )}
@@ -1280,7 +1709,7 @@ const TeachDetail2 = ({ onNavigate, params }) => {
                                             .sort((a, b) => a.orderNo - b.orderNo)
                                             .map((o, i) => (
                                                 <div className="td2-qw-outcomes-item" key={o.outcomeNo || i}>
-                                                    {i + 1}. {o.outcomeContent || "-"}
+                                                    {i + 1}. {o.outcomeContent || ""}
                                                 </div>
                                             ))}
                                         {(buildWinModalData.taskOutcomes || []).filter(o => o.outcomeType === "QUALITATIVE").length === 0 && (
@@ -1294,7 +1723,7 @@ const TeachDetail2 = ({ onNavigate, params }) => {
                                             .sort((a, b) => a.orderNo - b.orderNo)
                                             .map((o, i) => (
                                                 <div className="td2-qw-outcomes-item" key={o.outcomeNo || i}>
-                                                    {i + 1}. {o.outcomeContent || "-"}
+                                                    {i + 1}. {o.outcomeContent || ""}
                                                 </div>
                                             ))}
                                         {(buildWinModalData.taskOutcomes || []).filter(o => o.outcomeType === "QUANTITATIVE").length === 0 && (
@@ -1304,6 +1733,38 @@ const TeachDetail2 = ({ onNavigate, params }) => {
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            )}
+
+            {/* 실행과제 검증 열람 모달 (F-1, F-2) */}
+            {showFundingModal && fundingModalData && (
+                <div className="td2-modal-overlay" onClick={() => setShowFundingModal(false)}>
+                    <div className="td2-funding-modal" onClick={e => e.stopPropagation()}>
+                        <div className="td2-impact-modal-header">
+                            <span className="td2-impact-modal-title">{fundingModalTitle}</span>
+                            <button className="td2-modify-close" onClick={() => setShowFundingModal(false)}>&times;</button>
+                        </div>
+                        <div className="td2-funding-modal-body">
+                            {fundingModalData.length === 0 ? (
+                                <div style={{ textAlign: "center", padding: 40, color: "#999" }}>등록된 평가 데이터가 없습니다.</div>
+                            ) : (
+                                <FundingModalBody data={fundingModalData} type={fundingModalType} teamId={missionModalTeamId} />
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* 최종 결과 열람 모달 (F-3) */}
+            {showResultModal && resultModalData && (
+                <div className="td2-modal-overlay" onClick={() => setShowResultModal(false)}>
+                    <div className="td2-result-modal" onClick={e => e.stopPropagation()}>
+                        <div className="td2-impact-modal-header">
+                            <span className="td2-impact-modal-title">{resultModalTitle}</span>
+                            <button className="td2-modify-close" onClick={() => setShowResultModal(false)}>&times;</button>
+                        </div>
+                        <FundingResultModalBody data={resultModalData} />
                     </div>
                 </div>
             )}

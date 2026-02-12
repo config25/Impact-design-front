@@ -6,8 +6,8 @@ import polygonImage from "../resource/report/Polygon 4.png";
 import polygon5Image from "../resource/report/Polygon 5.png";
 import logoImage from "../resource/report/logo01.png";
 import coverMainImage from "../resource/report/image.png";
-import shinhanLogo from "../resource/report/신한은행.png";
 import image7Bg from "../resource/report/Image 7.png";
+import { getImageUrl } from "../utils/logoUtil";
 import polygon2Image from "../resource/report/Polygon 2.png";
 import unionImage from "../resource/report/union.png";
 import frame27Bg from "../resource/report/Frame 27.png";
@@ -20,6 +20,7 @@ const ReportScreen = ({ onNavigate }) => {
     const [isExporting, setIsExporting] = useState(false);
     const [reportData, setReportData] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [logoUrl, setLogoUrl] = useState(null);
 
     useEffect(() => {
         const fetchReport = async () => {
@@ -27,6 +28,7 @@ const ReportScreen = ({ onNavigate }) => {
             const result = await getReport();
             if (result.success) {
                 setReportData(result.data);
+                if (result.data.imageUrl) setLogoUrl(getImageUrl(result.data.imageUrl));
             }
             setLoading(false);
         };
@@ -412,7 +414,7 @@ const ReportScreen = ({ onNavigate }) => {
             <div className="report-page report-page-4">
                 {/* Top bar */}
                 <div className="p4-topbar">
-                    <img src={shinhanLogo} alt="신한은행" className="p4-bank-logo" />
+                    {logoUrl && <img src={logoUrl} alt="logo" className="p4-bank-logo" />}
                     <span className="p4-confidential">Confidential &amp; Proprietary</span>
                 </div>
 
@@ -655,7 +657,7 @@ const ReportScreen = ({ onNavigate }) => {
             {/* Page 6 - Strategic Identity: External Threats */}
             <div className="report-page report-page-6">
                 <div className="p4-topbar">
-                    <img src={shinhanLogo} alt="신한은행" className="p4-bank-logo" />
+                    {logoUrl && <img src={logoUrl} alt="logo" className="p4-bank-logo" />}
                     <span className="p4-confidential" style={{ color: '#8990A3' }}>Confidential &amp; Proprietary</span>
                 </div>
 
@@ -737,7 +739,7 @@ const ReportScreen = ({ onNavigate }) => {
             {/* Page 7 - Strategic Identity: Internal Limits */}
             <div className="report-page report-page-7">
                 <div className="p4-topbar">
-                    <img src={shinhanLogo} alt="신한은행" className="p4-bank-logo" />
+                    {logoUrl && <img src={logoUrl} alt="logo" className="p4-bank-logo" />}
                     <span className="p4-confidential" style={{ color: '#8990A3' }}>Confidential &amp; Proprietary</span>
                 </div>
 
@@ -865,7 +867,7 @@ const ReportScreen = ({ onNavigate }) => {
             {/* Page 9 - Performance Stream: New Future */}
             <div className="report-page report-page-9">
                 <div className="p4-topbar">
-                    <img src={shinhanLogo} alt="신한은행" className="p4-bank-logo" />
+                    {logoUrl && <img src={logoUrl} alt="logo" className="p4-bank-logo" />}
                     <span className="p4-confidential" style={{ color: '#8990A3' }}>Confidential &amp; Proprietary</span>
                 </div>
 
@@ -948,7 +950,7 @@ const ReportScreen = ({ onNavigate }) => {
             {/* Page 10 - Performance Stream: Strategic Goals */}
             <div className="report-page report-page-10">
                 <div className="p4-topbar">
-                    <img src={shinhanLogo} alt="신한은행" className="p4-bank-logo" />
+                    {logoUrl && <img src={logoUrl} alt="logo" className="p4-bank-logo" />}
                     <span className="p4-confidential" style={{ color: '#8990A3' }}>Confidential &amp; Proprietary</span>
                 </div>
 
@@ -1052,7 +1054,7 @@ const ReportScreen = ({ onNavigate }) => {
             {(reportData?.flowCanvasGoals?.goals?.length || 0) >= 21 && (
             <div className="report-page report-page-11">
                 <div className="p4-topbar">
-                    <img src={shinhanLogo} alt="신한은행" className="p4-bank-logo" />
+                    {logoUrl && <img src={logoUrl} alt="logo" className="p4-bank-logo" />}
                     <span className="p4-confidential" style={{ color: '#8990A3' }}>Confidential &amp; Proprietary</span>
                 </div>
 
@@ -1117,7 +1119,7 @@ const ReportScreen = ({ onNavigate }) => {
             {/* Page 12 - Performance Stream: Tactical KPI */}
             <div className="report-page report-page-12">
                 <div className="p4-topbar">
-                    <img src={shinhanLogo} alt="신한은행" className="p4-bank-logo" />
+                    {logoUrl && <img src={logoUrl} alt="logo" className="p4-bank-logo" />}
                     <span className="p4-confidential" style={{ color: '#8990A3' }}>Confidential &amp; Proprietary</span>
                 </div>
 
@@ -1198,7 +1200,7 @@ const ReportScreen = ({ onNavigate }) => {
             {(reportData?.tacticals?.length || 0) >= 45 && (
             <div className="report-page report-page-13">
                 <div className="p4-topbar">
-                    <img src={shinhanLogo} alt="신한은행" className="p4-bank-logo" />
+                    {logoUrl && <img src={logoUrl} alt="logo" className="p4-bank-logo" />}
                     <span className="p4-confidential" style={{ color: '#8990A3' }}>Confidential &amp; Proprietary</span>
                 </div>
 
@@ -1272,7 +1274,7 @@ const ReportScreen = ({ onNavigate }) => {
             {/* Page 14 - Performance Stream: Strategic KAI */}
             <div className="report-page report-page-14">
                 <div className="p4-topbar">
-                    <img src={shinhanLogo} alt="신한은행" className="p4-bank-logo" />
+                    {logoUrl && <img src={logoUrl} alt="logo" className="p4-bank-logo" />}
                     <span className="p4-confidential" style={{ color: '#8990A3' }}>Confidential &amp; Proprietary</span>
                 </div>
 
@@ -1354,7 +1356,7 @@ const ReportScreen = ({ onNavigate }) => {
             {(reportData?.strategicActivities?.length || 0) >= 45 && (
             <div className="report-page report-page-15">
                 <div className="p4-topbar">
-                    <img src={shinhanLogo} alt="신한은행" className="p4-bank-logo" />
+                    {logoUrl && <img src={logoUrl} alt="logo" className="p4-bank-logo" />}
                     <span className="p4-confidential" style={{ color: '#8990A3' }}>Confidential &amp; Proprietary</span>
                 </div>
 
@@ -1475,7 +1477,7 @@ const ReportScreen = ({ onNavigate }) => {
             {/* Page 17 - Quick Win */}
             <div className="report-page report-page-20">
                 <div className="p4-topbar">
-                    <img src={shinhanLogo} alt="신한은행" className="p4-bank-logo" />
+                    {logoUrl && <img src={logoUrl} alt="logo" className="p4-bank-logo" />}
                     <span className="p4-confidential" style={{ color: '#8990A3' }}>Confidential &amp; Proprietary</span>
                 </div>
 
@@ -1562,7 +1564,7 @@ const ReportScreen = ({ onNavigate }) => {
             {/* Page 18 - Build Win */}
             <div className="report-page report-page-20">
                 <div className="p4-topbar">
-                    <img src={shinhanLogo} alt="신한은행" className="p4-bank-logo" />
+                    {logoUrl && <img src={logoUrl} alt="logo" className="p4-bank-logo" />}
                     <span className="p4-confidential" style={{ color: '#8990A3' }}>Confidential &amp; Proprietary</span>
                 </div>
 

@@ -45,7 +45,7 @@ export const login = async (loginId, password) => {
 };
 
 export const logoutApi = async () => {
-    const accessToken = localStorage.getItem("accessToken");
+    const accessToken = sessionStorage.getItem("accessToken");
     try {
         await fetch(`${BASE_URL}/logout`, {
             method: "POST",

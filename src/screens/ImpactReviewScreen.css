@@ -1,0 +1,487 @@
+/* IMPACT Review - 실행과제 검증 (1920px 기준) */
+.ir-container {
+    width: 1920px;
+    min-height: 100vh;
+    background: #fff;
+    margin: 0 auto;
+    position: relative;
+}
+
+/* Sub Header */
+.ir-sub-header {
+    width: 1920px;
+    height: 140px;
+    background: #F3F5F9;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 42px;
+    box-sizing: border-box;
+}
+
+.ir-sub-header-title {
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 700;
+    font-size: 32px;
+    color: #353B72;
+}
+
+/* ── 탭 네비게이션 ── */
+.ir-tabs {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    padding: 0 42px;
+    margin-top: 24px;
+}
+
+.ir-tab {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 32px;
+    border: none;
+    cursor: pointer;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    border-radius: 6px 6px 0 0;
+    transition: background 0.15s, color 0.15s;
+}
+
+.ir-tab.active {
+    background: #222;
+    color: #fff;
+}
+
+.ir-tab:not(.active) {
+    background: #e0e0e0;
+    color: #888;
+}
+
+.ir-tab-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 800;
+}
+
+.ir-tab.active .ir-tab-badge {
+    background: #fff;
+    color: #222;
+}
+
+.ir-tab:not(.active) .ir-tab-badge {
+    background: #c0c0c0;
+    color: #fff;
+}
+
+.ir-tab-badge.done {
+    background: #d32f2f !important;
+    color: #fff !important;
+    font-size: 13px;
+}
+
+.ir-tab:not(.active) .ir-tab-badge.done {
+    background: #999 !important;
+}
+
+.ir-tab.active .ir-tab-badge.done {
+    background: #d32f2f !important;
+}
+
+/* ── 본문 2컬럼 ── */
+.ir-body {
+    display: flex;
+    gap: 36px;
+    padding: 28px 42px 60px;
+}
+
+.ir-left {
+    flex: 0 0 920px;
+}
+
+.ir-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+/* ── 평가 폼 영역 (왼쪽) ── */
+.ir-form-title {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 26px;
+    font-weight: 800;
+    text-align: center;
+    padding: 20px 0 16px;
+    border-bottom: 2px solid #222;
+    margin-bottom: 0;
+}
+
+/* 상단 정보 필드 */
+.ir-info-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.ir-info-table td {
+    border: 1px solid #ccc;
+    padding: 10px 14px;
+    font-size: 15px;
+    font-family: 'Pretendard', sans-serif;
+}
+
+.ir-info-label {
+    background: #f5f5f5;
+    font-weight: 700;
+    width: 130px;
+    color: #222;
+}
+
+.ir-info-value {
+    background: #fff;
+}
+
+.ir-info-select {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 15px;
+    font-family: 'Pretendard', sans-serif;
+    background: transparent;
+    cursor: pointer;
+    padding: 2px 0;
+}
+
+.ir-info-input {
+    border: none;
+    outline: none;
+    font-size: 15px;
+    font-family: 'Pretendard', sans-serif;
+    background: transparent;
+    width: 100%;
+    text-align: right;
+}
+
+.ir-info-input:read-only {
+    color: #666;
+}
+
+.ir-info-unit {
+    font-weight: 600;
+    white-space: nowrap;
+    width: 30px;
+}
+
+/* ── 검증 문항 테이블 ── */
+.ir-eval-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: -1px;
+}
+
+.ir-eval-table thead th {
+    background: #f5f5f5;
+    border: 1px solid #ccc;
+    padding: 10px 8px;
+    font-size: 14px;
+    font-weight: 700;
+    text-align: center;
+    font-family: 'Pretendard', sans-serif;
+}
+
+.ir-eval-table thead th.ir-th-score {
+    width: 70px;
+}
+
+.ir-eval-table thead th.ir-th-select {
+    width: 60px;
+    background: #f0c040;
+}
+
+.ir-eval-table thead th.ir-th-no {
+    width: 46px;
+}
+
+.ir-eval-table thead th.ir-th-category {
+    width: 100px;
+}
+
+.ir-eval-table tbody td {
+    border: 1px solid #ccc;
+    padding: 10px 12px;
+    font-size: 14px;
+    font-family: 'Pretendard', sans-serif;
+    vertical-align: middle;
+}
+
+.ir-eval-category {
+    text-align: center;
+    font-weight: 700;
+    background: #fafafa;
+    line-height: 1.5;
+}
+
+.ir-eval-no {
+    text-align: center;
+    font-weight: 600;
+}
+
+.ir-eval-question {
+    line-height: 1.6;
+}
+
+.ir-eval-score {
+    text-align: center;
+    font-weight: 700;
+    color: #333;
+}
+
+.ir-eval-select-cell {
+    text-align: center;
+}
+
+.ir-score-select {
+    width: 52px;
+    height: 32px;
+    border: 1px solid #bbb;
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: 'Pretendard', sans-serif;
+    text-align: center;
+    cursor: pointer;
+    background: #fff;
+}
+
+/* 종합의견 */
+.ir-opinion-row {
+    display: flex;
+    border: 1px solid #ccc;
+    border-top: none;
+}
+
+.ir-opinion-label {
+    background: #f5f5f5;
+    font-weight: 700;
+    font-size: 15px;
+    padding: 14px;
+    width: 130px;
+    display: flex;
+    align-items: flex-start;
+    border-right: 1px solid #ccc;
+    font-family: 'Pretendard', sans-serif;
+}
+
+.ir-opinion-textarea {
+    flex: 1;
+    border: none;
+    outline: none;
+    resize: vertical;
+    min-height: 100px;
+    padding: 14px;
+    font-size: 14px;
+    font-family: 'Pretendard', sans-serif;
+    line-height: 1.6;
+}
+
+/* 저장/제출 버튼 */
+.ir-form-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.ir-btn-save {
+    padding: 12px 40px;
+    background: #555;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Pretendard', sans-serif;
+}
+
+.ir-btn-save:hover {
+    opacity: 0.85;
+}
+
+.ir-btn-submit {
+    padding: 12px 40px;
+    background: #222;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Pretendard', sans-serif;
+}
+
+.ir-btn-submit:hover {
+    opacity: 0.85;
+}
+
+.ir-btn-save:disabled,
+.ir-btn-submit:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* ── 오른쪽: 포트폴리오 ── */
+.ir-section-title {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: #d32f2f;
+    margin-bottom: 16px;
+}
+
+.ir-portfolio-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.ir-portfolio-header {
+    display: flex;
+    padding: 12px 16px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #222;
+    border-bottom: 2px solid #222;
+}
+
+.ir-portfolio-header span:first-child {
+    flex: 1;
+}
+
+.ir-portfolio-header span:last-child {
+    width: 160px;
+    text-align: right;
+}
+
+.ir-portfolio-row {
+    display: flex;
+    align-items: center;
+    padding: 14px 16px;
+    border-bottom: 1px solid #eee;
+    font-size: 15px;
+    font-family: 'Pretendard', sans-serif;
+}
+
+.ir-portfolio-row:hover {
+    background: #fafafa;
+}
+
+.ir-portfolio-name {
+    flex: 1;
+    font-weight: 500;
+}
+
+.ir-portfolio-amount {
+    width: 160px;
+    text-align: right;
+    font-weight: 700;
+}
+
+/* 차트 영역 */
+.ir-chart-title {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: #d32f2f;
+    margin-bottom: 12px;
+}
+
+.ir-chart-box {
+    background: #f7f7f7;
+    border-radius: 8px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 280px;
+}
+
+/* ── 탭3: 최종 결과 ── */
+.ir-result-body {
+    padding: 28px 42px 60px;
+}
+
+.ir-result-section {
+    margin-bottom: 48px;
+}
+
+.ir-result-title {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 26px;
+    font-weight: 800;
+    color: #d32f2f;
+    margin-bottom: 20px;
+}
+
+.ir-result-content {
+    display: flex;
+    gap: 36px;
+}
+
+.ir-result-chart {
+    flex: 0 0 540px;
+    background: #f7f7f7;
+    border-radius: 8px;
+    padding: 24px;
+    min-height: 320px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ir-result-opinions {
+    flex: 1;
+}
+
+.ir-opinions-header {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: #222;
+    margin-bottom: 16px;
+}
+
+.ir-opinions-badge {
+    display: inline-block;
+    background: #d32f2f;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 4px;
+    margin-bottom: 12px;
+}
+
+.ir-opinions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 360px;
+    overflow-y: auto;
+}
+
+.ir-opinion-card {
+    background: #f5f5f5;
+    border-radius: 6px;
+    padding: 16px 18px;
+    font-size: 14px;
+    line-height: 1.7;
+    font-family: 'Pretendard', sans-serif;
+    color: #333;
+}

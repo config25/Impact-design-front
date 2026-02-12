@@ -1528,3 +1528,40 @@ th.td2-qw-th-sub { background: inherit; }
 .td2-qw-outcomes-item:last-child {
     border-bottom: none;
 }
+
+/* ── 실행과제 검증 열람 모달 (F-1, F-2) ── */
+.td2-funding-modal {
+    background: #fff;
+    border-radius: 6px;
+    width: 1400px;
+    max-width: 95vw;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.td2-funding-modal-body {
+    padding: 0;
+}
+
+/* 읽기전용 점수 표시 */
+.ir-score-display {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 32px;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: 'Pretendard', sans-serif;
+    color: #1a237e;
+}
+
+/* ── 최종 결과 열람 모달 (F-3) ── */
+.td2-result-modal {
+    background: #fff;
+    border-radius: 6px;
+    width: 1300px;
+    max-width: 95vw;
+    max-height: 90vh;
+    overflow-y: auto;
+}

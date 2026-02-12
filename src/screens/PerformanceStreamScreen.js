@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import GNB from "../components/common/GNB";
+import TipsModal from "../components/common/TipsModal";
 import "./PerformanceStreamScreen.css";
-import shinhanLogo from "../resource/flow/신한은행.png";
 import component1 from "../resource/flow/Component 1.png";
+import { getImageUrl } from "../utils/logoUtil";
 import vector3 from "../resource/flow/Vector 3.png";
 import pencil2 from "../resource/quick/pencil2.png";
 import pencilIcon from "../resource/identity/pencil.png";
@@ -62,11 +63,14 @@ const PerformanceStreamScreen = ({ onNavigate }) => {
 
     // Submit state
     const [submitted, setSubmitted] = useState(false);
+    const [showTips, setShowTips] = useState(false);
+    const [logoUrl, setLogoUrl] = useState(null);
 
     useEffect(() => {
         const fetchData = async () => {
             const result = await getFlowCanvas();
             if (result.success && result.data) {
+                if (result.data.imageUrl) setLogoUrl(getImageUrl(result.data.imageUrl));
                 if (result.data.newVision) {
                     setNewVision(result.data.newVision);
                 }
@@ -184,7 +188,7 @@ const PerformanceStreamScreen = ({ onNavigate }) => {
             <div className="sub-header">
                 <div className="sub-header-title">2. Performance Flow Canvas</div>
                 <div className="sub-header-actions">
-                    <button className="tips-button">
+                    <button className="tips-button" onClick={() => setShowTips(true)}>
                         <img src={pencil2} alt="" className="pencil-icon" />
                         <span className="tips-text">
                             <span className="tips-text-bold">작성 Tips</span>
@@ -216,9 +220,11 @@ const PerformanceStreamScreen = ({ onNavigate }) => {
                             </p>
                         </div>
                     </div>
-                    <div className="logo-wrapper">
-                        <img src={shinhanLogo} alt="신한은행" className="logo-img" />
-                    </div>
+                    {logoUrl && (
+                        <div className="logo-wrapper">
+                            <img src={logoUrl} alt="logo" className="logo-img" />
+                        </div>
+                    )}
                 </header>
 
                 {/* New Vision Banner */}
@@ -359,6 +365,14 @@ const PerformanceStreamScreen = ({ onNavigate }) => {
                     </div>
                 </div>
             </div>
+
+            <TipsModal
+                show={showTips}
+                onClose={() => setShowTips(false)}
+                title="성과경로 설계"
+                concept={`Performance Flow Canvas는 비전을 달성하기 위한 전략목표(Strategic Goal)와 실행 경로를 설계하는 도구입니다.\n\n비전은 선언만으로 달성되지 않습니다. 전략목표를 설정하고, 이를 현실로 만들기 위한 전술적 성과지표와 전략적 활동지표를 함께 설계해야 합니다.`}
+                method={`1. 3대 전략목표: New Vision을 기반으로, '어떤 방식의 성과를 만들겠다는 선택'을 3가지로 설정합니다.\n   - 예) 매출 확대(X) → 고수익 구조로의 전환(O)\n2. 전술적 성과: 전략목표를 향해 가고 있음을 단기적으로 확인할 수 있는 구체적인 성과지표를 작성합니다.\n   - 예) 영업 활동 강화(X) → 고수익 고객 매출 비중 +8%(O)\n3. 전략적 활동: 반복 가능한 구조와 체질로 자리 잡았는지를 확인하는 내재화 기준을 작성합니다.\n   - 예) 3분기 연속 유지, 규범화 완료 등`}
+            />
         </div>
     );
 };

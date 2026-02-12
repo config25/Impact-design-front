@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import GNB from "../components/common/GNB";
+import TipsModal from "../components/common/TipsModal";
 import "./QuickWinScreen.css";
-import shinhanLogo from "../resource/flow/신한은행.png";
 import component1 from "../resource/quick/Component 1.png";
+import { getImageUrl } from "../utils/logoUtil";
 import vector3 from "../resource/quick/Vector 3.png";
 import pencil2 from "../resource/quick/pencil2.png";
 import pencil from "../resource/start/pencil.png";
@@ -34,12 +35,15 @@ const QuickWinScreen = ({ onNavigate }) => {
 
     // Submit state
     const [submitted, setSubmitted] = useState(false);
+    const [showTips, setShowTips] = useState(false);
+    const [logoUrl, setLogoUrl] = useState(null);
 
     useEffect(() => {
         const fetchData = async () => {
             const result = await getQuickWinCanvas();
             if (result.success && result.data) {
                 const d = result.data;
+                if (d.imageUrl) setLogoUrl(getImageUrl(d.imageUrl));
                 setAlignment(d.strategicGoal || "");
                 setTaskName(d.taskName || "");
                 setTaskContent(d.taskDescription || "");
@@ -146,7 +150,7 @@ const QuickWinScreen = ({ onNavigate }) => {
             <div className="sub-header">
                 <div className="sub-header-title">3. Quick Win Canvas</div>
                 <div className="sub-header-actions">
-                    <button className="tips-button">
+                    <button className="tips-button" onClick={() => setShowTips(true)}>
                         <img src={pencil2} alt="" className="pencil-icon" />
                         <span className="tips-text"><span className="tips-text-bold">작성 Tips</span><span className="tips-text-regular">를 확인해보세요!</span></span>
                     </button>
@@ -175,9 +179,11 @@ const QuickWinScreen = ({ onNavigate }) => {
                             </p>
                         </div>
                     </div>
-                    <div className="logo-wrapper">
-                        <img src={shinhanLogo} alt="신한은행" className="logo-img" />
-                    </div>
+                    {logoUrl && (
+                        <div className="logo-wrapper">
+                            <img src={logoUrl} alt="logo" className="logo-img" />
+                        </div>
+                    )}
                 </header>
 
                 {/* Content */}
@@ -614,6 +620,14 @@ const QuickWinScreen = ({ onNavigate }) => {
                     </div>
                 </div>
             </div>
+
+            <TipsModal
+                show={showTips}
+                onClose={() => setShowTips(false)}
+                title="전술적 실행과제"
+                concept={`Quick Win Canvas는 전략목표 달성을 가로막는 장애물을 빠르게 제거하여, 단기간에 가시적 성과를 만들어내는 전술적 실행과제를 설계하는 도구입니다.\n\nQuick Win이 실행되지 않으면, 지금 당장 만들 수 있는 성과를 계속 놓치게 됩니다.`}
+                method={`1. 전략목표 Alignment: 이 과제가 연계된 전략목표(방향)를 명확히 합니다.\n2. 전술적 실행과제: 과제명과 주요 내용을 구체적으로 작성합니다.\n   - 과제명은 '무엇을 제거/해결하는 과제'인지 한 문장으로 표현\n3. 상황(Situation): 위기의 신호와 Pain/Touch point를 분석합니다.\n4. 투입(Input) → 활동(Activity) → 산출(Outputs): 필요 자원, 추진 절차, 팀워크를 논리적 흐름으로 작성합니다.\n5. 성과(Outcomes): 정성적 효과(체감 변화)와 정량적 효과(측정 가능 변화)를 구분하여 작성합니다.`}
+            />
         </div>
     );
 };

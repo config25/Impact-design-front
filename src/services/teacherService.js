@@ -3,7 +3,7 @@ import { API_BASE, authFetch } from "./apiConfig";
 const BASE_URL = `${API_BASE}/teach`;
 const ADMIN_BASE_URL = `${API_BASE}/admin/teach`;
 
-const isAdmin = () => localStorage.getItem("userRole") === "ADMIN";
+const isAdmin = () => sessionStorage.getItem("userRole") === "ADMIN";
 
 export const getTeachIndex = async () => {
     const url = isAdmin() ? ADMIN_BASE_URL : BASE_URL;
@@ -63,11 +63,15 @@ export const getTeachList = async () => {
     return { success: false, message: result.data?.message || "강의실 현황을 불러오는데 실패했습니다." };
 };
 
-export const createClass = async (data) => {
+export const createClass = async (data, imageFile) => {
+    const formData = new FormData();
+    formData.append("request", new Blob([JSON.stringify(data)], { type: "application/json" }));
+    if (imageFile) {
+        formData.append("image", imageFile);
+    }
     const response = await authFetch(`${BASE_URL}/class`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: formData,
     });
     const result = await response.json();
 
@@ -220,6 +224,37 @@ export const getBuildWinByTeam = async (teamId) => {
     }
 
     return { success: false, message: result.data?.message || "전략적 실행과제 데이터를 불러오는데 실패했습니다." };
+};
+
+/**
+ * 실행과제 검증 열람 (F-1: quick, F-2: build)
+ * @param {string} canvasType - "quick" 또는 "build"
+ * @param {number} teamId - 팀 ID
+ */
+export const getFundingByTeam = async (canvasType, teamId) => {
+    const response = await authFetch(`${BASE_URL}/submission/funding/${canvasType}?teamId=${teamId}`);
+    const result = await response.json();
+
+    if (response.ok) {
+        return { success: true, data: result.data };
+    }
+
+    return { success: false, message: result.data?.message || "실행과제 검증 데이터를 불러오는데 실패했습니다." };
+};
+
+/**
+ * 팀별 최종 결과 열람 (F-3: Quick Win + Build Win)
+ * @param {number} teamId - 팀 ID
+ */
+export const getFundingResultByTeam = async (teamId) => {
+    const response = await authFetch(`${BASE_URL}/submission/funding/result?teamId=${teamId}`);
+    const result = await response.json();
+
+    if (response.ok) {
+        return { success: true, data: result.data };
+    }
+
+    return { success: false, message: result.data?.message || "최종 결과 데이터를 불러오는데 실패했습니다." };
 };
 
 export const getTeamInfo = async (teamId) => {

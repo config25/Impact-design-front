@@ -1,13 +1,15 @@
 export const API_BASE = process.env.REACT_APP_API_URL || "http://localhost:8080/api";
 
 let globalLogout = null;
+let isLoggingOut = false;
 
 export const setGlobalLogout = (fn) => {
     globalLogout = fn;
+    isLoggingOut = false;
 };
 
 export const authFetch = async (url, options = {}) => {
-    const accessToken = localStorage.getItem("accessToken");
+    const accessToken = sessionStorage.getItem("accessToken");
 
     const response = await fetch(url, {
         ...options,
@@ -17,9 +19,10 @@ export const authFetch = async (url, options = {}) => {
         },
     });
 
-    if (response.status === 401 && globalLogout) {
+    if (response.status === 401 && globalLogout && !isLoggingOut) {
+        isLoggingOut = true;
+        alert("세션이 만료되었습니다. 다시 로그인해주세요.");
         globalLogout();
-        return response;
     }
 
     return response;
