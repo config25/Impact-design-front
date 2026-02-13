@@ -110,9 +110,20 @@
     color: #333;
 }
 
-.tsv-input-name:focus {
+.tsv-input-name:focus,
+.tsv-input-date:focus {
     outline: none;
     border-color: #66afe9;
+}
+
+/* Project Date 인풋 */
+.tsv-input-date {
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 13px;
+    color: #333;
 }
 
 /* 팀수 / 팀원수 셀렉트 */

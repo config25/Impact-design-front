@@ -6,6 +6,8 @@ const TeachSave = ({ onNavigate }) => {
     const [classType, setClassType] = useState("Basic");
     const [groupType, setGroupType] = useState("team");
     const [className, setClassName] = useState("");
+    const [target, setTarget] = useState("");
+    const [projectDate, setProjectDate] = useState("");
     const [teamCount, setTeamCount] = useState(3);
     const [memberCount, setMemberCount] = useState(1);
     const [imageFile, setImageFile] = useState(null);
@@ -22,6 +24,8 @@ const TeachSave = ({ onNavigate }) => {
             numTeam: teamCount,
             numMember: memberCount,
             classType: classType,
+            target: target,
+            projectDate: projectDate,
         }, imageFile);
 
         if (result.success) {
@@ -89,6 +93,29 @@ const TeachSave = ({ onNavigate }) => {
                                         placeholder="강의실 명"
                                         value={className}
                                         onChange={e => setClassName(e.target.value)}
+                                    />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>대상</th>
+                                <td>
+                                    <input
+                                        type="text"
+                                        className="tsv-input-name"
+                                        placeholder="대상을 입력해주세요"
+                                        value={target}
+                                        onChange={e => setTarget(e.target.value)}
+                                    />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Project Date</th>
+                                <td>
+                                    <input
+                                        type="date"
+                                        className="tsv-input-date"
+                                        value={projectDate}
+                                        onChange={e => setProjectDate(e.target.value)}
                                     />
                                 </td>
                             </tr>

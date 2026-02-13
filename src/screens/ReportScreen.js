@@ -27,6 +27,7 @@ const ReportScreen = ({ onNavigate }) => {
             setLoading(true);
             const result = await getReport();
             if (result.success) {
+                console.log("reportData:", result.data);
                 setReportData(result.data);
                 if (result.data.imageUrl) setLogoUrl(getImageUrl(result.data.imageUrl));
             }
@@ -254,15 +255,15 @@ const ReportScreen = ({ onNavigate }) => {
                 <div className="cover-info">
                     <div className="cover-info-item">
                         <p className="cover-info-label"><span className="cover-info-bar">|</span>&nbsp;&nbsp;Project Date</p>
-                        <p className="cover-info-value">2026. 00. 00</p>
+                        <p className="cover-info-value">{reportData?.projectDate ? reportData.projectDate.replaceAll("-", ". ") : "-"}</p>
                     </div>
                     <div className="cover-info-item">
                         <p className="cover-info-label"><span className="cover-info-bar">|</span>&nbsp;&nbsp;과정명</p>
-                        <p className="cover-info-value">신임팀장 성과관리 과정</p>
+                        <p className="cover-info-value">{reportData?.className || "-"}</p>
                     </div>
                     <div className="cover-info-item">
                         <p className="cover-info-label"><span className="cover-info-bar">|</span>&nbsp;&nbsp;대상</p>
-                        <p className="cover-info-value">팀장급 30명</p>
+                        <p className="cover-info-value">{reportData?.target || "-"}</p>
                     </div>
                     <div className="cover-info-item">
                         <p className="cover-info-label"><span className="cover-info-bar">|</span>&nbsp;&nbsp;Facilitator</p>

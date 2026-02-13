@@ -181,88 +181,57 @@ const EvalForm = ({ type, questions, title }) => {
         }
     };
 
-    // 검증 문항 행 렌더
-    const renderRows = () => {
-        const rows = [];
-        questions.forEach((group) => {
-            group.items.forEach((item, idx) => {
-                rows.push(
-                    <tr key={item.no}>
-                        {idx === 0 && (
-                            <td className="ir-eval-category" rowSpan={group.rowSpan} style={{ whiteSpace: "pre-line" }}>
-                                {group.category}
-                            </td>
-                        )}
-                        <td className="ir-eval-no">{item.no}</td>
-                        <td className="ir-eval-question">{item.q}</td>
-                        <td className="ir-eval-score">{item.score}</td>
-                        <td className="ir-eval-select-cell">
-                            <select
-                                className="ir-score-select"
-                                value={scores[item.no] != null ? scores[item.no] : ""}
-                                onChange={(e) => handleScoreChange(item.no, e.target.value)}
-                            >
-                                <option value=""></option>
-                                {Array.from({ length: item.score + 1 }, (_, i) => (
-                                    <option key={i} value={i}>{i}</option>
-                                ))}
-                            </select>
-                        </td>
-                    </tr>
-                );
-            });
-        });
-        return rows;
-    };
-
     return (
         <div className="ir-left">
-            <div className="ir-form-title">{title}</div>
+            <div className="ir-left-card">
+                <div className="ir-form-title">{title}</div>
 
-            {/* 상단 정보 */}
-            <table className="ir-info-table">
-                <tbody>
-                    <tr>
-                        <td className="ir-info-label">검증 대상</td>
-                        <td className="ir-info-value" colSpan="3">
-                            <select
-                                className="ir-info-select"
-                                value={selectedTeam}
-                                onChange={(e) => handleTeamChange(e.target.value)}
-                            >
-                                <option value="">팀을 선택하세요</option>
-                                {teams.map(t => (
-                                    <option key={t.teamId} value={t.teamId}>{t.teamName}</option>
-                                ))}
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td className="ir-info-label">실행 과제명</td>
-                        <td className="ir-info-value" colSpan="3">
+                {/* 검증 대상 */}
+                <div className="ir-field-group">
+                    <div className="ir-field-label">검증 대상</div>
+                    <div className="ir-field-box">
+                        <select
+                            value={selectedTeam}
+                            onChange={(e) => handleTeamChange(e.target.value)}
+                        >
+                            <option value="">팀을 선택하세요</option>
+                            {teams.map(t => (
+                                <option key={t.teamId} value={t.teamId}>{t.teamName}</option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+
+                {/* 실행 과제명 */}
+                <div className="ir-field-group">
+                    <div className="ir-field-label">실행 과제명</div>
+                    <div className="ir-field-box">
+                        <input
+                            value={taskName}
+                            readOnly
+                            placeholder="팀명을 입력하세요."
+                        />
+                    </div>
+                </div>
+
+                {/* 예산 */}
+                <div className="ir-field-row">
+                    <div className="ir-field-group ir-field-half">
+                        <div className="ir-field-label">투입가능 예산</div>
+                        <div className="ir-field-box">
                             <input
-                                className="ir-info-input"
-                                style={{ textAlign: "left" }}
-                                value={taskName}
-                                readOnly
-                                placeholder="팀을 선택하면 자동으로 입력됩니다."
-                            />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td className="ir-info-label">투입가능 예산</td>
-                        <td className="ir-info-value" style={{ display: "flex", alignItems: "center" }}>
-                            <input
-                                className="ir-info-input"
+                                className="ir-budget-value"
                                 value={formatNumber(availableBudget)}
                                 readOnly
                             />
-                            <span className="ir-info-unit">원</span>
-                        </td>
-                        <td className="ir-info-label">투자 예산</td>
-                        <td className="ir-info-value" style={{ display: "flex", alignItems: "center" }}>
+                            <span className="ir-field-unit">원</span>
+                        </div>
+                    </div>
+                    <div className="ir-field-group ir-field-half">
+                        <div className="ir-field-label">투자 예산</div>
+                        <div className="ir-field-box">
                             <input
-                                className="ir-info-input"
+                                className="ir-budget-input"
                                 value={investBudget}
                                 onChange={(e) => {
                                     const raw = e.target.value.replace(/,/g, "").replace(/\D/g, "");
@@ -272,43 +241,56 @@ const EvalForm = ({ type, questions, title }) => {
                                 }}
                                 placeholder="0"
                             />
-                            <span className="ir-info-unit">원</span>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                            <span className="ir-field-unit">원</span>
+                        </div>
+                    </div>
+                </div>
 
-            {/* 검증 문항 */}
-            <table className="ir-eval-table">
-                <thead>
-                    <tr>
-                        <th className="ir-th-category">구분</th>
-                        <th className="ir-th-no">번호</th>
-                        <th>검증 문항</th>
-                        <th className="ir-th-score"></th>
-                        <th className="ir-th-select"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {renderRows()}
-                </tbody>
-            </table>
+                {/* 검증 문항 */}
+                <div className="ir-eval-area">
+                    {questions.map((group, gi) => (
+                        <div className="ir-eval-group" key={gi}>
+                            <div className="ir-eval-group-title">
+                                {group.category.replace(/\n/g, ' ')}
+                            </div>
+                            {group.items.map(item => (
+                                <div className="ir-eval-row" key={item.no}>
+                                    <span className="ir-eval-badge">{item.no}</span>
+                                    <span className="ir-eval-text">{item.q}</span>
+                                    <div className="ir-eval-score-wrap">
+                                        <select
+                                            value={scores[item.no] != null ? scores[item.no] : ""}
+                                            onChange={(e) => handleScoreChange(item.no, e.target.value)}
+                                        >
+                                            <option value=""></option>
+                                            {Array.from({ length: item.score + 1 }, (_, i) => (
+                                                <option key={i} value={i}>{i}점</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    ))}
 
-            {/* 종합의견 */}
-            <div className="ir-opinion-row">
-                <div className="ir-opinion-label">종합의견</div>
-                <textarea
-                    className="ir-opinion-textarea"
-                    value={opinion}
-                    onChange={(e) => setOpinion(e.target.value)}
-                    placeholder="종합의견을 입력하세요."
-                />
-            </div>
+                    {/* 종합의견 */}
+                    <div className="ir-opinion-section">
+                        <div className="ir-opinion-title">종합의견</div>
+                        <div className="ir-opinion-box">
+                            <textarea
+                                value={opinion}
+                                onChange={(e) => setOpinion(e.target.value)}
+                                placeholder="종합의견에 대한 텍스트가 입력됩니다."
+                            />
+                        </div>
+                    </div>
+                </div>
 
-            {/* 버튼 */}
-            <div className="ir-form-actions">
-                <button className="ir-btn-save" onClick={handleSave} disabled={submitted}>저장</button>
-                <button className="ir-btn-submit" onClick={handleSubmit} disabled={submitted}>{submitted ? "제출됨" : "제출완료"}</button>
+                {/* 버튼 */}
+                <div className="ir-form-actions">
+                    <button className="ir-btn-save" onClick={handleSave} disabled={submitted}>저장</button>
+                    <button className="ir-btn-submit" onClick={handleSubmit} disabled={submitted}>{submitted ? "제출됨" : "제출완료"}</button>
+                </div>
             </div>
         </div>
     );
@@ -316,12 +298,12 @@ const EvalForm = ({ type, questions, title }) => {
 
 // ── 오른쪽 패널 (포트폴리오 + 차트) ──
 const CHART_COLORS = [
-    "rgba(0,0,139,0.6)", "rgba(30,144,255,0.6)", "rgba(65,105,225,0.6)",
-    "rgba(0,0,205,0.6)", "rgba(25,25,112,0.6)", "rgba(0,191,255,0.6)",
+    "#7B87F5", "#8AEAFF", "#3CDFC2", "#F5D562",
+    "#F5A623", "#E86B6B",
 ];
 const CHART_BORDERS = [
-    "rgba(0,0,139,1)", "rgba(30,144,255,1)", "rgba(65,105,225,1)",
-    "rgba(0,0,205,1)", "rgba(25,25,112,1)", "rgba(0,191,255,1)",
+    "#7B87F5", "#8AEAFF", "#3CDFC2", "#F5D562",
+    "#F5A623", "#E86B6B",
 ];
 
 const RightPanel = ({ type }) => {
@@ -348,8 +330,8 @@ const RightPanel = ({ type }) => {
 
     // 도넛 차트
     useEffect(() => {
-        if (!portfolio || !donutRef.current) return;
-        if (donutChart.current) donutChart.current.destroy();
+        if (!portfolio || !donutRef.current || !donutRef.current.isConnected) return;
+        if (donutChart.current) { donutChart.current.destroy(); donutChart.current = null; }
 
         const items = portfolio.investments || [];
         donutChart.current = new Chart(donutRef.current, {
@@ -359,34 +341,46 @@ const RightPanel = ({ type }) => {
                 datasets: [{
                     data: items.map(p => p.investmentPrice),
                     backgroundColor: CHART_COLORS.slice(0, items.length),
-                    borderColor: CHART_BORDERS.slice(0, items.length),
-                    borderWidth: 1,
+                    borderColor: "#fff",
+                    borderWidth: 2,
                 }],
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                resizeDelay: 200,
+                cutout: "45%",
                 plugins: {
-                    legend: { position: "right", labels: { font: { family: "Pretendard", size: 13 } } },
+                    legend: {
+                        position: "top",
+                        align: "end",
+                        labels: {
+                            font: { family: "Pretendard", size: 13, weight: "500" },
+                            color: "#333",
+                            usePointStyle: true,
+                            pointStyle: "rectRounded",
+                            padding: 16,
+                        },
+                    },
                     tooltip: { callbacks: { label: (ctx) => `${ctx.label}: ${formatNumber(ctx.raw)}원` } },
                 },
                 animation: { animateRotate: true, animateScale: true, duration: 1000 },
             },
         });
 
-        return () => { if (donutChart.current) donutChart.current.destroy(); };
+        return () => { if (donutChart.current) { donutChart.current.destroy(); donutChart.current = null; } };
     }, [portfolio]);
 
     // 라인 차트
     useEffect(() => {
-        if (!scores || !lineRef.current) return;
-        if (lineChart.current) lineChart.current.destroy();
+        if (!scores || !lineRef.current || !lineRef.current.isConnected) return;
+        if (lineChart.current) { lineChart.current.destroy(); lineChart.current = null; }
 
         const teams = scores.teamScores || [];
         lineChart.current = new Chart(lineRef.current, {
             type: "line",
             data: {
-                labels: ["Problem", "Solution", type === "quickwin" ? "Action" : "Scale up", "Effect"],
+                labels: [["Problem", "(문제정의)"], ["Solution", "(솔루션)"], type === "quickwin" ? ["Action", "(실행력)"] : ["Scale up", "(성장성)"], ["Effect", "(파급효과)"]],
                 datasets: teams.map((t, i) => ({
                     label: t.teamName,
                     data: [t.problemScore, t.solutionScore, t.scaleUpScore, t.effectScore],
@@ -395,24 +389,54 @@ const RightPanel = ({ type }) => {
                     tension: 0.3,
                     pointRadius: 5,
                     pointHoverRadius: 7,
+                    borderWidth: 2,
                     fill: false,
                 })),
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                resizeDelay: 200,
+                layout: { padding: { top: 8 } },
                 scales: {
-                    y: { suggestedMin: 0, suggestedMax: 30, ticks: { font: { family: "Pretendard" } } },
-                    x: { ticks: { color: "#d32f2f", font: { family: "Pretendard", weight: "bold" } } },
+                    y: {
+                        suggestedMin: 0,
+                        suggestedMax: 30,
+                        ticks: {
+                            stepSize: 5,
+                            font: { family: "Pretendard", size: 12, weight: "400" },
+                            color: "#999999",
+                        },
+                        grid: { color: "#E8E8E8" },
+                        border: { display: false },
+                    },
+                    x: {
+                        ticks: {
+                            font: { family: "Pretendard", size: 13, weight: "600" },
+                            color: "#555555",
+                        },
+                        grid: { display: false },
+                        border: { display: true, color: "#D7D7D7" },
+                    },
                 },
                 plugins: {
-                    legend: { position: "top", labels: { font: { family: "Pretendard", size: 12 } } },
+                    legend: {
+                        position: "top",
+                        align: "end",
+                        labels: {
+                            font: { family: "Pretendard", size: 13, weight: "500" },
+                            color: "#333",
+                            usePointStyle: true,
+                            pointStyle: "rectRounded",
+                            padding: 16,
+                        },
+                    },
                 },
                 animation: { duration: 1200, easing: "easeOutQuart" },
             },
         });
 
-        return () => { if (lineChart.current) lineChart.current.destroy(); };
+        return () => { if (lineChart.current) { lineChart.current.destroy(); lineChart.current = null; } };
     }, [scores, type]);
 
     const investments = portfolio?.investments || [];
@@ -420,9 +444,9 @@ const RightPanel = ({ type }) => {
     return (
         <div className="ir-right">
             {/* 예산 투자 포트폴리오 */}
-            <div>
-                <div className="ir-section-title">예산 투자 포트폴리오</div>
-                <div className="ir-portfolio-list">
+            <div className="ir-right-card ir-card-portfolio">
+                <div className="ir-right-card-title">예산 투자 포트폴리오</div>
+                <div className="ir-portfolio-scroll">
                     <div className="ir-portfolio-header">
                         <span>투자 대상</span>
                         <span>투자 금액</span>
@@ -442,17 +466,17 @@ const RightPanel = ({ type }) => {
             </div>
 
             {/* 투자 포트폴리오 현황 (도넛) */}
-            <div>
-                <div className="ir-chart-title">투자 포트폴리오 현황</div>
-                <div className="ir-chart-box">
+            <div className="ir-right-card ir-card-donut">
+                <div className="ir-right-card-title">투자 포트폴리오 현황</div>
+                <div className="ir-chart-box ir-chart-donut">
                     <canvas ref={donutRef} />
                 </div>
             </div>
 
-            {/* 나의 실행과제 평가 현황 (라인) */}
-            <div>
-                <div className="ir-chart-title">나의 실행과제 평가 현황</div>
-                <div className="ir-chart-box">
+            {/* 나의 아이디어 및 BM 평가 현황 (라인) */}
+            <div className="ir-right-card ir-card-line">
+                <div className="ir-right-card-title">나의 아이디어 및 BM 평가 현황</div>
+                <div className="ir-chart-box ir-chart-line">
                     <canvas ref={lineRef} />
                 </div>
             </div>
@@ -512,25 +536,55 @@ const ResultTab = () => {
             data: {
                 labels: labels.map(l => l.split("\n")),
                 datasets: [{
-                    label: "획득 점수",
+                    label: "청중평가",
                     data: data,
-                    backgroundColor: "#37474f",
-                    hoverBackgroundColor: "#1a237e",
-                    borderRadius: 4,
-                    barPercentage: 0.5,
+                    backgroundColor: "#7B87F5",
+                    hoverBackgroundColor: "#5364F7",
+                    borderRadius: 0,
+                    barPercentage: 0.45,
+                    categoryPercentage: 0.6,
                 }],
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                resizeDelay: 200,
+                layout: { padding: { top: 10 } },
                 scales: {
-                    y: { suggestedMin: 0, suggestedMax: 30, ticks: { stepSize: 5, font: { family: "Pretendard" } } },
-                    x: { ticks: { font: { family: "Pretendard", size: 11 } } },
+                    y: {
+                        min: 0,
+                        max: 10,
+                        ticks: {
+                            stepSize: 1,
+                            font: { family: "Inter", size: 12, weight: "400" },
+                            color: "#999999",
+                        },
+                        grid: { color: "#D7D7D7" },
+                        border: { display: false },
+                    },
+                    x: {
+                        ticks: {
+                            font: { family: "Pretendard", size: 14, weight: "600" },
+                            color: "#555555",
+                        },
+                        grid: { display: false },
+                        border: { display: true, color: "#D7D7D7" },
+                    },
                 },
                 plugins: {
                     legend: { display: false },
-                    title: { display: true, text: "부문별 획득 점수", align: "start", font: { family: "Pretendard", size: 14, weight: "bold" } },
-                    tooltip: { callbacks: { label: (ctx) => `${ctx.raw}점` } },
+                    title: { display: false },
+                    tooltip: {
+                        enabled: true,
+                        backgroundColor: "#fff",
+                        borderColor: "#CACACA",
+                        borderWidth: 1,
+                        titleColor: "#999",
+                        bodyColor: "#999999",
+                        bodyFont: { family: "Pretendard", size: 14, weight: "600" },
+                        displayColors: false,
+                        callbacks: { label: (ctx) => ctx.raw.toFixed(1) },
+                    },
                 },
                 animations: {
                     y: {
@@ -551,44 +605,46 @@ const ResultTab = () => {
 
     return (
         <div className="ir-result-body">
-            {/* Quick Win 결과 */}
-            <div className="ir-result-section">
-                <div className="ir-result-title">Quick Win 실행과제 검증결과</div>
-                <div className="ir-result-content">
-                    <div className="ir-result-chart">
+            {/* Quick Win 행 */}
+            <div className="ir-result-row">
+                <div className="ir-result-card">
+                    <div className="ir-result-title">Quick Win 실행과제평가</div>
+                    <div className="ir-result-chart-subtitle">부문별 획득 점수</div>
+                    <div className="ir-result-legend"><span className="ir-legend-box" /><span className="ir-legend-label">청중평가</span></div>
+                    <div className="ir-result-chart-box">
                         <canvas ref={qwBarRef} />
                     </div>
-                    <div className="ir-result-opinions">
-                        <div className="ir-opinions-header">평가 참가자 의견 ({qwCount}명)</div>
-                        <div className="ir-opinions-badge">전체 코멘트</div>
-                        <div className="ir-opinions-list">
-                            {qwOpinions.length > 0 ? qwOpinions.map((o, i) => (
-                                <div key={i} className="ir-opinion-card">{o}</div>
-                            )) : (
-                                <div className="ir-opinion-card" style={{ color: "#999", textAlign: "center" }}>아직 등록된 의견이 없습니다.</div>
-                            )}
-                        </div>
+                </div>
+                <div className="ir-result-card">
+                    <div className="ir-opinions-header">평가 참가자 의견</div>
+                    <div className="ir-opinions-list">
+                        {qwOpinions.length > 0 ? qwOpinions.map((o, i) => (
+                            <div key={i} className="ir-opinion-card">{o}</div>
+                        )) : (
+                            <div className="ir-opinion-card" style={{ color: "#999", textAlign: "center" }}>아직 등록된 의견이 없습니다.</div>
+                        )}
                     </div>
                 </div>
             </div>
 
-            {/* Build Win 결과 */}
-            <div className="ir-result-section">
-                <div className="ir-result-title">Build Win 실행과제 검증결과</div>
-                <div className="ir-result-content">
-                    <div className="ir-result-chart">
+            {/* Build Win 행 */}
+            <div className="ir-result-row">
+                <div className="ir-result-card">
+                    <div className="ir-result-title">Build Win 실행과제평가</div>
+                    <div className="ir-result-chart-subtitle">부문별 획득 점수</div>
+                    <div className="ir-result-legend"><span className="ir-legend-box" /><span className="ir-legend-label">청중평가</span></div>
+                    <div className="ir-result-chart-box">
                         <canvas ref={bwBarRef} />
                     </div>
-                    <div className="ir-result-opinions">
-                        <div className="ir-opinions-header">평가 참가자 의견 ({bwCount}명)</div>
-                        <div className="ir-opinions-badge">전체 코멘트</div>
-                        <div className="ir-opinions-list">
-                            {bwOpinions.length > 0 ? bwOpinions.map((o, i) => (
-                                <div key={i} className="ir-opinion-card">{o}</div>
-                            )) : (
-                                <div className="ir-opinion-card" style={{ color: "#999", textAlign: "center" }}>아직 등록된 의견이 없습니다.</div>
-                            )}
-                        </div>
+                </div>
+                <div className="ir-result-card">
+                    <div className="ir-opinions-header">평가 참가자 의견</div>
+                    <div className="ir-opinions-list">
+                        {bwOpinions.length > 0 ? bwOpinions.map((o, i) => (
+                            <div key={i} className="ir-opinion-card">{o}</div>
+                        )) : (
+                            <div className="ir-opinion-card" style={{ color: "#999", textAlign: "center" }}>아직 등록된 의견이 없습니다.</div>
+                        )}
                     </div>
                 </div>
             </div>
@@ -605,23 +661,19 @@ const ImpactReviewScreen = ({ onNavigate }) => {
             <GNB activeScreen="review" onNavigate={onNavigate} />
 
             <div className="ir-sub-header">
-                <div className="ir-sub-header-title">6. IMPACT Review</div>
-            </div>
-
-            {/* 탭 네비게이션 */}
-            <div className="ir-tabs">
-                <button className={`ir-tab ${activeTab === 0 ? "active" : ""}`} onClick={() => setActiveTab(0)}>
-                    <span className="ir-tab-badge">1차</span>
-                    Quick Win 평가
-                </button>
-                <button className={`ir-tab ${activeTab === 1 ? "active" : ""}`} onClick={() => setActiveTab(1)}>
-                    <span className="ir-tab-badge">2차</span>
-                    Build Win 평가
-                </button>
-                <button className={`ir-tab ${activeTab === 2 ? "active" : ""}`} onClick={() => setActiveTab(2)}>
-                    <span className="ir-tab-badge done">완료</span>
-                    최종 결과 확인
-                </button>
+                <div className="ir-tab-bar">
+                    <button className={`ir-tab-btn ${activeTab === 0 ? "active" : ""}`} onClick={() => setActiveTab(0)}>
+                        1차 - Quick Win 평가
+                    </button>
+                    <div className="ir-tab-divider" />
+                    <button className={`ir-tab-btn ${activeTab === 1 ? "active" : ""}`} onClick={() => setActiveTab(1)}>
+                        2차 - Build Win 평가
+                    </button>
+                    <div className="ir-tab-divider" />
+                    <button className={`ir-tab-btn ${activeTab === 2 ? "active" : ""}`} onClick={() => setActiveTab(2)}>
+                        완료 - 최종 결과
+                    </button>
+                </div>
             </div>
 
             {/* 탭 컨텐츠 */}
