@@ -313,6 +313,27 @@ const RightPanel = ({ type }) => {
     const lineChart = useRef(null);
     const [portfolio, setPortfolio] = useState(null);
     const [scores, setScores] = useState(null);
+    const [donutHidden, setDonutHidden] = useState({});
+    const [lineHidden, setLineHidden] = useState({});
+
+    const toggleDonut = (i) => {
+        const chart = donutChart.current;
+        if (!chart) return;
+        const meta = chart.getDatasetMeta(0);
+        const isHidden = !donutHidden[i];
+        meta.data[i].hidden = isHidden;
+        chart.update();
+        setDonutHidden(prev => ({ ...prev, [i]: isHidden }));
+    };
+
+    const toggleLine = (i) => {
+        const chart = lineChart.current;
+        if (!chart) return;
+        const isHidden = !lineHidden[i];
+        chart.setDatasetVisibility(i, !isHidden);
+        chart.update();
+        setLineHidden(prev => ({ ...prev, [i]: isHidden }));
+    };
 
     const canvasType = type === "quickwin" ? "quick" : "build";
 
@@ -351,17 +372,7 @@ const RightPanel = ({ type }) => {
                 resizeDelay: 200,
                 cutout: "45%",
                 plugins: {
-                    legend: {
-                        position: "top",
-                        align: "end",
-                        labels: {
-                            font: { family: "Pretendard", size: 13, weight: "500" },
-                            color: "#333",
-                            usePointStyle: true,
-                            pointStyle: "rectRounded",
-                            padding: 16,
-                        },
-                    },
+                    legend: { display: false },
                     tooltip: { callbacks: { label: (ctx) => `${ctx.label}: ${formatNumber(ctx.raw)}원` } },
                 },
                 animation: { animateRotate: true, animateScale: true, duration: 1000 },
@@ -386,7 +397,7 @@ const RightPanel = ({ type }) => {
                     data: [t.problemScore, t.solutionScore, t.scaleUpScore, t.effectScore],
                     borderColor: CHART_BORDERS[i % CHART_BORDERS.length],
                     backgroundColor: CHART_COLORS[i % CHART_COLORS.length],
-                    tension: 0.3,
+                    tension: 0,
                     pointRadius: 5,
                     pointHoverRadius: 7,
                     borderWidth: 2,
@@ -404,33 +415,26 @@ const RightPanel = ({ type }) => {
                         suggestedMax: 30,
                         ticks: {
                             stepSize: 5,
-                            font: { family: "Pretendard", size: 12, weight: "400" },
+                            padding: 8,
+                            font: { family: "Inter", size: 12, weight: "400" },
                             color: "#999999",
                         },
-                        grid: { color: "#E8E8E8" },
+                        grid: { color: "#D7D7D7" },
                         border: { display: false },
                     },
                     x: {
+                        offset: true,
                         ticks: {
-                            font: { family: "Pretendard", size: 13, weight: "600" },
+                            padding: 10,
+                            font: { family: "Pretendard", size: 14, weight: "600" },
                             color: "#555555",
                         },
-                        grid: { display: false },
+                        grid: { display: true, color: "#EBEBEB" },
                         border: { display: true, color: "#D7D7D7" },
                     },
                 },
                 plugins: {
-                    legend: {
-                        position: "top",
-                        align: "end",
-                        labels: {
-                            font: { family: "Pretendard", size: 13, weight: "500" },
-                            color: "#333",
-                            usePointStyle: true,
-                            pointStyle: "rectRounded",
-                            padding: 16,
-                        },
-                    },
+                    legend: { display: false },
                 },
                 animation: { duration: 1200, easing: "easeOutQuart" },
             },
@@ -468,6 +472,14 @@ const RightPanel = ({ type }) => {
             {/* 투자 포트폴리오 현황 (도넛) */}
             <div className="ir-right-card ir-card-donut">
                 <div className="ir-right-card-title">투자 포트폴리오 현황</div>
+                <div className="ir-line-legend">
+                    {investments.map((p, i) => (
+                        <div key={i} className="ir-line-legend-item" onClick={() => toggleDonut(i)} style={{ cursor: "pointer", opacity: donutHidden[i] ? 0.4 : 1 }}>
+                            <span className="ir-line-legend-box" style={{ background: CHART_COLORS[i % CHART_COLORS.length] }} />
+                            <span className="ir-line-legend-label">{p.teamName}</span>
+                        </div>
+                    ))}
+                </div>
                 <div className="ir-chart-box ir-chart-donut">
                     <canvas ref={donutRef} />
                 </div>
@@ -476,6 +488,14 @@ const RightPanel = ({ type }) => {
             {/* 나의 아이디어 및 BM 평가 현황 (라인) */}
             <div className="ir-right-card ir-card-line">
                 <div className="ir-right-card-title">나의 아이디어 및 BM 평가 현황</div>
+                <div className="ir-line-legend">
+                    {(scores?.teamScores || []).map((t, i) => (
+                        <div key={i} className="ir-line-legend-item" onClick={() => toggleLine(i)} style={{ cursor: "pointer", opacity: lineHidden[i] ? 0.4 : 1 }}>
+                            <span className="ir-line-legend-box" style={{ background: CHART_COLORS[i % CHART_COLORS.length] }} />
+                            <span className="ir-line-legend-label">{t.teamName}</span>
+                        </div>
+                    ))}
+                </div>
                 <div className="ir-chart-box ir-chart-line">
                     <canvas ref={lineRef} />
                 </div>
