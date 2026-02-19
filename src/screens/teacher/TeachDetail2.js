@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { getTeachDetail, updateClass, saveStep, addTeam, addEvaluationTeam, deleteTeam, getDeletedTeams, restoreTeam, getTeamInfo, updateTeamInfo, getSubmissionList, getImpactCheckByTeam, getIdentityCanvasByTeam, getFlowCanvasByTeam, getQuickWinByTeam, getBuildWinByTeam, getFundingByTeam, getFundingResultByTeam, endClass, deleteTeamMembers } from "../../services/teacherService";
 import { getLogoUrl } from "../../utils/logoUtil";
 import { Chart, BarController, BarElement, DoughnutController, ArcElement, LineController, LineElement, PointElement, CategoryScale, LinearScale, Tooltip, Legend } from "chart.js";
@@ -8,12 +8,12 @@ import "../ImpactReviewScreen.css";
 Chart.register(BarController, BarElement, DoughnutController, ArcElement, LineController, LineElement, PointElement, CategoryScale, LinearScale, Tooltip, Legend);
 
 const CHART_COLORS = [
-    "rgba(0,0,139,0.6)", "rgba(30,144,255,0.6)", "rgba(65,105,225,0.6)",
-    "rgba(0,0,205,0.6)", "rgba(25,25,112,0.6)", "rgba(0,191,255,0.6)",
+    "#7B87F5", "#8AEAFF", "#3CDFC2", "#F5D562",
+    "#F5A623", "#E86B6B",
 ];
 const CHART_BORDERS = [
-    "rgba(0,0,139,1)", "rgba(30,144,255,1)", "rgba(65,105,225,1)",
-    "rgba(0,0,205,1)", "rgba(25,25,112,1)", "rgba(0,191,255,1)",
+    "#7B87F5", "#8AEAFF", "#3CDFC2", "#F5D562",
+    "#F5A623", "#E86B6B",
 ];
 
 const formatNumber = (num) => Number(num).toLocaleString();
@@ -67,37 +67,55 @@ const FundingModalBody = ({ data, type, teamId }) => {
     const lineRef = useRef(null);
     const donutChartRef = useRef(null);
     const lineChartRef = useRef(null);
+    const [donutHidden, setDonutHidden] = useState({});
+    const [lineHidden, setLineHidden] = useState({});
 
-    // 자기 자신(선택된 팀) 제외
-    const filtered = data.filter(d => d.investmentTarget !== teamId);
-
+    const filtered = useMemo(() => data.filter(d => d.investmentTarget !== teamId), [data, teamId]);
     const questions = type === "quick" ? QUICK_WIN_QUESTIONS : BUILD_WIN_QUESTIONS;
     const current = filtered[selectedIdx] || null;
+    const investments = useMemo(() => filtered.filter(d => d.investmentPrice && Number(d.investmentPrice) > 0), [filtered]);
 
-    // 도넛 차트 (투자 포트폴리오 현황)
+    const toggleDonut = (i) => {
+        const chart = donutChartRef.current;
+        if (!chart) return;
+        const meta = chart.getDatasetMeta(0);
+        const isHidden = !donutHidden[i];
+        meta.data[i].hidden = isHidden;
+        chart.update();
+        setDonutHidden(prev => ({ ...prev, [i]: isHidden }));
+    };
+    const toggleLine = (i) => {
+        const chart = lineChartRef.current;
+        if (!chart) return;
+        const isHidden = !lineHidden[i];
+        chart.setDatasetVisibility(i, !isHidden);
+        chart.update();
+        setLineHidden(prev => ({ ...prev, [i]: isHidden }));
+    };
+
+    // 도넛 차트
     useEffect(() => {
         if (!donutRef.current) return;
         if (donutChartRef.current) donutChartRef.current.destroy();
-
-        const invested = filtered.filter(d => d.investmentPrice && Number(d.investmentPrice) > 0);
-        if (invested.length === 0) return;
+        if (investments.length === 0) return;
 
         donutChartRef.current = new Chart(donutRef.current, {
             type: "doughnut",
             data: {
-                labels: invested.map(d => d.teamName),
+                labels: investments.map(d => d.teamName),
                 datasets: [{
-                    data: invested.map(d => Number(d.investmentPrice)),
-                    backgroundColor: CHART_COLORS.slice(0, invested.length),
-                    borderColor: CHART_BORDERS.slice(0, invested.length),
+                    data: investments.map(d => Number(d.investmentPrice)),
+                    backgroundColor: CHART_COLORS.slice(0, investments.length),
+                    borderColor: "#000000",
                     borderWidth: 1,
                 }],
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                cutout: "45%",
                 plugins: {
-                    legend: { position: "right", labels: { font: { family: "Pretendard", size: 13 } } },
+                    legend: { display: false },
                     tooltip: { callbacks: { label: (ctx) => `${ctx.label}: ${formatNumber(ctx.raw)}원` } },
                 },
                 animation: { animateRotate: true, animateScale: true, duration: 1000 },
@@ -107,17 +125,16 @@ const FundingModalBody = ({ data, type, teamId }) => {
         return () => { if (donutChartRef.current) donutChartRef.current.destroy(); };
     }, [filtered]);
 
-    // 라인 차트 (평가자별 점수 현황)
+    // 라인 차트
     useEffect(() => {
         if (!lineRef.current) return;
         if (lineChartRef.current) lineChartRef.current.destroy();
-
         if (filtered.length === 0) return;
 
         lineChartRef.current = new Chart(lineRef.current, {
             type: "line",
             data: {
-                labels: ["Problem", "Solution", type === "quick" ? "Action" : "Scale up", "Effect"],
+                labels: [["Problem", "(문제정의)"], ["Solution", "(솔루션)"], type === "quick" ? ["Action", "(실행력)"] : ["Scale up", "(성장성)"], ["Effect", "(파급효과)"]],
                 datasets: filtered.map((d, i) => ({
                     label: d.teamName,
                     data: [
@@ -128,22 +145,32 @@ const FundingModalBody = ({ data, type, teamId }) => {
                     ],
                     borderColor: CHART_BORDERS[i % CHART_BORDERS.length],
                     backgroundColor: CHART_COLORS[i % CHART_COLORS.length],
-                    tension: 0.3,
+                    tension: 0,
                     pointRadius: 5,
                     pointHoverRadius: 7,
+                    borderWidth: 2,
                     fill: false,
                 })),
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                layout: { padding: { top: 8 } },
                 scales: {
-                    y: { suggestedMin: 0, suggestedMax: 30, ticks: { font: { family: "Pretendard" } } },
-                    x: { ticks: { color: "#d32f2f", font: { family: "Pretendard", weight: "bold" } } },
+                    y: {
+                        suggestedMin: 0, suggestedMax: 30,
+                        ticks: { stepSize: 5, padding: 8, font: { family: "Inter", size: 12, weight: "400" }, color: "#999999" },
+                        grid: { color: "#D7D7D7" },
+                        border: { display: false },
+                    },
+                    x: {
+                        offset: true,
+                        ticks: { padding: 10, font: { family: "Pretendard", size: 13, weight: "600" }, color: "#555555" },
+                        grid: { display: true, color: "#EBEBEB" },
+                        border: { display: true, color: "#D7D7D7" },
+                    },
                 },
-                plugins: {
-                    legend: { position: "top", labels: { font: { family: "Pretendard", size: 12 } } },
-                },
+                plugins: { legend: { display: false } },
                 animation: { duration: 1200, easing: "easeOutQuart" },
             },
         });
@@ -151,132 +178,127 @@ const FundingModalBody = ({ data, type, teamId }) => {
         return () => { if (lineChartRef.current) lineChartRef.current.destroy(); };
     }, [filtered, type]);
 
-    // 문항 행 렌더
-    const renderRows = () => {
-        const rows = [];
-        questions.forEach((group) => {
-            group.items.forEach((item, idx) => {
-                const scoreField = SCORE_MAP[item.no];
-                const val = current ? current[scoreField] : null;
-                rows.push(
-                    <tr key={item.no}>
-                        {idx === 0 && (
-                            <td className="ir-eval-category" rowSpan={group.rowSpan} style={{ whiteSpace: "pre-line" }}>
-                                {group.category}
-                            </td>
-                        )}
-                        <td className="ir-eval-no">{item.no}</td>
-                        <td className="ir-eval-question">{item.q}</td>
-                        <td className="ir-eval-score">{item.score}</td>
-                        <td className="ir-eval-select-cell">
-                            <span className="ir-score-display">{val != null ? val : "-"}</span>
-                        </td>
-                    </tr>
-                );
-            });
-        });
-        return rows;
-    };
-
-    const investments = filtered.filter(d => d.investmentPrice && Number(d.investmentPrice) > 0);
-
     return (
-        <div className="ir-body" style={{ padding: "20px 24px 30px" }}>
+        <div className="fm-body">
             {/* 왼쪽: 평가 폼 (읽기전용) */}
-            <div className="ir-left" style={{ flex: "0 0 680px" }}>
-                <div className="ir-form-title" style={{ fontSize: 20 }}>
-                    {type === "quick" ? "Quick Win 실행과제 평가" : "Build Win 실행과제 평가"}
-                </div>
+            <div className="fm-left">
+                <div className="fm-left-card">
+                    <div className="ir-form-title" style={{ fontSize: 20 }}>
+                        {type === "quick" ? "Quick Win 실행과제 평가" : "Build Win 실행과제 평가"}
+                    </div>
 
-                <table className="ir-info-table">
-                    <tbody>
-                        <tr>
-                            <td className="ir-info-label">평가자</td>
-                            <td className="ir-info-value" colSpan="3">
-                                <select
-                                    className="ir-info-select"
-                                    value={selectedIdx}
-                                    onChange={(e) => setSelectedIdx(Number(e.target.value))}
-                                >
-                                    {filtered.map((d, i) => (
-                                        <option key={i} value={i}>
-                                            {d.teamName}{d.submitted ? " (제출완료)" : " (미제출)"}
-                                        </option>
-                                    ))}
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="ir-info-label">실행 과제명</td>
-                            <td className="ir-info-value" colSpan="3">
-                                <input className="ir-info-input" style={{ textAlign: "left" }} value={current?.businessName || ""} readOnly />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="ir-info-label">투자 예산</td>
-                            <td className="ir-info-value" colSpan="3" style={{ display: "flex", alignItems: "center" }}>
-                                <input className="ir-info-input" value={current?.investmentPrice ? formatNumber(Number(current.investmentPrice)) : "-"} readOnly />
-                                <span className="ir-info-unit">원</span>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                    {/* 평가자 */}
+                    <div className="ir-field-group">
+                        <div className="ir-field-label">평가자</div>
+                        <div className="ir-field-box" style={{ width: "100%" }}>
+                            <select value={selectedIdx} onChange={(e) => setSelectedIdx(Number(e.target.value))}>
+                                {filtered.map((d, i) => (
+                                    <option key={i} value={i}>{d.teamName}{d.submitted ? " (제출완료)" : " (미제출)"}</option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
 
-                <table className="ir-eval-table">
-                    <thead>
-                        <tr>
-                            <th className="ir-th-category">구분</th>
-                            <th className="ir-th-no">번호</th>
-                            <th>검증 문항</th>
-                            <th className="ir-th-score"></th>
-                            <th className="ir-th-select">점수</th>
-                        </tr>
-                    </thead>
-                    <tbody>{renderRows()}</tbody>
-                </table>
+                    {/* 실행 과제명 */}
+                    <div className="ir-field-group">
+                        <div className="ir-field-label">실행 과제명</div>
+                        <div className="ir-field-box" style={{ width: "100%" }}>
+                            <input value={current?.businessName || ""} readOnly placeholder="과제명 없음" />
+                        </div>
+                    </div>
 
-                <div className="ir-opinion-row">
-                    <div className="ir-opinion-label">종합의견</div>
-                    <textarea className="ir-opinion-textarea" value={current?.opinion || ""} readOnly placeholder="의견 없음" />
+                    {/* 투자 예산 */}
+                    <div className="ir-field-group">
+                        <div className="ir-field-label">투자 예산</div>
+                        <div className="ir-field-box" style={{ width: "100%" }}>
+                            <input className="ir-budget-value" value={current?.investmentPrice ? formatNumber(Number(current.investmentPrice)) : "-"} readOnly />
+                            <span className="ir-field-unit">원</span>
+                        </div>
+                    </div>
+
+                    {/* 검증 문항 */}
+                    <div className="ir-eval-area">
+                        {questions.map((group, gi) => (
+                            <div className="ir-eval-group" key={gi}>
+                                <div className="ir-eval-group-title">{group.category.replace(/\n/g, ' ')}</div>
+                                {group.items.map(item => {
+                                    const val = current ? current[SCORE_MAP[item.no]] : null;
+                                    return (
+                                        <div className="ir-eval-row" key={item.no}>
+                                            <span className="ir-eval-badge">{item.no}</span>
+                                            <span className="ir-eval-text">{item.q}</span>
+                                            <div className="ir-eval-score-wrap">
+                                                <span style={{ fontFamily: "Pretendard", fontSize: 16, fontWeight: 600, color: "#6B7079" }}>
+                                                    {val != null ? val + "점" : "-"}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        ))}
+
+                        {/* 종합의견 */}
+                        <div className="ir-opinion-section">
+                            <div className="ir-opinion-title">종합의견</div>
+                            <div className="ir-opinion-box">
+                                <textarea value={current?.opinion || ""} readOnly placeholder="의견 없음" />
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             {/* 오른쪽: 포트폴리오 + 차트 */}
-            <div className="ir-right">
-                <div>
-                    <div className="ir-section-title">예산 투자 포트폴리오</div>
-                    <div className="ir-portfolio-list">
-                        <div className="ir-portfolio-header">
-                            <span>투자 대상</span>
-                            <span>투자 금액</span>
+            <div className="fm-right">
+                {/* 예산 투자 포트폴리오 */}
+                <div className="ir-right-card" style={{ padding: "32px 28px 28px" }}>
+                    <div className="ir-right-card-title" style={{ fontSize: 20 }}>예산 투자 포트폴리오</div>
+                    <div className="ir-portfolio-header"><span>투자 대상</span><span>투자 금액</span></div>
+                    {investments.map((p, i) => (
+                        <div key={i} className="ir-portfolio-row">
+                            <span className="ir-portfolio-name">{p.teamName}</span>
+                            <span className="ir-portfolio-amount">{formatNumber(Number(p.investmentPrice))} 원</span>
                         </div>
+                    ))}
+                    {investments.length === 0 && (
+                        <div className="ir-portfolio-row" style={{ justifyContent: "center", color: "#999" }}>투자 내역이 없습니다.</div>
+                    )}
+                </div>
+
+                {/* 투자 포트폴리오 현황 (도넛) */}
+                <div className="ir-right-card" style={{ padding: "32px 28px 28px" }}>
+                    <div className="ir-right-card-title" style={{ fontSize: 20 }}>투자 포트폴리오 현황</div>
+                    <div className="ir-line-legend">
                         {investments.map((p, i) => (
-                            <div key={i} className="ir-portfolio-row">
-                                <span className="ir-portfolio-name">{p.teamName}</span>
-                                <span className="ir-portfolio-amount">{formatNumber(Number(p.investmentPrice))} 원</span>
+                            <div key={i} className="ir-line-legend-item" onClick={() => toggleDonut(i)} style={{ cursor: "pointer", opacity: donutHidden[i] ? 0.4 : 1 }}>
+                                <span className="ir-line-legend-box" style={{ background: CHART_COLORS[i % CHART_COLORS.length] }} />
+                                <span className="ir-line-legend-label">{p.teamName}</span>
                             </div>
                         ))}
-                        {investments.length === 0 && (
-                            <div className="ir-portfolio-row" style={{ justifyContent: "center", color: "#999" }}>투자 내역이 없습니다.</div>
-                        )}
                     </div>
+                    <div style={{ position: "relative", height: 250 }}><canvas ref={donutRef} /></div>
                 </div>
 
-                <div>
-                    <div className="ir-chart-title">투자 포트폴리오 현황</div>
-                    <div className="ir-chart-box"><canvas ref={donutRef} /></div>
-                </div>
-
-                <div>
-                    <div className="ir-chart-title">평가 현황</div>
-                    <div className="ir-chart-box"><canvas ref={lineRef} /></div>
+                {/* 평가 현황 (라인) */}
+                <div className="ir-right-card" style={{ padding: "32px 28px 28px" }}>
+                    <div className="ir-right-card-title" style={{ fontSize: 20 }}>나의 아이디어 및 BM 평가 현황</div>
+                    <div className="ir-line-legend">
+                        {filtered.map((d, i) => (
+                            <div key={i} className="ir-line-legend-item" onClick={() => toggleLine(i)} style={{ cursor: "pointer", opacity: lineHidden[i] ? 0.4 : 1 }}>
+                                <span className="ir-line-legend-box" style={{ background: CHART_COLORS[i % CHART_COLORS.length] }} />
+                                <span className="ir-line-legend-label">{d.teamName}</span>
+                            </div>
+                        ))}
+                    </div>
+                    <div style={{ position: "relative", height: 250 }}><canvas ref={lineRef} /></div>
                 </div>
             </div>
         </div>
     );
 };
 
-/* ── F-3 최종 결과 모달 본문 (ImpactReviewScreen ResultTab과 동일) ── */
+/* ── F-3 최종 결과 모달 본문 ── */
 const FundingResultModalBody = ({ data }) => {
     const qwBarRef = useRef(null);
     const bwBarRef = useRef(null);
@@ -317,25 +339,46 @@ const FundingResultModalBody = ({ data }) => {
             data: {
                 labels: labels.map(l => l.split("\n")),
                 datasets: [{
-                    label: "획득 점수",
+                    label: "청중평가",
                     data: chartData,
-                    backgroundColor: "#37474f",
-                    hoverBackgroundColor: "#1a237e",
-                    borderRadius: 4,
-                    barPercentage: 0.5,
+                    backgroundColor: "#7B87F5",
+                    hoverBackgroundColor: "#5364F7",
+                    borderRadius: 0,
+                    barPercentage: 0.45,
+                    categoryPercentage: 0.6,
                 }],
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                layout: { padding: { top: 10 } },
                 scales: {
-                    y: { suggestedMin: 0, suggestedMax: 30, ticks: { stepSize: 5, font: { family: "Pretendard" } } },
-                    x: { ticks: { font: { family: "Pretendard", size: 11 } } },
+                    y: {
+                        min: 0, max: 10,
+                        ticks: { stepSize: 1, font: { family: "Inter", size: 12, weight: "400" }, color: "#999999" },
+                        grid: { color: "#D7D7D7" },
+                        border: { display: false },
+                    },
+                    x: {
+                        ticks: { font: { family: "Pretendard", size: 14, weight: "600" }, color: "#555555" },
+                        grid: { display: false },
+                        border: { display: true, color: "#D7D7D7" },
+                    },
                 },
                 plugins: {
                     legend: { display: false },
-                    title: { display: true, text: "부문별 획득 점수", align: "start", font: { family: "Pretendard", size: 14, weight: "bold" } },
-                    tooltip: { callbacks: { label: (ctx) => `${ctx.raw}점` } },
+                    title: { display: false },
+                    tooltip: {
+                        enabled: true,
+                        backgroundColor: "#fff",
+                        borderColor: "#CACACA",
+                        borderWidth: 1,
+                        titleColor: "#999",
+                        bodyColor: "#999999",
+                        bodyFont: { family: "Pretendard", size: 14, weight: "600" },
+                        displayColors: false,
+                        callbacks: { label: (ctx) => ctx.raw.toFixed(1) },
+                    },
                 },
                 animations: {
                     y: {
@@ -351,47 +394,49 @@ const FundingResultModalBody = ({ data }) => {
 
     const qwOpinions = data?.quick?.opinions || [];
     const bwOpinions = data?.build?.opinions || [];
-    const qwCount = data?.quick?.scores?.evaluatorCount || 0;
-    const bwCount = data?.build?.scores?.evaluatorCount || 0;
 
     return (
-        <div className="ir-result-body">
-            <div className="ir-result-section">
-                <div className="ir-result-title">Quick Win 실행과제 검증결과</div>
-                <div className="ir-result-content">
-                    <div className="ir-result-chart">
+        <div className="fr-body">
+            {/* Quick Win 행 */}
+            <div className="fr-row">
+                <div className="fr-card">
+                    <div className="ir-result-title" style={{ fontSize: 20 }}>Quick Win 실행과제평가</div>
+                    <div className="ir-result-chart-subtitle">부문별 획득 점수</div>
+                    <div className="ir-result-legend"><span className="ir-legend-box" /><span className="ir-legend-label">청중평가</span></div>
+                    <div style={{ position: "relative", flex: 1, minHeight: 300 }}>
                         <canvas ref={qwBarRef} />
                     </div>
-                    <div className="ir-result-opinions">
-                        <div className="ir-opinions-header">평가 참가자 의견 ({qwCount}명)</div>
-                        <div className="ir-opinions-badge">전체 코멘트</div>
-                        <div className="ir-opinions-list">
-                            {qwOpinions.length > 0 ? qwOpinions.map((o, i) => (
-                                <div key={i} className="ir-opinion-card">{o}</div>
-                            )) : (
-                                <div className="ir-opinion-card" style={{ color: "#999", textAlign: "center" }}>아직 등록된 의견이 없습니다.</div>
-                            )}
-                        </div>
+                </div>
+                <div className="fr-card">
+                    <div className="ir-opinions-header" style={{ fontSize: 20 }}>평가 참가자 의견</div>
+                    <div className="ir-opinions-list">
+                        {qwOpinions.length > 0 ? qwOpinions.map((o, i) => (
+                            <div key={i} className="ir-opinion-card">{o}</div>
+                        )) : (
+                            <div className="ir-opinion-card" style={{ color: "#999", textAlign: "center" }}>아직 등록된 의견이 없습니다.</div>
+                        )}
                     </div>
                 </div>
             </div>
 
-            <div className="ir-result-section">
-                <div className="ir-result-title">Build Win 실행과제 검증결과</div>
-                <div className="ir-result-content">
-                    <div className="ir-result-chart">
+            {/* Build Win 행 */}
+            <div className="fr-row">
+                <div className="fr-card">
+                    <div className="ir-result-title" style={{ fontSize: 20 }}>Build Win 실행과제평가</div>
+                    <div className="ir-result-chart-subtitle">부문별 획득 점수</div>
+                    <div className="ir-result-legend"><span className="ir-legend-box" /><span className="ir-legend-label">청중평가</span></div>
+                    <div style={{ position: "relative", flex: 1, minHeight: 300 }}>
                         <canvas ref={bwBarRef} />
                     </div>
-                    <div className="ir-result-opinions">
-                        <div className="ir-opinions-header">평가 참가자 의견 ({bwCount}명)</div>
-                        <div className="ir-opinions-badge">전체 코멘트</div>
-                        <div className="ir-opinions-list">
-                            {bwOpinions.length > 0 ? bwOpinions.map((o, i) => (
-                                <div key={i} className="ir-opinion-card">{o}</div>
-                            )) : (
-                                <div className="ir-opinion-card" style={{ color: "#999", textAlign: "center" }}>아직 등록된 의견이 없습니다.</div>
-                            )}
-                        </div>
+                </div>
+                <div className="fr-card">
+                    <div className="ir-opinions-header" style={{ fontSize: 20 }}>평가 참가자 의견</div>
+                    <div className="ir-opinions-list">
+                        {bwOpinions.length > 0 ? bwOpinions.map((o, i) => (
+                            <div key={i} className="ir-opinion-card">{o}</div>
+                        )) : (
+                            <div className="ir-opinion-card" style={{ color: "#999", textAlign: "center" }}>아직 등록된 의견이 없습니다.</div>
+                        )}
                     </div>
                 </div>
             </div>
