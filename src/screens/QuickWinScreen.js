@@ -9,7 +9,7 @@ import pencil2 from "../resource/quick/pencil2.png";
 import pencil from "../resource/start/pencil.png";
 import { getQuickWinCanvas, saveQuickWinCanvas, submitQuickWinCanvas } from "../services/quickWinCanvasService";
 
-const QuickWinScreen = ({ onNavigate }) => {
+const QuickWinScreen = ({ onNavigate, gameStep }) => {
     // Editable fields state
     const [alignment, setAlignment] = useState("");
     const [taskName, setTaskName] = useState("");
@@ -144,7 +144,7 @@ const QuickWinScreen = ({ onNavigate }) => {
     return (
         <div className="quickwin-container">
             {/* GNB */}
-            <GNB activeScreen="quickwin" onNavigate={onNavigate} />
+            <GNB activeScreen="quickwin" onNavigate={onNavigate} gameStep={gameStep} />
 
             {/* Sub Header */}
             <div className="sub-header">

@@ -8,7 +8,7 @@ import { getIdentityCanvas, saveIdentityCanvas, submitIdentityCanvas } from "../
 import { getImageUrl } from "../utils/logoUtil";
 import { IdentityCanvasProvider, IdentityCanvasContext } from "../contexts/IdentityCanvasContext";
 
-const IdentityCanvasInner = ({ onNavigate }) => {
+const IdentityCanvasInner = ({ onNavigate, gameStep }) => {
     const { values, loadFromResponse } = useContext(IdentityCanvasContext);
     const [submitted, setSubmitted] = useState(false);
     const [showTips, setShowTips] = useState(false);
@@ -49,7 +49,7 @@ const IdentityCanvasInner = ({ onNavigate }) => {
 
     return (
         <div className="identity-screen">
-            <GNB activeScreen="identity" onNavigate={onNavigate} />
+            <GNB activeScreen="identity" onNavigate={onNavigate} gameStep={gameStep} />
 
             <div className="identity-toolbar">
                 <h2 className="identity-page-title">1. Strategic Identity Canvas</h2>
@@ -80,10 +80,10 @@ const IdentityCanvasInner = ({ onNavigate }) => {
     );
 };
 
-const IdentityCanvasScreen = ({ onNavigate }) => {
+const IdentityCanvasScreen = ({ onNavigate, gameStep }) => {
     return (
         <IdentityCanvasProvider>
-            <IdentityCanvasInner onNavigate={onNavigate} />
+            <IdentityCanvasInner onNavigate={onNavigate} gameStep={gameStep} />
         </IdentityCanvasProvider>
     );
 };

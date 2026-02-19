@@ -4,7 +4,7 @@ import "./ImpactCheckScreen.css";
 import pencilIcon from "../resource/start/pencil.png";
 import { getImpactCheck, saveImpactCheck, submitImpactCheck } from "../services/impactCheckService";
 
-const ImpactCheckScreen = ({ onNavigate }) => {
+const ImpactCheckScreen = ({ onNavigate, gameStep }) => {
     const [department, setDepartment] = useState("");
     const [answers, setAnswers] = useState({});
     const [submitted, setSubmitted] = useState(false);
@@ -93,7 +93,7 @@ const ImpactCheckScreen = ({ onNavigate }) => {
     return (
         <div className="impact-check-container">
             {/* GNB */}
-            <GNB activeScreen="impactcheck" onNavigate={onNavigate} />
+            <GNB activeScreen="impactcheck" onNavigate={onNavigate} gameStep={gameStep} />
 
             {/* 헤더 */}
             <header className="impact-header">

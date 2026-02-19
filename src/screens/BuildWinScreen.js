@@ -9,7 +9,7 @@ import pencil2 from "../resource/quick/pencil2.png";
 import pencil from "../resource/start/pencil.png";
 import { getBuildWinCanvas, saveBuildWinCanvas, submitBuildWinCanvas } from "../services/buildWinCanvasService";
 
-const BuildWinScreen = ({ onNavigate }) => {
+const BuildWinScreen = ({ onNavigate, gameStep }) => {
     // Editable fields state
     const [alignment, setAlignment] = useState("");
     const [taskName, setTaskName] = useState("");
@@ -143,7 +143,7 @@ const BuildWinScreen = ({ onNavigate }) => {
     return (
         <div className="buildwin-container">
             {/* GNB */}
-            <GNB activeScreen="buildwin" onNavigate={onNavigate} />
+            <GNB activeScreen="buildwin" onNavigate={onNavigate} gameStep={gameStep} />
 
             {/* Sub Header */}
             <div className="sub-header">

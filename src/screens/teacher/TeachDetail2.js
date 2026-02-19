@@ -526,13 +526,18 @@ const formatDate = (isoStr) => {
     return `${yyyy}-${mm}-${dd} ${hh}시 ${min}분`;
 };
 
-/* stepArr → checkedSteps 변환: ["A","B"] → ["0-1","0-2","0-3","1-1","1-2","1-3"] */
+/* stepArr → checkedSteps 변환
+   새 포맷: ["A-1","B-1","F-1","F-2"] → 그대로 사용
+   구 포맷: ["A","B"] → 그룹 키를 하위 항목으로 확장 */
 const stepArrToChecked = (stepArr) => {
     if (!stepArr || stepArr.length === 0) return [];
     const checked = [];
-    stepConfig.forEach(group => {
-        if (stepArr.includes(group.key)) {
-            group.items.forEach(item => checked.push(item.value));
+    stepArr.forEach(val => {
+        if (val.includes("-")) {
+            checked.push(val);
+        } else {
+            const group = stepConfig.find(g => g.key === val);
+            if (group) group.items.forEach(item => checked.push(item.value));
         }
     });
     return checked;
@@ -742,7 +747,7 @@ const TeachDetail2 = ({ onNavigate, params }) => {
         );
     };
 
-    /* 단계 저장 - checkedSteps → step 문자열 변환 ("A,B,F") */
+    /* 단계 저장 - checkedSteps → step 문자열 변환 ("A-1,B-1,F-1,F-2") */
     const handleStepSave = async () => {
         if (checkedSteps.length === 0) {
             alert("단계를 선택해주세요.");
@@ -750,12 +755,7 @@ const TeachDetail2 = ({ onNavigate, params }) => {
         }
         if (!window.confirm("저장하시겠습니까?")) return;
 
-        const selectedKeys = new Set();
-        stepConfig.forEach(group => {
-            const hasChecked = group.items.some(item => checkedSteps.includes(item.value));
-            if (hasChecked) selectedKeys.add(group.key);
-        });
-        const step = Array.from(selectedKeys).join(",");
+        const step = checkedSteps.join(",");
 
         const result = await saveStep(gameId, step);
         if (result.success) {

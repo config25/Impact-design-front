@@ -9,7 +9,7 @@ import pencil2 from "../resource/quick/pencil2.png";
 import pencilIcon from "../resource/identity/pencil.png";
 import { getFlowCanvas, saveFlowCanvas, submitFlowCanvas } from "../services/flowCanvasService";
 
-const PerformanceStreamScreen = ({ onNavigate }) => {
+const PerformanceStreamScreen = ({ onNavigate, gameStep }) => {
     // Goal cards state
     const [goalCards, setGoalCards] = useState([
         { goalId: null, title: "", content: "" },
@@ -182,7 +182,7 @@ const PerformanceStreamScreen = ({ onNavigate }) => {
     return (
         <div className="stream-container">
             {/* GNB */}
-            <GNB activeScreen="performance" onNavigate={onNavigate} />
+            <GNB activeScreen="performance" onNavigate={onNavigate} gameStep={gameStep} />
 
             {/* Sub Header */}
             <div className="sub-header">

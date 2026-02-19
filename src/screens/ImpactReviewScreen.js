@@ -673,24 +673,47 @@ const ResultTab = () => {
 };
 
 // ── 메인 컴포넌트 ──
-const ImpactReviewScreen = ({ onNavigate }) => {
-    const [activeTab, setActiveTab] = useState(0); // 0=QuickWin, 1=BuildWin, 2=결과
+const ImpactReviewScreen = ({ onNavigate, gameStep }) => {
+    const steps = gameStep ? gameStep.split(",").map(s => s.trim()) : [];
+    const hasSubStep = (code) => !gameStep || steps.includes(code) || steps.includes("F");
+    const tabAllowed = [hasSubStep("F-1"), hasSubStep("F-2"), hasSubStep("F-3")];
+    const firstAllowed = tabAllowed.indexOf(true);
+    const [activeTab, setActiveTab] = useState(firstAllowed >= 0 ? firstAllowed : 0);
+
+    const handleTab = (idx) => {
+        if (tabAllowed[idx]) setActiveTab(idx);
+    };
 
     return (
         <div className="ir-container">
-            <GNB activeScreen="review" onNavigate={onNavigate} />
+            <GNB activeScreen="review" onNavigate={onNavigate} gameStep={gameStep} />
 
             <div className="ir-sub-header">
                 <div className="ir-tab-bar">
-                    <button className={`ir-tab-btn ${activeTab === 0 ? "active" : ""}`} onClick={() => setActiveTab(0)}>
+                    <button
+                        className={`ir-tab-btn ${activeTab === 0 ? "active" : ""}`}
+                        onClick={() => handleTab(0)}
+                        disabled={!tabAllowed[0]}
+                        style={!tabAllowed[0] ? { opacity: 0.3, cursor: "not-allowed" } : {}}
+                    >
                         1차 - Quick Win 평가
                     </button>
                     <div className="ir-tab-divider" />
-                    <button className={`ir-tab-btn ${activeTab === 1 ? "active" : ""}`} onClick={() => setActiveTab(1)}>
+                    <button
+                        className={`ir-tab-btn ${activeTab === 1 ? "active" : ""}`}
+                        onClick={() => handleTab(1)}
+                        disabled={!tabAllowed[1]}
+                        style={!tabAllowed[1] ? { opacity: 0.3, cursor: "not-allowed" } : {}}
+                    >
                         2차 - Build Win 평가
                     </button>
                     <div className="ir-tab-divider" />
-                    <button className={`ir-tab-btn ${activeTab === 2 ? "active" : ""}`} onClick={() => setActiveTab(2)}>
+                    <button
+                        className={`ir-tab-btn ${activeTab === 2 ? "active" : ""}`}
+                        onClick={() => handleTab(2)}
+                        disabled={!tabAllowed[2]}
+                        style={!tabAllowed[2] ? { opacity: 0.3, cursor: "not-allowed" } : {}}
+                    >
                         완료 - 최종 결과
                     </button>
                 </div>

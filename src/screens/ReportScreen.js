@@ -15,7 +15,7 @@ import polygon3Image from "../resource/report/Polygon 3.png";
 import longunionImg from "../resource/report/longunion.png";
 import { getReport } from "../services/reportService";
 
-const ReportScreen = ({ onNavigate }) => {
+const ReportScreen = ({ onNavigate, gameStep }) => {
     const containerRef = useRef(null);
     const [isExporting, setIsExporting] = useState(false);
     const [reportData, setReportData] = useState(null);

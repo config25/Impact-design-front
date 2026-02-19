@@ -84,6 +84,13 @@
     color: #353B72;
 }
 
+/* 비활성화 (step 미포함) */
+.gnb-item.disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
 /* 반응형 */
 @media (max-width: 1400px) {
     .gnb {

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Main from "./screens/Main";
 import MemberLogin from "./screens/MemberLogin";
 import MemberRegister from "./screens/MemberRegister";
@@ -12,6 +12,7 @@ import BuildWinScreen from "./screens/BuildWinScreen";
 import ReportScreen from "./screens/ReportScreen";
 import ImpactReviewScreen from "./screens/ImpactReviewScreen";
 import { AuthProvider } from "./contexts/AuthContext";
+import { getUserStep } from "./services/gameService";
 
 // Teacher screens
 import TeacherLayout from "./components/teacher/TeacherLayout";
@@ -26,15 +27,33 @@ const teacherScreens = ["teach", "teach_list", "teach_save", "teach_detail", "te
     "teach_modify", "student_list", "teach_mission", "teach_layer",
     "teach_community", "teach_community_form", "teach_submission_team", "teach_submission_step"];
 
+const studentScreens = ["impactcheck", "identity", "performance", "quickwin", "buildwin", "review"];
+
 function App() {
     const isTeacherLogin = window.location.pathname === "/teacher_login";
     const [currentScreen, setCurrentScreen] = useState(isTeacherLogin ? "teachlogin" : "login");
     const [screenParams, setScreenParams] = useState({});
+    const [gameStep, setGameStep] = useState(null);
 
     const handleNavigate = (screen, params) => {
         setCurrentScreen(screen);
         if (params) setScreenParams(params);
     };
+
+    const fetchStep = useCallback(async () => {
+        try {
+            const step = await getUserStep();
+            setGameStep(step);
+        } catch {
+            setGameStep("");
+        }
+    }, []);
+
+    useEffect(() => {
+        if (studentScreens.includes(currentScreen) && gameStep === null) {
+            fetchStep();
+        }
+    }, [currentScreen, gameStep, fetchStep]);
 
     // Teacher content renderer
     const renderTeacherContent = () => {
@@ -82,26 +101,26 @@ function App() {
             case "start":
                 return <StartScreen onStart={() => handleNavigate("impactcheck")} />;
             case "impactcheck":
-                return <ImpactCheckScreen onNavigate={handleNavigate} />;
+                return <ImpactCheckScreen onNavigate={handleNavigate} gameStep={gameStep} />;
             case "identity":
-                return <IdentityCanvasScreen onNavigate={handleNavigate} />;
+                return <IdentityCanvasScreen onNavigate={handleNavigate} gameStep={gameStep} />;
             case "performance":
-                return <PerformanceStreamScreen onNavigate={handleNavigate} />;
+                return <PerformanceStreamScreen onNavigate={handleNavigate} gameStep={gameStep} />;
             case "quickwin":
-                return <QuickWinScreen onNavigate={handleNavigate} />;
+                return <QuickWinScreen onNavigate={handleNavigate} gameStep={gameStep} />;
             case "buildwin":
-                return <BuildWinScreen onNavigate={handleNavigate} />;
+                return <BuildWinScreen onNavigate={handleNavigate} gameStep={gameStep} />;
             case "review":
-                return <ImpactReviewScreen onNavigate={handleNavigate} />;
+                return <ImpactReviewScreen onNavigate={handleNavigate} gameStep={gameStep} />;
             case "report":
-                return <ReportScreen onNavigate={handleNavigate} />;
+                return <ReportScreen onNavigate={handleNavigate} gameStep={gameStep} />;
             default:
                 return <Main onLogin={() => handleNavigate("start")} onRegister={() => handleNavigate("start")} />;
         }
     };
 
     return (
-        <AuthProvider onLogout={(wasTeacher) => handleNavigate(wasTeacher ? "teachlogin" : "login")}>
+        <AuthProvider onLogout={(wasTeacher) => { setGameStep(null); handleNavigate(wasTeacher ? "teachlogin" : "login"); }}>
             {renderScreen()}
         </AuthProvider>
     );
