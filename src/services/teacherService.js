@@ -283,6 +283,21 @@ export const updateTeamInfo = async (teamId, data) => {
     return { success: false, message: result.data?.message || "팀 정보 수정에 실패했습니다." };
 };
 
+export const setTeamWriter = async (teamId, userId) => {
+    const response = await authFetch(`${BASE_URL}/team/${teamId}/writer`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId }),
+    });
+    const result = await response.json();
+
+    if (response.ok) {
+        return { success: true };
+    }
+
+    return { success: false, message: result.data?.message || "대표 작성자 지정에 실패했습니다." };
+};
+
 export const deleteTeamMembers = async (userIds) => {
     const response = await authFetch(`${BASE_URL}/team-members`, {
         method: "DELETE",

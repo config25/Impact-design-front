@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from "react";
-import { getTeachDetail, updateClass, saveStep, addTeam, addEvaluationTeam, deleteTeam, getDeletedTeams, restoreTeam, getTeamInfo, updateTeamInfo, getSubmissionList, getImpactCheckByTeam, getIdentityCanvasByTeam, getFlowCanvasByTeam, getQuickWinByTeam, getBuildWinByTeam, getFundingByTeam, getFundingResultByTeam, endClass, deleteTeamMembers } from "../../services/teacherService";
+import { getTeachDetail, updateClass, saveStep, addTeam, addEvaluationTeam, deleteTeam, getDeletedTeams, restoreTeam, getTeamInfo, updateTeamInfo, getSubmissionList, getImpactCheckByTeam, getIdentityCanvasByTeam, getFlowCanvasByTeam, getQuickWinByTeam, getBuildWinByTeam, getFundingByTeam, getFundingResultByTeam, endClass, deleteTeamMembers, setTeamWriter } from "../../services/teacherService";
 import { getLogoUrl } from "../../utils/logoUtil";
 import { Chart, BarController, BarElement, DoughnutController, ArcElement, LineController, LineElement, PointElement, CategoryScale, LinearScale, Tooltip, Legend } from "chart.js";
 import "./TeachDetail2.css";
@@ -823,15 +823,19 @@ const TeachDetail2 = ({ onNavigate, params }) => {
     };
 
     /* 모달 - 대표 작성자 지정 */
-    const handleSetWriter = () => {
+    const handleSetWriter = async () => {
         if (selectedMembers.length !== 1) {
             alert("대표 작성자로 지정할 1명을 선택해주세요.");
             return;
         }
-        // TODO: API 호출
-        setModalMembers(prev => prev.map(m => ({ ...m, writer: m.userId === selectedMembers[0] ? "Y" : "N" })));
-        setSelectedMembers([]);
-        alert("대표 작성자가 지정되었습니다.");
+        const result = await setTeamWriter(modalTeam.teamId, selectedMembers[0]);
+        if (result.success) {
+            setModalMembers(prev => prev.map(m => ({ ...m, writer: m.userId === selectedMembers[0] ? "Y" : "N" })));
+            setSelectedMembers([]);
+            alert("대표 작성자가 지정되었습니다.");
+        } else {
+            alert(result.message);
+        }
     };
 
     /* 모달 - 입력완료 (저장) */

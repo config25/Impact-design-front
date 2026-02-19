@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getTeachDetail2, getTeamInfo, updateTeamInfo, startClass, endClass, restoreClass, deleteTeamMembers } from "../../services/teacherService";
+import { getTeachDetail2, getTeamInfo, updateTeamInfo, startClass, endClass, restoreClass, deleteTeamMembers, addTeam, addEvaluationTeam, setTeamWriter } from "../../services/teacherService";
 import { getLogoUrl } from "../../utils/logoUtil";
 import "./TeachDetail.css";
 
@@ -49,38 +49,39 @@ const TeachDetail = ({ onNavigate, params }) => {
     const [deadlineMinute, setDeadlineMinute] = useState(0);
 
     /* API 데이터 로드 */
-    useEffect(() => {
+    const fetchData = async () => {
         if (!gameId) return;
-        const fetchData = async () => {
-            const result = await getTeachDetail2(gameId);
-            if (result.success) {
-                const d = result.data;
-                setGameInfo({
-                    name: d.name,
-                    numTeam: d.numTeam,
-                    submitTime: d.mission ? formatDate(d.mission.startdate) + " ~ " + formatDate(d.mission.enddate) : "-",
-                    currentYear: d.mission ? `${d.mission.ddYear}년 ${d.mission.ddTerm}분기` : statusText(d.status),
-                    status: statusText(d.status),
-                    code: d.code,
-                    logoUrl: getLogoUrl(d.gameLogo),
-                });
-                setTeams((d.teams || []).map(t => ({
-                    teamId: t.teamId,
-                    teamName: t.teamName,
-                    numUser: t.numUser,
-                })));
+        const result = await getTeachDetail2(gameId);
+        if (result.success) {
+            const d = result.data;
+            setGameInfo({
+                name: d.name,
+                numTeam: d.numTeam,
+                submitTime: d.mission ? formatDate(d.mission.startdate) + " ~ " + formatDate(d.mission.enddate) : "-",
+                currentYear: d.mission ? `${d.mission.ddYear}년 ${d.mission.ddTerm}분기` : statusText(d.status),
+                status: statusText(d.status),
+                code: d.code,
+                logoUrl: getLogoUrl(d.gameLogo),
+            });
+            setTeams((d.teams || []).map(t => ({
+                teamId: t.teamId,
+                teamName: t.teamName,
+                numUser: t.numUser,
+            })));
 
-                if (d.mission?.enddate) {
-                    const ed = new Date(d.mission.enddate);
-                    setDeadlineYear(ed.getFullYear());
-                    setDeadlineMonth(ed.getMonth() + 1);
-                    setDeadlineDay(ed.getDate());
-                    setDeadlineHour(ed.getHours());
-                    setDeadlineMinute(Math.floor(ed.getMinutes() / 10) * 10);
-                }
+            if (d.mission?.enddate) {
+                const ed = new Date(d.mission.enddate);
+                setDeadlineYear(ed.getFullYear());
+                setDeadlineMonth(ed.getMonth() + 1);
+                setDeadlineDay(ed.getDate());
+                setDeadlineHour(ed.getHours());
+                setDeadlineMinute(Math.floor(ed.getMinutes() / 10) * 10);
             }
-            setLoading(false);
-        };
+        }
+        setLoading(false);
+    };
+
+    useEffect(() => {
         fetchData();
     }, [gameId]);
 
@@ -117,18 +118,26 @@ const TeachDetail = ({ onNavigate, params }) => {
     };
 
     /* 팀 추가 */
-    const handleTeamAdd = () => {
-        if (window.confirm("팀을 추가하시겠습니까?")) {
-            // TODO: API 호출
-            alert("저장되었습니다.");
+    const handleTeamAdd = async () => {
+        if (!window.confirm("팀을 추가하시겠습니까?")) return;
+        const result = await addTeam(gameId);
+        if (result.success) {
+            alert("팀이 추가되었습니다.");
+            await fetchData();
+        } else {
+            alert(result.message);
         }
     };
 
     /* 평가팀 추가 */
-    const handleEvalTeamAdd = () => {
-        if (window.confirm("평가팀을 추가하시겠습니까?")) {
-            // TODO: API 호출
-            alert("저장되었습니다.");
+    const handleEvalTeamAdd = async () => {
+        if (!window.confirm("평가팀을 추가하시겠습니까?")) return;
+        const result = await addEvaluationTeam(gameId);
+        if (result.success) {
+            alert("평가팀이 추가되었습니다.");
+            await fetchData();
+        } else {
+            alert(result.message);
         }
     };
 
@@ -177,14 +186,19 @@ const TeachDetail = ({ onNavigate, params }) => {
     };
 
     /* 모달 - 대표 작성자 지정 */
-    const handleSetLeader = () => {
+    const handleSetLeader = async () => {
         if (selectedMembers.length !== 1) {
             alert("대표 작성자로 지정할 1명을 선택해주세요.");
             return;
         }
-        setModalMembers(prev => prev.map(m => ({ ...m, isLeader: m.user_id === selectedMembers[0] })));
-        setSelectedMembers([]);
-        alert("대표 작성자가 지정되었습니다.");
+        const result = await setTeamWriter(modalTeam.teamId, selectedMembers[0]);
+        if (result.success) {
+            setModalMembers(prev => prev.map(m => ({ ...m, isLeader: m.user_id === selectedMembers[0] })));
+            setSelectedMembers([]);
+            alert("대표 작성자가 지정되었습니다.");
+        } else {
+            alert(result.message);
+        }
     };
 
     /* 모달 - 입력완료 (저장) */
