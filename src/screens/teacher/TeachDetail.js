@@ -172,7 +172,7 @@ const TeachDetail = ({ onNavigate, params }) => {
 
         const result = await deleteTeamMembers(selectedMembers);
         if (result.success) {
-            setModalMembers(prev => prev.filter(m => !selectedMembers.includes(m.user_id)));
+            setModalMembers(prev => prev.filter(m => !selectedMembers.includes(m.userId)));
             setSelectedMembers([]);
         } else {
             alert(result.message);
@@ -182,19 +182,18 @@ const TeachDetail = ({ onNavigate, params }) => {
     /* 모달 - 팀원 추가 */
     const handleAddMember = () => {
         const newId = `new_${Date.now()}`;
-        setModalMembers(prev => [...prev, { user_id: newId, password: "", name: "", email: "", isLeader: false }]);
+        setModalMembers(prev => [...prev, { userId: newId, loginId: "", name: "", mail: "", writer: null }]);
     };
 
-    /* 모달 - 대표 작성자 지정 */
+    /* 모달 - 대표 작성자 지정 (대표작성자 체크박스 기준) */
     const handleSetLeader = async () => {
-        if (selectedMembers.length !== 1) {
-            alert("대표 작성자로 지정할 1명을 선택해주세요.");
+        const writerMember = modalMembers.find(m => m.writer === "1");
+        if (!writerMember) {
+            alert("대표 작성자로 지정할 팀원의 체크박스를 선택해주세요.");
             return;
         }
-        const result = await setTeamWriter(modalTeam.teamId, selectedMembers[0]);
+        const result = await setTeamWriter(modalTeam.teamId, writerMember.userId);
         if (result.success) {
-            setModalMembers(prev => prev.map(m => ({ ...m, isLeader: m.user_id === selectedMembers[0] })));
-            setSelectedMembers([]);
             alert("대표 작성자가 지정되었습니다.");
         } else {
             alert(result.message);
@@ -454,21 +453,30 @@ const TeachDetail = ({ onNavigate, params }) => {
                                         <tr><td colSpan="7" className="tdt-empty">등록된 팀원이 없습니다.</td></tr>
                                     ) : (
                                         modalMembers.map((m, idx) => (
-                                            <tr key={m.user_id}>
+                                            <tr key={m.userId}>
                                                 <td style={{ textAlign: "center" }}>
                                                     <input
                                                         type="checkbox"
-                                                        checked={selectedMembers.includes(m.user_id)}
-                                                        onChange={() => handleMemberCheck(m.user_id)}
+                                                        checked={selectedMembers.includes(m.userId)}
+                                                        onChange={() => handleMemberCheck(m.userId)}
                                                     />
                                                 </td>
                                                 <td>{idx + 1}</td>
-                                                <td>{m.user_id}</td>
-                                                <td className="tdt-member-link">{m.password}</td>
-                                                <td className="tdt-member-link">{m.name}</td>
-                                                <td>{m.email}</td>
+                                                <td>{m.loginId}</td>
+                                                <td className="tdt-member-link">{m.loginId}</td>
+                                                <td className="tdt-member-link">{m.name || m.loginId}</td>
+                                                <td>{m.mail || ""}</td>
                                                 <td style={{ textAlign: "center" }}>
-                                                    <input type="checkbox" checked={m.isLeader} readOnly />
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={m.writer === "1"}
+                                                        onChange={() => {
+                                                            setModalMembers(prev => prev.map(mb => ({
+                                                                ...mb,
+                                                                writer: mb.userId === m.userId ? "1" : null
+                                                            })));
+                                                        }}
+                                                    />
                                                 </td>
                                             </tr>
                                         ))

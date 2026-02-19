@@ -822,16 +822,15 @@ const TeachDetail2 = ({ onNavigate, params }) => {
         alert("팀원이 추가되었습니다.");
     };
 
-    /* 모달 - 대표 작성자 지정 */
+    /* 모달 - 대표 작성자 지정 (대표작성자 체크박스 기준) */
     const handleSetWriter = async () => {
-        if (selectedMembers.length !== 1) {
-            alert("대표 작성자로 지정할 1명을 선택해주세요.");
+        const writerMember = modalMembers.find(m => m.writer === "1");
+        if (!writerMember) {
+            alert("대표 작성자로 지정할 팀원의 체크박스를 선택해주세요.");
             return;
         }
-        const result = await setTeamWriter(modalTeam.teamId, selectedMembers[0]);
+        const result = await setTeamWriter(modalTeam.teamId, writerMember.userId);
         if (result.success) {
-            setModalMembers(prev => prev.map(m => ({ ...m, writer: m.userId === selectedMembers[0] ? "Y" : "N" })));
-            setSelectedMembers([]);
             alert("대표 작성자가 지정되었습니다.");
         } else {
             alert(result.message);
@@ -1912,13 +1911,12 @@ const TeachDetail2 = ({ onNavigate, params }) => {
                                                 <td style={{ textAlign: "center" }}>
                                                     <input
                                                         type="checkbox"
-                                                        checked={m.writer === "Y"}
+                                                        checked={m.writer === "1"}
                                                         onChange={() => {
-                                                            setModalMembers(prev => prev.map(mb =>
-                                                                mb.userId === m.userId
-                                                                    ? { ...mb, writer: mb.writer === "Y" ? "N" : "Y" }
-                                                                    : mb
-                                                            ));
+                                                            setModalMembers(prev => prev.map(mb => ({
+                                                                ...mb,
+                                                                writer: mb.userId === m.userId ? "1" : null
+                                                            })));
                                                         }}
                                                     />
                                                 </td>
