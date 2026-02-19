@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useMemo } from "react";
-import { getTeachDetail, updateClass, saveStep, addTeam, addEvaluationTeam, deleteTeam, getDeletedTeams, restoreTeam, getTeamInfo, updateTeamInfo, getSubmissionList, getImpactCheckByTeam, getIdentityCanvasByTeam, getFlowCanvasByTeam, getQuickWinByTeam, getBuildWinByTeam, getFundingByTeam, getFundingResultByTeam, endClass, deleteTeamMembers, setTeamWriter } from "../../services/teacherService";
+import { getTeachDetail, updateClass, saveStep, addTeam, addEvaluationTeam, deleteTeam, getDeletedTeams, restoreTeam, getTeamInfo, updateTeamInfo, getSubmissionList, getImpactCheckByTeam, getIdentityCanvasByTeam, getFlowCanvasByTeam, getQuickWinByTeam, getBuildWinByTeam, getFundingByTeam, getFundingResultByTeam, endClass, deleteTeamMembers, setTeamWriter, addTeamMember } from "../../services/teacherService";
 import { getLogoUrl } from "../../utils/logoUtil";
+import ReportScreen from "../ReportScreen";
 import { Chart, BarController, BarElement, DoughnutController, ArcElement, LineController, LineElement, PointElement, CategoryScale, LinearScale, Tooltip, Legend } from "chart.js";
 import "./TeachDetail2.css";
 import "../ImpactReviewScreen.css";
@@ -618,6 +619,10 @@ const TeachDetail2 = ({ onNavigate, params }) => {
     const [modalMembers, setModalMembers] = useState([]);
     const [selectedMembers, setSelectedMembers] = useState([]);
 
+    /* 보고서(파일 다운) 모달 */
+    const [showReportModal, setShowReportModal] = useState(false);
+    const [reportTeamId, setReportTeamId] = useState(null);
+
     /* 강의실 수정 모달 */
     const [showModifyModal, setShowModifyModal] = useState(false);
     const [modifyName, setModifyName] = useState("");
@@ -817,9 +822,15 @@ const TeachDetail2 = ({ onNavigate, params }) => {
     };
 
     /* 모달 - 팀원 추가 */
-    const handleAddMember = () => {
-        // TODO: API 호출
-        alert("팀원이 추가되었습니다.");
+    const handleAddMember = async () => {
+        const result = await addTeamMember(modalTeam.teamId, gameId);
+        if (result.success) {
+            alert(`팀원이 추가되었습니다. (ID: ${result.loginId})`);
+            const refreshed = await getTeamInfo(modalTeam.teamId);
+            if (refreshed.success) setModalMembers(refreshed.data.members || []);
+        } else {
+            alert(result.message);
+        }
     };
 
     /* 모달 - 대표 작성자 지정 (대표작성자 체크박스 기준) */
@@ -1191,7 +1202,7 @@ const TeachDetail2 = ({ onNavigate, params }) => {
                                                     <button className="td2-btn-pdf">PDF</button>
                                                 </td>
                                                 <td>
-                                                    <button className="td2-btn-file-down">파일 다운</button>
+                                                    <button className="td2-btn-file-down" onClick={() => { setReportTeamId(t.teamId); setShowReportModal(true); }}>파일 다운</button>
                                                 </td>
                                                 <td>
                                                     <button className="td2-btn-delete" onClick={() => handleDeleteTeam(t)} title="팀 삭제">
@@ -1884,7 +1895,6 @@ const TeachDetail2 = ({ onNavigate, params }) => {
                                         <th style={{ width: 40 }}></th>
                                         <th>번호</th>
                                         <th>User ID</th>
-                                        <th>비밀번호</th>
                                         <th>성명</th>
                                         <th>메일주소</th>
                                         <th>대표작성자</th>
@@ -1892,7 +1902,7 @@ const TeachDetail2 = ({ onNavigate, params }) => {
                                 </thead>
                                 <tbody>
                                     {modalMembers.length === 0 ? (
-                                        <tr><td colSpan="7" style={{ textAlign: "center", padding: 20, color: "#999" }}>등록된 팀원이 없습니다.</td></tr>
+                                        <tr><td colSpan="6" style={{ textAlign: "center", padding: 20, color: "#999" }}>등록된 팀원이 없습니다.</td></tr>
                                     ) : (
                                         modalMembers.map((m, idx) => (
                                             <tr key={m.userId}>
@@ -1905,7 +1915,6 @@ const TeachDetail2 = ({ onNavigate, params }) => {
                                                 </td>
                                                 <td>{idx + 1}</td>
                                                 <td>{m.loginId}</td>
-                                                <td className="td2-member-editable">{m.loginId}</td>
                                                 <td className="td2-member-editable">{m.name || m.loginId}</td>
                                                 <td className="td2-member-editable">{m.mail || "@"}</td>
                                                 <td style={{ textAlign: "center" }}>
@@ -1936,6 +1945,21 @@ const TeachDetail2 = ({ onNavigate, params }) => {
                                 </div>
                                 <p className="td2-team-modal-note">CEO와 각 계정당 직책은 오직 1명만 가능합니다.</p>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* 보고서(파일 다운) 모달 */}
+            {showReportModal && reportTeamId && (
+                <div className="td2-modal-overlay" onClick={() => setShowReportModal(false)}>
+                    <div className="td2-report-modal" onClick={e => e.stopPropagation()}>
+                        <div className="td2-impact-modal-header">
+                            <span className="td2-impact-modal-title">팀 보고서</span>
+                            <button className="td2-modify-close" onClick={() => setShowReportModal(false)}>&times;</button>
+                        </div>
+                        <div className="td2-report-modal-body">
+                            <ReportScreen teamId={reportTeamId} onClose={() => setShowReportModal(false)} />
                         </div>
                     </div>
                 </div>

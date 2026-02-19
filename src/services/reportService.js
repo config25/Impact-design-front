@@ -12,3 +12,14 @@ export const getReport = async () => {
 
     return { success: false, message: result.data?.message || "리포트 조회에 실패했습니다." };
 };
+
+export const getReportByTeam = async (teamId) => {
+    const response = await authFetch(`${API_BASE}/teach/report/${teamId}`);
+    const result = await response.json();
+
+    if (response.ok) {
+        return { success: true, data: result.data };
+    }
+
+    return { success: false, message: result.data?.message || "리포트 조회에 실패했습니다." };
+};

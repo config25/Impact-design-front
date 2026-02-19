@@ -9,7 +9,6 @@ import IdentityCanvasScreen from "./screens/IdentityCanvasScreen";
 import PerformanceStreamScreen from "./screens/PerformanceStreamScreen";
 import QuickWinScreen from "./screens/QuickWinScreen";
 import BuildWinScreen from "./screens/BuildWinScreen";
-import ReportScreen from "./screens/ReportScreen";
 import ImpactReviewScreen from "./screens/ImpactReviewScreen";
 import { AuthProvider } from "./contexts/AuthContext";
 import { getUserStep } from "./services/gameService";
@@ -112,8 +111,6 @@ function App() {
                 return <BuildWinScreen onNavigate={handleNavigate} gameStep={gameStep} />;
             case "review":
                 return <ImpactReviewScreen onNavigate={handleNavigate} gameStep={gameStep} />;
-            case "report":
-                return <ReportScreen onNavigate={handleNavigate} gameStep={gameStep} />;
             default:
                 return <Main onLogin={() => handleNavigate("start")} onRegister={() => handleNavigate("start")} />;
         }

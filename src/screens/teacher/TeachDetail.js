@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getTeachDetail2, getTeamInfo, updateTeamInfo, startClass, endClass, restoreClass, deleteTeamMembers, addTeam, addEvaluationTeam, setTeamWriter } from "../../services/teacherService";
+import { getTeachDetail2, getTeamInfo, updateTeamInfo, startClass, endClass, restoreClass, deleteTeamMembers, addTeam, addEvaluationTeam, setTeamWriter, addTeamMember } from "../../services/teacherService";
 import { getLogoUrl } from "../../utils/logoUtil";
 import "./TeachDetail.css";
 
@@ -180,9 +180,15 @@ const TeachDetail = ({ onNavigate, params }) => {
     };
 
     /* 모달 - 팀원 추가 */
-    const handleAddMember = () => {
-        const newId = `new_${Date.now()}`;
-        setModalMembers(prev => [...prev, { userId: newId, loginId: "", name: "", mail: "", writer: null }]);
+    const handleAddMember = async () => {
+        const result = await addTeamMember(modalTeam.teamId, gameId);
+        if (result.success) {
+            alert(`팀원이 추가되었습니다. (ID: ${result.loginId})`);
+            const refreshed = await getTeamInfo(modalTeam.teamId);
+            if (refreshed.success) setModalMembers(refreshed.data.members || []);
+        } else {
+            alert(result.message);
+        }
     };
 
     /* 모달 - 대표 작성자 지정 (대표작성자 체크박스 기준) */
@@ -442,7 +448,6 @@ const TeachDetail = ({ onNavigate, params }) => {
                                         <th style={{ width: 40 }}></th>
                                         <th>번호</th>
                                         <th>User ID</th>
-                                        <th>비밀번호</th>
                                         <th>성명</th>
                                         <th>메일주소</th>
                                         <th>대표작성자</th>
@@ -450,7 +455,7 @@ const TeachDetail = ({ onNavigate, params }) => {
                                 </thead>
                                 <tbody>
                                     {modalMembers.length === 0 ? (
-                                        <tr><td colSpan="7" className="tdt-empty">등록된 팀원이 없습니다.</td></tr>
+                                        <tr><td colSpan="6" className="tdt-empty">등록된 팀원이 없습니다.</td></tr>
                                     ) : (
                                         modalMembers.map((m, idx) => (
                                             <tr key={m.userId}>
@@ -463,7 +468,6 @@ const TeachDetail = ({ onNavigate, params }) => {
                                                 </td>
                                                 <td>{idx + 1}</td>
                                                 <td>{m.loginId}</td>
-                                                <td className="tdt-member-link">{m.loginId}</td>
                                                 <td className="tdt-member-link">{m.name || m.loginId}</td>
                                                 <td>{m.mail || ""}</td>
                                                 <td style={{ textAlign: "center" }}>

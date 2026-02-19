@@ -1600,3 +1600,17 @@ th.td2-qw-th-sub { background: inherit; }
     display: flex;
     flex-direction: column;
 }
+
+/* 보고서(파일 다운) 모달 */
+.td2-report-modal {
+    background: #fff;
+    border-radius: 6px;
+    width: 1400px;
+    max-width: 95vw;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.td2-report-modal-body {
+    padding: 0;
+}

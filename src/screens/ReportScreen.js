@@ -13,9 +13,9 @@ import unionImage from "../resource/report/union.png";
 import frame27Bg from "../resource/report/Frame 27.png";
 import polygon3Image from "../resource/report/Polygon 3.png";
 import longunionImg from "../resource/report/longunion.png";
-import { getReport } from "../services/reportService";
+import { getReport, getReportByTeam } from "../services/reportService";
 
-const ReportScreen = ({ onNavigate, gameStep }) => {
+const ReportScreen = ({ onNavigate, gameStep, teamId, onClose }) => {
     const containerRef = useRef(null);
     const [isExporting, setIsExporting] = useState(false);
     const [reportData, setReportData] = useState(null);
@@ -25,16 +25,15 @@ const ReportScreen = ({ onNavigate, gameStep }) => {
     useEffect(() => {
         const fetchReport = async () => {
             setLoading(true);
-            const result = await getReport();
+            const result = teamId ? await getReportByTeam(teamId) : await getReport();
             if (result.success) {
-                console.log("reportData:", result.data);
                 setReportData(result.data);
                 if (result.data.imageUrl) setLogoUrl(getImageUrl(result.data.imageUrl));
             }
             setLoading(false);
         };
         fetchReport();
-    }, []);
+    }, [teamId]);
 
     // 점수 계산 함수들
     const calculateScores = (impactCheckScores) => {
@@ -135,6 +134,10 @@ const ReportScreen = ({ onNavigate, gameStep }) => {
 
     if (loading) {
         return <div className="report-loading">리포트를 불러오는 중...</div>;
+    }
+
+    if (!reportData) {
+        return <div className="report-loading">리포트 데이터가 없습니다.</div>;
     }
 
     const handleDownloadPDF = async () => {

@@ -52,18 +52,6 @@ const GNB = ({ activeScreen, onNavigate, gameStep }) => {
                     );
                 })}
             </div>
-            {/* 임시 보고서 버튼 - 실행과제 검증 개발 완료 후 삭제 */}
-            <button
-                style={{
-                    position: "fixed", bottom: 24, right: 24, zIndex: 9999,
-                    background: "#337ab7", color: "#fff", border: "none", borderRadius: 8,
-                    padding: "10px 20px", fontSize: 14, fontWeight: 600, cursor: "pointer",
-                    boxShadow: "0 2px 8px rgba(0,0,0,0.2)"
-                }}
-                onClick={() => onNavigate && onNavigate("report")}
-            >
-                보고서 (임시)
-            </button>
         </nav>
     );
 };
