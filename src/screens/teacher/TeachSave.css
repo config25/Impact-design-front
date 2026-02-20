@@ -150,6 +150,12 @@
     margin-left: 6px;
 }
 
+.tsv-note {
+    font-size: 12px;
+    color: #d9534f;
+    margin-left: 10px;
+}
+
 /* 파일 업로드 */
 .tsv-file-label {
     display: inline-flex;

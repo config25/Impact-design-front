@@ -28,6 +28,26 @@ const teacherScreens = ["teach", "teach_list", "teach_save", "teach_detail", "te
 
 const studentScreens = ["impactcheck", "identity", "performance", "quickwin", "buildwin", "review"];
 
+const STEP_ORDER = [
+    { screen: "impactcheck", key: "A" },
+    { screen: "identity", key: "B" },
+    { screen: "performance", key: "C" },
+    { screen: "quickwin", key: "D" },
+    { screen: "buildwin", key: "E" },
+    { screen: "review", key: "F" },
+];
+
+function getFirstAllowedScreen(gameStep) {
+    if (!gameStep) return "impactcheck";
+    const allowed = gameStep.split(",").map(s => s.trim());
+    for (const { screen, key } of STEP_ORDER) {
+        if (allowed.some(s => s === key || s.startsWith(key + "-"))) {
+            return screen;
+        }
+    }
+    return "impactcheck";
+}
+
 function App() {
     const isTeacherLogin = window.location.pathname === "/teacher_login";
     const [currentScreen, setCurrentScreen] = useState(isTeacherLogin ? "teachlogin" : "login");
@@ -98,7 +118,19 @@ function App() {
             case "teachlogin":
                 return <TeachLogin onLogin={() => handleNavigate("teach")} />;
             case "start":
-                return <StartScreen onStart={() => handleNavigate("impactcheck")} />;
+                return <StartScreen onStart={async () => {
+                    let step = gameStep;
+                    if (step === null) {
+                        try {
+                            step = await getUserStep();
+                            setGameStep(step);
+                        } catch {
+                            step = "";
+                            setGameStep("");
+                        }
+                    }
+                    handleNavigate(getFirstAllowedScreen(step));
+                }} />;
             case "impactcheck":
                 return <ImpactCheckScreen onNavigate={handleNavigate} gameStep={gameStep} />;
             case "identity":

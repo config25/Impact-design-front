@@ -1,7 +1,9 @@
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { getTeachDetail, updateClass, saveStep, addTeam, addEvaluationTeam, deleteTeam, getDeletedTeams, restoreTeam, getTeamInfo, updateTeamInfo, getSubmissionList, getImpactCheckByTeam, getIdentityCanvasByTeam, getFlowCanvasByTeam, getQuickWinByTeam, getBuildWinByTeam, getFundingByTeam, getFundingResultByTeam, endClass, deleteTeamMembers, setTeamWriter, addTeamMember } from "../../services/teacherService";
 import { getLogoUrl } from "../../utils/logoUtil";
 import ReportScreen from "../ReportScreen";
+import JSZip from "jszip";
+import { saveAs } from "file-saver";
 import { Chart, BarController, BarElement, DoughnutController, ArcElement, LineController, LineElement, PointElement, CategoryScale, LinearScale, Tooltip, Legend } from "chart.js";
 import "./TeachDetail2.css";
 import "../ImpactReviewScreen.css";
@@ -623,6 +625,13 @@ const TeachDetail2 = ({ onNavigate, params }) => {
     const [showReportModal, setShowReportModal] = useState(false);
     const [reportTeamId, setReportTeamId] = useState(null);
 
+    /* 전체 PDF 다운 */
+    const [pdfAllRunning, setPdfAllRunning] = useState(false);
+    const [pdfProgress, setPdfProgress] = useState({ current: 0, total: 0, teamName: "", done: false, error: null });
+    const pdfReportRef = useRef(null);
+    const pdfReadyResolveRef = useRef(null);
+    const [pdfRenderTeamId, setPdfRenderTeamId] = useState(null);
+
     /* 강의실 수정 모달 */
     const [showModifyModal, setShowModifyModal] = useState(false);
     const [modifyName, setModifyName] = useState("");
@@ -630,6 +639,57 @@ const TeachDetail2 = ({ onNavigate, params }) => {
     const [modifyDay, setModifyDay] = useState(new Date().getDate());
     const [modifyHour, setModifyHour] = useState(1);
     const [modifyMinute, setModifyMinute] = useState(0);
+
+    /* 전체 PDF 다운로드 */
+    const handlePdfReportReady = useCallback(() => {
+        if (pdfReadyResolveRef.current) {
+            pdfReadyResolveRef.current();
+            pdfReadyResolveRef.current = null;
+        }
+    }, []);
+
+    const handleDownloadAllPDF = useCallback(async () => {
+        if (teams.length === 0) return;
+        setPdfAllRunning(true);
+        setPdfProgress({ current: 0, total: teams.length, teamName: "", done: false, error: null });
+        const zip = new JSZip();
+
+        for (let i = 0; i < teams.length; i++) {
+            const team = teams[i];
+            setPdfProgress(prev => ({ ...prev, current: i + 1, teamName: team.teamName }));
+
+            // 이전 리포트 언마운트 → 새 팀으로 마운트
+            setPdfRenderTeamId(null);
+            await new Promise(r => setTimeout(r, 100));
+            setPdfRenderTeamId(team.teamId);
+
+            // onReady 대기 (데이터 로드 + 렌더 완료)
+            await new Promise((resolve) => {
+                pdfReadyResolveRef.current = resolve;
+                setTimeout(() => { pdfReadyResolveRef.current = null; resolve(); }, 30000);
+            });
+
+            try {
+                const blob = await pdfReportRef.current?.generatePDFBlob();
+                if (blob) {
+                    zip.file(`${team.teamName}_Report.pdf`, blob);
+                }
+            } catch (err) {
+                console.error(`PDF 생성 실패 (${team.teamName}):`, err);
+            }
+        }
+
+        setPdfRenderTeamId(null);
+
+        try {
+            const content = await zip.generateAsync({ type: "blob" });
+            saveAs(content, `${gameInfo?.name || "강의실"}_전체보고서.zip`);
+            setPdfProgress(prev => ({ ...prev, done: true }));
+        } catch {
+            setPdfProgress(prev => ({ ...prev, error: "ZIP 생성에 실패했습니다." }));
+        }
+        setPdfAllRunning(false);
+    }, [teams, gameInfo]);
 
     /* 제출 기한 */
     const now = new Date();
@@ -1166,7 +1226,9 @@ const TeachDetail2 = ({ onNavigate, params }) => {
                     <div className="td2-panel">
                         <div className="td2-panel-heading">
                             <span className="td2-panel-title">진행 현황</span>
-                            <button className="td2-btn-pdf-all">전체 PDF 다운</button>
+                            <button className="td2-btn-pdf-all" onClick={handleDownloadAllPDF} disabled={pdfAllRunning}>
+                                {pdfAllRunning ? "생성 중..." : "전체 PDF 다운"}
+                            </button>
                         </div>
                         <div className="td2-panel-body">
                             <div className="td2-scroll-area">
@@ -1950,7 +2012,7 @@ const TeachDetail2 = ({ onNavigate, params }) => {
                 </div>
             )}
 
-            {/* 보고서(파일 다운) 모달 */}
+            {/* 보고서(파일 다운) 모달 - 개별 보기용 */}
             {showReportModal && reportTeamId && (
                 <div className="td2-modal-overlay" onClick={() => setShowReportModal(false)}>
                     <div className="td2-report-modal" onClick={e => e.stopPropagation()}>
@@ -1960,6 +2022,71 @@ const TeachDetail2 = ({ onNavigate, params }) => {
                         </div>
                         <div className="td2-report-modal-body">
                             <ReportScreen teamId={reportTeamId} onClose={() => setShowReportModal(false)} />
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* 전체 PDF 다운 - 숨겨진 렌더링 영역 */}
+            {pdfRenderTeamId && (
+                <div style={{ position: "fixed", left: "-10000px", top: 0, width: 1000, height: 1415, overflow: "hidden" }}>
+                    <ReportScreen ref={pdfReportRef} teamId={pdfRenderTeamId} hideControls onReady={handlePdfReportReady} />
+                </div>
+            )}
+
+            {/* 전체 PDF 다운 - 진행상황 오버레이 */}
+            {pdfAllRunning && (
+                <div className="td2-modal-overlay" style={{ zIndex: 99999 }}>
+                    <div className="td2-pdf-all-modal" onClick={e => e.stopPropagation()}>
+                        <div className="td2-impact-modal-header">
+                            <span className="td2-impact-modal-title">전체 PDF 다운로드</span>
+                        </div>
+                        <div className="td2-pdf-all-modal-body">
+                            <div className="td2-pdf-all-progress">
+                                <p>PDF 생성 중... ({pdfProgress.current}/{pdfProgress.total})</p>
+                                <p style={{ fontSize: 13, color: "#888", marginTop: 4 }}>{pdfProgress.teamName}</p>
+                                <div className="td2-pdf-all-bar-bg" style={{ marginTop: 12 }}>
+                                    <div className="td2-pdf-all-bar-fill" style={{ width: `${pdfProgress.total > 0 ? (pdfProgress.current / pdfProgress.total) * 100 : 0}%` }} />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* 전체 PDF 다운 완료/에러 알림 */}
+            {pdfProgress.done && (
+                <div className="td2-modal-overlay" onClick={() => setPdfProgress(prev => ({ ...prev, done: false }))}>
+                    <div className="td2-pdf-all-modal" onClick={e => e.stopPropagation()}>
+                        <div className="td2-impact-modal-header">
+                            <span className="td2-impact-modal-title">전체 PDF 다운로드</span>
+                            <button className="td2-modify-close" onClick={() => setPdfProgress(prev => ({ ...prev, done: false }))}>&times;</button>
+                        </div>
+                        <div className="td2-pdf-all-modal-body">
+                            <div className="td2-pdf-all-progress">
+                                <p className="td2-pdf-all-complete">다운로드가 완료되었습니다!</p>
+                                <div style={{ textAlign: "center", marginTop: 16 }}>
+                                    <button className="td2-btn-primary" onClick={() => setPdfProgress(prev => ({ ...prev, done: false }))}>닫기</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+            {pdfProgress.error && (
+                <div className="td2-modal-overlay" onClick={() => setPdfProgress(prev => ({ ...prev, error: null }))}>
+                    <div className="td2-pdf-all-modal" onClick={e => e.stopPropagation()}>
+                        <div className="td2-impact-modal-header">
+                            <span className="td2-impact-modal-title">전체 PDF 다운로드</span>
+                            <button className="td2-modify-close" onClick={() => setPdfProgress(prev => ({ ...prev, error: null }))}>&times;</button>
+                        </div>
+                        <div className="td2-pdf-all-modal-body">
+                            <div className="td2-pdf-all-progress">
+                                <p className="td2-pdf-all-error">{pdfProgress.error}</p>
+                                <div style={{ textAlign: "center", marginTop: 16 }}>
+                                    <button className="td2-btn-primary" onClick={() => setPdfProgress(prev => ({ ...prev, error: null }))}>닫기</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

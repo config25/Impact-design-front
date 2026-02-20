@@ -127,7 +127,7 @@ const TeachSave = ({ onNavigate }) => {
                                         value={teamCount}
                                         onChange={e => setTeamCount(Number(e.target.value))}
                                     >
-                                        {Array.from({ length: 20 }, (_, i) => i + 1).map(n => (
+                                        {Array.from({ length: 4 }, (_, i) => i + 3).map(n => (
                                             <option key={n} value={n}>{n}</option>
                                         ))}
                                     </select>

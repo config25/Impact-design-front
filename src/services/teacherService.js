@@ -31,13 +31,14 @@ export const getTeachDetail = async (gameId) => {
 export const getTeachDetail2 = async (gameId) => {
     const url = gameId ? `${BASE_URL}/detail2?gameId=${gameId}` : `${BASE_URL}/detail2`;
     const response = await authFetch(url);
-    const result = await response.json();
+    const text = await response.text();
+    const result = text ? JSON.parse(text) : null;
 
-    if (response.ok) {
+    if (response.ok && result) {
         return { success: true, data: result.data };
     }
 
-    return { success: false, message: result.data?.message || "강의실 상세 정보를 불러오는데 실패했습니다." };
+    return { success: false, message: result?.data?.message || "강의실 상세 정보를 불러오는데 실패했습니다." };
 };
 
 export const getStudentList = async (gameId) => {
@@ -341,9 +342,11 @@ export const updateTeamMember = async (userId, teamId) => {
     return { success: false, message: result.data?.message || "팀 이동에 실패했습니다." };
 };
 
-export const restoreClass = async (gameId) => {
+export const restoreClass = async (gameId, enddate) => {
     const response = await authFetch(`${BASE_URL}/class/${gameId}/restore`, {
         method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ enddate }),
     });
     const result = await response.json();
 
@@ -367,9 +370,11 @@ export const endClass = async (gameId) => {
     return { success: false, message: result.data?.message || "강의실 종료에 실패했습니다." };
 };
 
-export const startClass = async (gameId) => {
+export const startClass = async (gameId, enddate) => {
     const response = await authFetch(`${BASE_URL}/class/${gameId}/start`, {
         method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ enddate }),
     });
     const result = await response.json();
 

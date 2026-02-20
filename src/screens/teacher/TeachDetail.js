@@ -108,7 +108,13 @@ const TeachDetail = ({ onNavigate, params }) => {
     const handleRestoreGame = async () => {
         if (!window.confirm("강의실을 복원하시겠습니까?")) return;
 
-        const result = await restoreClass(gameId);
+        const mm = String(deadlineMonth).padStart(2, "0");
+        const dd = String(deadlineDay).padStart(2, "0");
+        const hh = String(deadlineHour).padStart(2, "0");
+        const min = String(deadlineMinute).padStart(2, "0");
+        const enddate = `${deadlineYear}-${mm}-${dd} ${hh}:${min}`;
+
+        const result = await restoreClass(gameId, enddate);
         if (result.success) {
             alert("강의실이 복원되었습니다.");
             onNavigate("teach_detail2", { gameId });
@@ -227,7 +233,13 @@ const TeachDetail = ({ onNavigate, params }) => {
     const handleStartEducation = async () => {
         if (!window.confirm("교육을 시작하시겠습니까?")) return;
 
-        const result = await startClass(gameId);
+        const mm = String(deadlineMonth).padStart(2, "0");
+        const dd = String(deadlineDay).padStart(2, "0");
+        const hh = String(deadlineHour).padStart(2, "0");
+        const min = String(deadlineMinute).padStart(2, "0");
+        const enddate = `${deadlineYear}-${mm}-${dd} ${hh}:${min}`;
+
+        const result = await startClass(gameId, enddate);
         if (result.success) {
             alert("교육이 시작되었습니다.");
             onNavigate("teach_detail2", { gameId });

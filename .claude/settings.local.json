@@ -14,7 +14,8 @@
       "Bash(node_modules/.bin/react-scripts build:*)",
       "Bash(node -c:*)",
       "Bash(grep:*)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash(npx eslint:*)"
     ]
   }
 }

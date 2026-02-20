@@ -231,8 +231,8 @@
 }
 
 .logo-img {
-    width: 200px;
-    height: 52px;
+    max-width: 400px;
+    max-height: 105px;
     object-fit: contain;
 }
 

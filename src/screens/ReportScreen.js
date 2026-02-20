@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, forwardRef, useImperativeHandle } from "react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import "./ReportScreen.css";
@@ -15,7 +15,7 @@ import polygon3Image from "../resource/report/Polygon 3.png";
 import longunionImg from "../resource/report/longunion.png";
 import { getReport, getReportByTeam } from "../services/reportService";
 
-const ReportScreen = ({ onNavigate, gameStep, teamId, onClose }) => {
+const ReportScreen = forwardRef(({ onNavigate, gameStep, teamId, onClose, onReady, hideControls }, ref) => {
     const containerRef = useRef(null);
     const [isExporting, setIsExporting] = useState(false);
     const [reportData, setReportData] = useState(null);
@@ -132,6 +132,44 @@ const ReportScreen = ({ onNavigate, gameStep, teamId, onClose }) => {
         return basePage + offset;
     };
 
+    const generatePDFBlob = async () => {
+        if (!containerRef.current) return null;
+
+        const originalCreatePattern = CanvasRenderingContext2D.prototype.createPattern;
+        CanvasRenderingContext2D.prototype.createPattern = function (image, repetition) {
+            if (image && (image.width === 0 || image.height === 0)) return null;
+            return originalCreatePattern.call(this, image, repetition);
+        };
+
+        try {
+            const pages = containerRef.current.querySelectorAll(".report-page");
+            const pdf = new jsPDF({ orientation: "portrait", unit: "px", format: [1000, 1415] });
+
+            for (let i = 0; i < pages.length; i++) {
+                const canvas = await html2canvas(pages[i], {
+                    scale: 2, useCORS: true, allowTaint: true, backgroundColor: null,
+                    width: 1000, height: 1415, logging: false,
+                });
+                const imgData = canvas.toDataURL("image/jpeg", 0.95);
+                if (i > 0) pdf.addPage([1000, 1415]);
+                pdf.addImage(imgData, "JPEG", 0, 0, 1000, 1415);
+            }
+
+            return pdf.output("blob");
+        } finally {
+            CanvasRenderingContext2D.prototype.createPattern = originalCreatePattern;
+        }
+    };
+
+    useImperativeHandle(ref, () => ({ generatePDFBlob }));
+
+    useEffect(() => {
+        if (!loading && reportData && onReady) {
+            const timer = setTimeout(() => onReady(), 500);
+            return () => clearTimeout(timer);
+        }
+    }, [loading, reportData, onReady]);
+
     if (loading) {
         return <div className="report-loading">리포트를 불러오는 중...</div>;
     }
@@ -143,6 +181,15 @@ const ReportScreen = ({ onNavigate, gameStep, teamId, onClose }) => {
     const handleDownloadPDF = async () => {
         if (!containerRef.current || isExporting) return;
         setIsExporting(true);
+
+        // html2canvas 0x0 이미지 에러 방지: createPattern 임시 패치
+        const originalCreatePattern = CanvasRenderingContext2D.prototype.createPattern;
+        CanvasRenderingContext2D.prototype.createPattern = function (image, repetition) {
+            if (image && (image.width === 0 || image.height === 0)) {
+                return null;
+            }
+            return originalCreatePattern.call(this, image, repetition);
+        };
 
         try {
             const pages = containerRef.current.querySelectorAll(".report-page");
@@ -156,9 +203,11 @@ const ReportScreen = ({ onNavigate, gameStep, teamId, onClose }) => {
                 const canvas = await html2canvas(pages[i], {
                     scale: 2,
                     useCORS: true,
+                    allowTaint: true,
                     backgroundColor: null,
                     width: 1000,
                     height: 1415,
+                    logging: false,
                 });
 
                 const imgData = canvas.toDataURL("image/jpeg", 0.95);
@@ -171,6 +220,7 @@ const ReportScreen = ({ onNavigate, gameStep, teamId, onClose }) => {
         } catch (err) {
             console.error("PDF export failed:", err);
         } finally {
+            CanvasRenderingContext2D.prototype.createPattern = originalCreatePattern;
             setIsExporting(false);
         }
     };
@@ -211,13 +261,13 @@ const ReportScreen = ({ onNavigate, gameStep, teamId, onClose }) => {
 
     return (
         <div className="report-container" ref={containerRef}>
-            <button
+            {!hideControls && <button
                 className="pdf-download-btn"
                 onClick={handleDownloadPDF}
                 disabled={isExporting}
             >
                 {isExporting ? "PDF 생성 중..." : "PDF 다운로드"}
-            </button>
+            </button>}
 
             {/* Page 1 - Cover */}
             <div className="report-page report-page-cover">
@@ -1689,6 +1739,6 @@ const ReportScreen = ({ onNavigate, gameStep, teamId, onClose }) => {
             </div>
         </div>
     );
-};
+});
 
 export default ReportScreen;
