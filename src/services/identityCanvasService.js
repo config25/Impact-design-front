@@ -28,10 +28,11 @@ export const saveIdentityCanvas = async (values) => {
     return { success: false, message: result.data?.message || "저장에 실패했습니다." };
 };
 
-export const submitIdentityCanvas = async () => {
+export const submitIdentityCanvas = async (values) => {
     const response = await authFetch(`${BASE_URL}/submit`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values),
     });
     const result = await response.json();
 

@@ -37,9 +37,20 @@ export const saveImpactCheck = async (answers) => {
     return { success: false, message: result.data?.message || "저장에 실패했습니다." };
 };
 
-export const submitImpactCheck = async () => {
+export const submitImpactCheck = async (answers) => {
+    const body = {};
+    for (let i = 1; i <= 12; i++) {
+        body[`q${i}Score`] = answers[i] ?? null;
+    }
+    body.q13Text = answers[13] || null;
+    body.q14Text = answers[14] || null;
+    body.q15Text = answers[15] || null;
+    body.q16Text = answers[16] || null;
+
     const response = await authFetch(`${BASE_URL}/submit`, {
         method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
     });
     const result = await response.json();
 

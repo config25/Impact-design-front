@@ -140,8 +140,30 @@ const PerformanceStreamScreen = ({ onNavigate, gameStep }) => {
     const handleSubmit = async () => {
         if (submitted) return;
         if (!window.confirm("제출완료 후에는 수정이 불가능합니다. 제출하시겠습니까?")) return;
-        const result = await submitFlowCanvas();
+        const result = await submitFlowCanvas(goalCards, tacticalTables, strategicTables);
         if (result.success) {
+            if (result.data?.goals?.length) {
+                const goals = result.data.goals;
+                setGoalCards(goals.map((g) => ({
+                    goalId: g.goalId || null,
+                    title: g.goalTitle || "",
+                    content: g.goalDescription || "",
+                })));
+                setTacticalTables(goals.map((g) =>
+                    (g.tacticals || []).map((t) => ({
+                        metricId: t.metricId || null,
+                        indicator: t.tacticalMetric || "",
+                        target: t.tacticalGoal || "",
+                    }))
+                ));
+                setStrategicTables(goals.map((g) =>
+                    (g.strategicActivities || []).map((a) => ({
+                        activityId: a.activityId || null,
+                        indicator: a.activityMetric || "",
+                        target: a.interCriteria || "",
+                    }))
+                ));
+            }
             setSubmitted(true);
             alert("제출이 완료되었습니다.");
         } else {

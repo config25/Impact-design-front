@@ -194,6 +194,7 @@
     justify-content: flex-start;
     gap: 8px;
     box-sizing: border-box;
+    overflow: hidden;
 }
 
 .edit-icon {
@@ -378,6 +379,7 @@
     justify-content: flex-start;
     box-sizing: border-box;
     gap: 8px;
+    overflow: hidden;
 }
 
 /* 편집 모드일 때 전체 영역 사용 */
@@ -516,6 +518,7 @@
     justify-content: flex-start;
     box-sizing: border-box;
     gap: 8px;
+    overflow: hidden;
 }
 
 /* 카드 질문 */
@@ -601,6 +604,7 @@
     justify-content: flex-start;
     gap: 8px;
     box-sizing: border-box;
+    overflow: hidden;
 }
 
 .new-item-body .edit-icon {
@@ -640,7 +644,9 @@
     text-align: center;
     resize: none;
     min-height: 60px;
-}
+    word-break: break-word;
+    overflow-wrap: break-word;
+    }
 
 .editable-input:focus {
     outline: none;

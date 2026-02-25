@@ -15,7 +15,8 @@
       "Bash(node -c:*)",
       "Bash(grep:*)",
       "Bash(node:*)",
-      "Bash(npx eslint:*)"
+      "Bash(npx eslint:*)",
+      "Bash(head:*)"
     ]
   }
 }

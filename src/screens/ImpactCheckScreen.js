@@ -81,7 +81,7 @@ const ImpactCheckScreen = ({ onNavigate, gameStep }) => {
     const handleSubmit = async () => {
         if (submitted) return;
         if (!window.confirm("진단완료 후에는 수정이 불가능합니다. 제출하시겠습니까?")) return;
-        const result = await submitImpactCheck();
+        const result = await submitImpactCheck(answers);
         if (result.success) {
             setSubmitted(true);
             alert("진단이 완료되었습니다.");

@@ -13,7 +13,7 @@ export const getQuickWinCanvas = async () => {
     return { success: false, message: result.data?.message || "조회에 실패했습니다." };
 };
 
-export const saveQuickWinCanvas = async ({ strategicGoal, taskName, taskContent, crisisSignal, painPoint, tableCells, teamwork, output, outcomes }) => {
+const buildBody = ({ strategicGoal, taskName, taskContent, crisisSignal, painPoint, tableCells, teamwork, output, outcomes }) => {
     const taskInputs = tableCells.map((row, i) => ({
         resourceName: row[0] || null,
         quantity: row[1] ? Number(row[1]) : null,
@@ -40,7 +40,7 @@ export const saveQuickWinCanvas = async ({ strategicGoal, taskName, taskContent,
         })),
     ];
 
-    const body = {
+    return {
         strategicGoal: strategicGoal || null,
         taskName: taskName || null,
         taskDescription: taskContent || null,
@@ -54,6 +54,10 @@ export const saveQuickWinCanvas = async ({ strategicGoal, taskName, taskContent,
         },
         taskOutcomes,
     };
+};
+
+export const saveQuickWinCanvas = async (data) => {
+    const body = buildBody(data);
 
     const response = await authFetch(BASE_URL, {
         method: "POST",
@@ -69,10 +73,13 @@ export const saveQuickWinCanvas = async ({ strategicGoal, taskName, taskContent,
     return { success: false, message: result.data?.message || "저장에 실패했습니다." };
 };
 
-export const submitQuickWinCanvas = async () => {
+export const submitQuickWinCanvas = async (data) => {
+    const body = buildBody(data);
+
     const response = await authFetch(`${BASE_URL}/submit`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
     });
     const result = await response.json();
 

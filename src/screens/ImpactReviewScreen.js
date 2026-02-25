@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import GNB from "../components/common/GNB";
 import "./ImpactReviewScreen.css";
 import { Chart, DoughnutController, ArcElement, Tooltip, Legend, LineController, LineElement, PointElement, CategoryScale, LinearScale, BarController, BarElement } from "chart.js";
-import { getFundingTeams, getFundingInvestment, getFundingStatus, saveFundingInvestment, getFundingPortfolio, getFundingScores, getMyResult } from "../services/fundingService";
+import { getFundingTeams, getFundingInvestment, saveFundingInvestment, submitFundingInvestment, getFundingPortfolio, getFundingScores, getMyResult } from "../services/fundingService";
 
 // 문항번호 → score 필드 매핑
 const SCORE_MAP = { A1: "score1", A2: "score2", B1: "score3", B2: "score4", B3: "score5", C1: "score6", C2: "score7", D1: "score8", D2: "score9" };
@@ -86,16 +86,12 @@ const EvalForm = ({ type, questions, title }) => {
     useEffect(() => {
         const canvasType = type === "quickwin" ? "quick" : "build";
         const fetchData = async () => {
-            const [teamsResult, statusResult, portfolioResult] = await Promise.all([
+            const [teamsResult, portfolioResult] = await Promise.all([
                 getFundingTeams(canvasType),
-                getFundingStatus(canvasType),
                 getFundingPortfolio(canvasType),
             ]);
             if (teamsResult.success) {
                 setTeams(teamsResult.data.teams || []);
-            }
-            if (statusResult.success) {
-                setSubmitted(statusResult.data.submitted || false);
             }
             if (portfolioResult.success) {
                 setAvailableBudget(portfolioResult.data.remainingBudget ?? 100000000);
@@ -129,7 +125,7 @@ const EvalForm = ({ type, questions, title }) => {
 
     const toScoreValue = (val) => val === "" || val === undefined || val === null ? null : Number(val);
 
-    const buildPayload = (isSubmit) => ({
+    const buildPayload = () => ({
         investmentTarget: Number(selectedTeam),
         investmentPrice: investBudget.replace(/,/g, "") || "0",
         score1: toScoreValue(scores["A1"]),
@@ -142,7 +138,6 @@ const EvalForm = ({ type, questions, title }) => {
         score8: toScoreValue(scores["D1"]),
         score9: toScoreValue(scores["D2"]),
         opinion,
-        submit: isSubmit,
     });
 
     const applyResponse = (data) => {
@@ -159,7 +154,7 @@ const EvalForm = ({ type, questions, title }) => {
     const handleSave = async () => {
         if (!selectedTeam) { alert("검증 대상 팀을 선택하세요."); return; }
         const canvasType = type === "quickwin" ? "quick" : "build";
-        const result = await saveFundingInvestment(canvasType, buildPayload(false));
+        const result = await saveFundingInvestment(canvasType, buildPayload());
         if (result.success) {
             applyResponse(result.data);
             alert("저장되었습니다.");
@@ -172,7 +167,7 @@ const EvalForm = ({ type, questions, title }) => {
         if (!selectedTeam) { alert("검증 대상 팀을 선택하세요."); return; }
         if (!window.confirm("제출완료 후에는 수정이 불가능합니다. 제출하시겠습니까?")) return;
         const canvasType = type === "quickwin" ? "quick" : "build";
-        const result = await saveFundingInvestment(canvasType, buildPayload(true));
+        const result = await submitFundingInvestment(canvasType, buildPayload());
         if (result.success) {
             applyResponse(result.data);
             alert("제출이 완료되었습니다.");
@@ -180,6 +175,8 @@ const EvalForm = ({ type, questions, title }) => {
             alert(result.message);
         }
     };
+
+
 
     return (
         <div className="ir-left">

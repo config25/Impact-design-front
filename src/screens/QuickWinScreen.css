@@ -307,7 +307,13 @@
     border-bottom: none;
     border-top-right-radius: 4px;
     box-sizing: border-box;
-    overflow-x: auto;
+    overflow: hidden;
+}
+
+.section-content span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /* Task Section - 전술적 실행과제 */
@@ -402,7 +408,13 @@
     border-left: none;
     border-bottom: none;
     box-sizing: border-box;
-    overflow-x: auto;
+    overflow: hidden;
+}
+
+.task-content span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .task-content.highlight {
@@ -427,7 +439,6 @@
 /* Main Table */
 .main-table {
     margin-bottom: 20px;
-    overflow-x: auto;
 }
 
 .main-table table {
@@ -557,6 +568,18 @@
     background: #FFFFFF;
     height: 46px;
     font-size: 18px;
+    position: relative;
+}
+
+.main-table .input-cell > * {
+    position: absolute;
+    top: 50%;
+    left: 16px;
+    right: 16px;
+    transform: translateY(-50%);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /* 위기의 신호 셀 - 2행 span, 90px 높이 */
@@ -565,12 +588,26 @@
     height: 90px;
     background: #FFFFFF;
     text-align: center;
-    padding: 8px 16px;
+    padding: 0;
     vertical-align: middle;
     border-top: none;
     border-right: 1px solid #E6E6E6;
     border-bottom: 1px solid #E6E6E6;
     border-left: 1px solid #E6E6E6;
+}
+
+.main-table .crisis-cell > * {
+    display: block;
+    max-height: 90px;
+    overflow: hidden;
+    padding: 8px 16px;
+    box-sizing: border-box;
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
+.main-table .crisis-cell > textarea {
+    overflow-y: auto;
 }
 
 /* Pain/Touch point 헤더 셀 */
@@ -594,9 +631,23 @@
     height: 90px;
     background: #FFFFFF;
     text-align: center;
-    padding: 8px 16px;
+    padding: 0;
     vertical-align: middle;
     border-bottom-left-radius: 4px;
+}
+
+.main-table .pain-cell > * {
+    display: block;
+    max-height: 90px;
+    overflow: hidden;
+    padding: 8px 16px;
+    box-sizing: border-box;
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
+.main-table .pain-cell > textarea {
+    overflow-y: auto;
 }
 
 /* 팀워크 셀 - 5행 span, 226px 높이 */
@@ -605,7 +656,7 @@
     height: 226px;
     background: #FFFFFF;
     text-align: center;
-    padding: 6px 16px;
+    padding: 0;
     font-family: 'Pretendard', sans-serif;
     font-weight: 400;
     font-size: 18px;
@@ -615,13 +666,27 @@
     vertical-align: middle;
 }
 
+.main-table .teamwork-cell > * {
+    display: block;
+    max-height: 226px;
+    overflow: hidden;
+    padding: 6px 16px;
+    box-sizing: border-box;
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
+.main-table .teamwork-cell > textarea {
+    overflow-y: auto;
+}
+
 /* 산출 셀 - 5행 span, 226px 높이 */
 .main-table .output-cell {
     width: 230px;
     height: 226px;
     background: #FFFFFF;
     text-align: center;
-    padding: 6px 16px;
+    padding: 0;
     font-family: 'Pretendard', sans-serif;
     font-weight: 400;
     font-size: 18px;
@@ -629,6 +694,20 @@
     letter-spacing: 0;
     color: #333333;
     vertical-align: middle;
+}
+
+.main-table .output-cell > * {
+    display: block;
+    max-height: 226px;
+    overflow: hidden;
+    padding: 6px 16px;
+    box-sizing: border-box;
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
+.main-table .output-cell > textarea {
+    overflow-y: auto;
 }
 
 .cell-question {
@@ -700,7 +779,19 @@
     border: 1px solid #E6E6E6;
     border-top: none;
     box-sizing: border-box;
-    overflow-x: auto;
+    overflow: hidden;
+}
+
+.outcomes-cell span:not(.item-number) {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+    min-width: 0;
+}
+
+.outcomes-cell .item-number {
+    flex-shrink: 0;
 }
 
 .outcomes-cell.left {
@@ -784,6 +875,9 @@
     outline: none;
     resize: none;
     text-align: center;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    overflow-y: auto;
 }
 
 .editable-textarea::placeholder {
@@ -830,6 +924,7 @@
     color: #333333;
     white-space: pre-wrap;
 }
+
 
 /* Clickable cells */
 .section-content,

@@ -13,8 +13,8 @@ export const getFlowCanvas = async () => {
     return { success: false, message: result.data?.message || "조회에 실패했습니다." };
 };
 
-export const saveFlowCanvas = async (goalCards, tacticalTables, strategicTables) => {
-    const goals = goalCards.map((card, i) => ({
+const buildGoals = (goalCards, tacticalTables, strategicTables) => {
+    return goalCards.map((card, i) => ({
         goalId: card.goalId || null,
         goalTitle: card.title || null,
         goalDescription: card.content || null,
@@ -32,6 +32,10 @@ export const saveFlowCanvas = async (goalCards, tacticalTables, strategicTables)
             orderNo: j + 1,
         })),
     }));
+};
+
+export const saveFlowCanvas = async (goalCards, tacticalTables, strategicTables) => {
+    const goals = buildGoals(goalCards, tacticalTables, strategicTables);
 
     const response = await authFetch(BASE_URL, {
         method: "POST",
@@ -47,10 +51,13 @@ export const saveFlowCanvas = async (goalCards, tacticalTables, strategicTables)
     return { success: false, message: result.data?.message || "저장에 실패했습니다." };
 };
 
-export const submitFlowCanvas = async () => {
+export const submitFlowCanvas = async (goalCards, tacticalTables, strategicTables) => {
+    const goals = buildGoals(goalCards, tacticalTables, strategicTables);
+
     const response = await authFetch(`${BASE_URL}/submit`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ goals }),
     });
     const result = await response.json();
 

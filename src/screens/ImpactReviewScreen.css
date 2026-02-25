@@ -600,4 +600,7 @@
     font-weight: 500;
     line-height: 160%;
     color: #333333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

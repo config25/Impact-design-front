@@ -103,7 +103,10 @@ const QuickWinScreen = ({ onNavigate, gameStep }) => {
     const handleSubmit = async () => {
         if (submitted) return;
         if (!window.confirm("제출완료 후에는 수정이 불가능합니다. 제출하시겠습니까?")) return;
-        const result = await submitQuickWinCanvas();
+        const result = await submitQuickWinCanvas({
+            strategicGoal: alignment, taskName, taskContent, crisisSignal,
+            painPoint, tableCells, teamwork, output, outcomes,
+        });
         if (result.success) {
             setSubmitted(true);
             alert("제출이 완료되었습니다.");

@@ -47,9 +47,9 @@ export const getFundingStatus = async (canvasType) => {
 };
 
 /**
- * 투자 의향서 저장/제출
+ * 투자 의향서 저장 (임시저장)
  * @param {string} canvasType - "quick" 또는 "build"
- * @param {object} data - { investmentTarget, investmentPrice, score1~9, opinion, submit }
+ * @param {object} data - { investmentTarget, investmentPrice, score1~9, opinion }
  */
 export const saveFundingInvestment = async (canvasType, data) => {
     const response = await authFetch(`${API_BASE}/funding/${canvasType}/investment`, {
@@ -64,6 +64,30 @@ export const saveFundingInvestment = async (canvasType, data) => {
     }
 
     return { success: false, message: result.data?.message || "저장에 실패했습니다." };
+};
+
+/**
+ * 투자 의향서 저장 + 제출
+ * @param {string} canvasType - "quick" 또는 "build"
+ * @param {object} data - { investmentTarget, investmentPrice, score1~9, opinion }
+ */
+export const submitFundingInvestment = async (canvasType, data) => {
+    const response = await authFetch(`${API_BASE}/funding/${canvasType}/submit`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+    });
+    const result = await response.json();
+
+    if (response.ok) {
+        return { success: true, data: result.data };
+    }
+
+    if (response.status === 409) {
+        return { success: false, message: "이미 제출되었습니다." };
+    }
+
+    return { success: false, message: result.data?.message || "제출에 실패했습니다." };
 };
 
 /**
