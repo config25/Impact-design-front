@@ -15,7 +15,7 @@ import polygon3Image from "../resource/report/Polygon 3.png";
 import longunionImg from "../resource/report/longunion.png";
 import { getReport, getReportByTeam } from "../services/reportService";
 
-const ReportScreen = forwardRef(({ onNavigate, gameStep, teamId, onClose, onReady, hideControls }, ref) => {
+const ReportScreen = forwardRef(({ onNavigate, gameStep, teamId, onClose, onReady, hideControls, initialData }, ref) => {
     const containerRef = useRef(null);
     const [isExporting, setIsExporting] = useState(false);
     const [reportData, setReportData] = useState(null);
@@ -23,17 +23,27 @@ const ReportScreen = forwardRef(({ onNavigate, gameStep, teamId, onClose, onRead
     const [logoUrl, setLogoUrl] = useState(null);
 
     useEffect(() => {
+        if (initialData) {
+            setReportData(initialData);
+            if (initialData.imageUrl) setLogoUrl(getImageUrl(initialData.imageUrl));
+            setLoading(false);
+            return;
+        }
         const fetchReport = async () => {
             setLoading(true);
-            const result = teamId ? await getReportByTeam(teamId) : await getReport();
-            if (result.success) {
-                setReportData(result.data);
-                if (result.data.imageUrl) setLogoUrl(getImageUrl(result.data.imageUrl));
+            try {
+                const result = teamId ? await getReportByTeam(teamId) : await getReport();
+                if (result.success) {
+                    setReportData(result.data);
+                    if (result.data?.imageUrl) setLogoUrl(getImageUrl(result.data.imageUrl));
+                }
+            } catch (err) {
+                console.error("리포트 조회 실패:", err);
             }
             setLoading(false);
         };
         fetchReport();
-    }, [teamId]);
+    }, [teamId, initialData]);
 
     // 점수 계산 함수들
     const calculateScores = (impactCheckScores) => {

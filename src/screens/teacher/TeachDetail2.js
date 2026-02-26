@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { getTeachDetail, updateClass, saveStep, addTeam, addEvaluationTeam, deleteTeam, getDeletedTeams, restoreTeam, getTeamInfo, updateTeamInfo, getSubmissionList, getImpactCheckByTeam, getIdentityCanvasByTeam, getFlowCanvasByTeam, getQuickWinByTeam, getBuildWinByTeam, getFundingByTeam, getFundingResultByTeam, endClass, deleteTeamMembers, setTeamWriter, addTeamMember } from "../../services/teacherService";
 import { getLogoUrl } from "../../utils/logoUtil";
 import ReportScreen from "../ReportScreen";
+import { getBulkReport } from "../../services/reportService";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
 import { Chart, BarController, BarElement, DoughnutController, ArcElement, LineController, LineElement, PointElement, CategoryScale, LinearScale, Tooltip, Legend } from "chart.js";
@@ -631,6 +632,7 @@ const TeachDetail2 = ({ onNavigate, params }) => {
     const pdfReportRef = useRef(null);
     const pdfReadyResolveRef = useRef(null);
     const [pdfRenderTeamId, setPdfRenderTeamId] = useState(null);
+    const [pdfRenderData, setPdfRenderData] = useState(null);
 
     /* 강의실 수정 모달 */
     const [showModifyModal, setShowModifyModal] = useState(false);
@@ -651,19 +653,33 @@ const TeachDetail2 = ({ onNavigate, params }) => {
     const handleDownloadAllPDF = useCallback(async () => {
         if (teams.length === 0) return;
         setPdfAllRunning(true);
-        setPdfProgress({ current: 0, total: teams.length, teamName: "", done: false, error: null });
+        setPdfProgress({ current: 0, total: teams.length, teamName: "데이터 로딩 중...", done: false, error: null });
+
+        // 1) 벌크 API로 전체 리포트 데이터 한번에 가져오기
+        const bulkResult = await getBulkReport(gameId);
+        if (!bulkResult.success) {
+            setPdfProgress(prev => ({ ...prev, error: bulkResult.message }));
+            setPdfAllRunning(false);
+            return;
+        }
+        const allReports = bulkResult.data; // List<ReportResponse>
+
         const zip = new JSZip();
 
-        for (let i = 0; i < teams.length; i++) {
-            const team = teams[i];
-            setPdfProgress(prev => ({ ...prev, current: i + 1, teamName: team.teamName }));
+        // 2) 데이터를 이미 가지고 있으므로 PDF 렌더만 순차 실행
+        for (let i = 0; i < allReports.length; i++) {
+            const report = allReports[i];
+            const teamName = report.teamName || `팀${i + 1}`;
+            setPdfProgress(prev => ({ ...prev, current: i + 1, teamName }));
 
-            // 이전 리포트 언마운트 → 새 팀으로 마운트
+            // 이전 리포트 언마운트 → 새 데이터로 마운트
             setPdfRenderTeamId(null);
+            setPdfRenderData(null);
             await new Promise(r => setTimeout(r, 100));
-            setPdfRenderTeamId(team.teamId);
+            setPdfRenderData(report);
+            setPdfRenderTeamId(report.teamId);
 
-            // onReady 대기 (데이터 로드 + 렌더 완료)
+            // onReady 대기 (렌더 완료만 대기, API 호출 없음)
             await new Promise((resolve) => {
                 pdfReadyResolveRef.current = resolve;
                 setTimeout(() => { pdfReadyResolveRef.current = null; resolve(); }, 30000);
@@ -672,14 +688,15 @@ const TeachDetail2 = ({ onNavigate, params }) => {
             try {
                 const blob = await pdfReportRef.current?.generatePDFBlob();
                 if (blob) {
-                    zip.file(`${team.teamName}_Report.pdf`, blob);
+                    zip.file(`${teamName}_Report.pdf`, blob);
                 }
             } catch (err) {
-                console.error(`PDF 생성 실패 (${team.teamName}):`, err);
+                console.error(`PDF 생성 실패 (${teamName}):`, err);
             }
         }
 
         setPdfRenderTeamId(null);
+        setPdfRenderData(null);
 
         try {
             const content = await zip.generateAsync({ type: "blob" });
@@ -689,7 +706,7 @@ const TeachDetail2 = ({ onNavigate, params }) => {
             setPdfProgress(prev => ({ ...prev, error: "ZIP 생성에 실패했습니다." }));
         }
         setPdfAllRunning(false);
-    }, [teams, gameInfo]);
+    }, [teams, gameInfo, gameId]);
 
     /* 제출 기한 */
     const now = new Date();
@@ -2030,7 +2047,7 @@ const TeachDetail2 = ({ onNavigate, params }) => {
             {/* 전체 PDF 다운 - 숨겨진 렌더링 영역 */}
             {pdfRenderTeamId && (
                 <div style={{ position: "fixed", left: "-10000px", top: 0, width: 1000, height: 1415, overflow: "hidden" }}>
-                    <ReportScreen ref={pdfReportRef} teamId={pdfRenderTeamId} hideControls onReady={handlePdfReportReady} />
+                    <ReportScreen ref={pdfReportRef} teamId={pdfRenderTeamId} initialData={pdfRenderData} hideControls onReady={handlePdfReportReady} />
                 </div>
             )}
 
