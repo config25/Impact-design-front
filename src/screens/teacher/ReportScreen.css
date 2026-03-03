@@ -577,7 +577,7 @@
    Page 3 - Contents
    ============================== */
 .report-page-3 {
-    background: url('../resource/report/background.png') center / cover no-repeat;
+    background: url('../../resource/report/background.png') center / cover no-repeat;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -701,7 +701,7 @@
    Page 5 - Strategic Identity Contents
    ============================== */
 .report-page-5 {
-    background: url('../resource/report/background.png') center / cover no-repeat;
+    background: url('../../resource/report/background.png') center / cover no-repeat;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1554,7 +1554,7 @@
    Page 8 - Performance Stream Contents
    ============================== */
 .report-page-8 {
-    background: url('../resource/report/background.png') center / cover no-repeat;
+    background: url('../../resource/report/background.png') center / cover no-repeat;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -2074,7 +2074,7 @@
    Page 16 - Quick & Build Win Contents
    ============================== */
 .report-page-16 {
-    background: url('../resource/report/background.png') center / cover no-repeat;
+    background: url('../../resource/report/background.png') center / cover no-repeat;
     display: flex;
     flex-direction: column;
     align-items: center;

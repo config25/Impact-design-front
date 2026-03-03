@@ -7,9 +7,11 @@ import pencil2 from "../resource/quick/pencil2.png";
 import { getIdentityCanvas, saveIdentityCanvas, submitIdentityCanvas } from "../services/identityCanvasService";
 import { getImageUrl } from "../utils/logoUtil";
 import { IdentityCanvasProvider, IdentityCanvasContext } from "../contexts/IdentityCanvasContext";
+import { DashboardContext } from "../contexts/DashboardContext";
 
 const IdentityCanvasInner = ({ onNavigate, gameStep }) => {
     const { values, loadFromResponse } = useContext(IdentityCanvasContext);
+    const { dashboard } = useContext(DashboardContext);
     const [submitted, setSubmitted] = useState(false);
     const [showTips, setShowTips] = useState(false);
     const [logoUrl, setLogoUrl] = useState(null);
@@ -41,7 +43,7 @@ const IdentityCanvasInner = ({ onNavigate, gameStep }) => {
             if (result.success && result.data) {
                 loadFromResponse(result.data);
                 setSubmitted(result.data.submitted || false);
-                if (result.data.imageUrl) setLogoUrl(getImageUrl(result.data.imageUrl));
+                if (!dashboard?.classImage && result.data.imageUrl) setLogoUrl(getImageUrl(result.data.imageUrl));
             }
         };
         fetchData();
@@ -67,7 +69,7 @@ const IdentityCanvasInner = ({ onNavigate, gameStep }) => {
                 </div>
             </div>
 
-            <IdentityCanvasLayout logoUrl={logoUrl} />
+            <IdentityCanvasLayout logoUrl={dashboard?.classImage ? getImageUrl(dashboard.classImage) : logoUrl} />
 
             <TipsModal
                 show={showTips}

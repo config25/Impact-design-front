@@ -11,6 +11,7 @@ import QuickWinScreen from "./screens/QuickWinScreen";
 import BuildWinScreen from "./screens/BuildWinScreen";
 import ImpactReviewScreen from "./screens/ImpactReviewScreen";
 import { AuthProvider } from "./contexts/AuthContext";
+import { DashboardProvider } from "./contexts/DashboardContext";
 import { getUserStep } from "./services/gameService";
 
 // Teacher screens
@@ -150,7 +151,9 @@ function App() {
 
     return (
         <AuthProvider onLogout={(wasTeacher) => { setGameStep(null); handleNavigate(wasTeacher ? "teachlogin" : "login"); }}>
-            {renderScreen()}
+            <DashboardProvider>
+                {renderScreen()}
+            </DashboardProvider>
         </AuthProvider>
     );
 }

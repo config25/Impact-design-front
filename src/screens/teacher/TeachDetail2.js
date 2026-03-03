@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { getTeachDetail, updateClass, saveStep, addTeam, addEvaluationTeam, deleteTeam, getDeletedTeams, restoreTeam, getTeamInfo, updateTeamInfo, getSubmissionList, getImpactCheckByTeam, getIdentityCanvasByTeam, getFlowCanvasByTeam, getQuickWinByTeam, getBuildWinByTeam, getFundingByTeam, getFundingResultByTeam, endClass, deleteTeamMembers, setTeamWriter, addTeamMember } from "../../services/teacherService";
 import { getLogoUrl } from "../../utils/logoUtil";
-import ReportScreen from "../ReportScreen";
+import ReportScreen from "./ReportScreen";
 import { getBulkReport } from "../../services/reportService";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";

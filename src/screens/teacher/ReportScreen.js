@@ -2,18 +2,18 @@ import { useRef, useState, useEffect, forwardRef, useImperativeHandle } from "re
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import "./ReportScreen.css";
-import polygonImage from "../resource/report/Polygon 4.png";
-import polygon5Image from "../resource/report/Polygon 5.png";
-import logoImage from "../resource/report/logo01.png";
-import coverMainImage from "../resource/report/image.png";
-import image7Bg from "../resource/report/Image 7.png";
-import { getImageUrl } from "../utils/logoUtil";
-import polygon2Image from "../resource/report/Polygon 2.png";
-import unionImage from "../resource/report/union.png";
-import frame27Bg from "../resource/report/Frame 27.png";
-import polygon3Image from "../resource/report/Polygon 3.png";
-import longunionImg from "../resource/report/longunion.png";
-import { getReport, getReportByTeam } from "../services/reportService";
+import polygonImage from "../../resource/report/Polygon 4.png";
+import polygon5Image from "../../resource/report/Polygon 5.png";
+import logoImage from "../../resource/report/logo01.png";
+import coverMainImage from "../../resource/report/image.png";
+import image7Bg from "../../resource/report/Image 7.png";
+import { getImageUrl } from "../../utils/logoUtil";
+import polygon2Image from "../../resource/report/Polygon 2.png";
+import unionImage from "../../resource/report/union.png";
+import frame27Bg from "../../resource/report/Frame 27.png";
+import polygon3Image from "../../resource/report/Polygon 3.png";
+import longunionImg from "../../resource/report/longunion.png";
+import { getReport, getReportByTeam } from "../../services/reportService";
 
 const ReportScreen = forwardRef(({ onNavigate, gameStep, teamId, onClose, onReady, hideControls, initialData }, ref) => {
     const containerRef = useRef(null);

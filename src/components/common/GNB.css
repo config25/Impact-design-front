@@ -1,3 +1,87 @@
+/* ── Top Bar: 1920 x 60, #282E6B ── */
+.gnb-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 60px;
+    background: #282E6B;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 0 42px;
+    box-sizing: border-box;
+}
+
+.gnb-topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.gnb-topbar-icon {
+    width: 60px;
+    height: 59px;
+    object-fit: contain;
+}
+
+.gnb-topbar-title {
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+    line-height: 200%;
+    color: #FFFFFF;
+}
+
+.gnb-topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.gnb-topbar-team {
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 200%;
+    color: #FFFFFF;
+    text-align: right;
+}
+
+.gnb-topbar-divider {
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 100;
+    font-size: 16px;
+    line-height: 200%;
+    color: rgba(255, 255, 255, 0.3);
+    text-align: right;
+}
+
+.gnb-topbar-user {
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 200%;
+    color: #FFFFFF;
+    text-align: center;
+}
+
+.gnb-topbar-logout {
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    line-height: 200%;
+    color: #FFFFFF;
+    background: transparent;
+    border: 1px solid #FCFCFC;
+    border-radius: 2px;
+    padding: 4px 24px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.gnb-topbar-logout:hover {
+    opacity: 0.8;
+}
+
 /* GNB 스타일 - 전체 화면 1920 x 1320 기준 */
 /* GNB 전체 박스: 1920 x 100, 파란색 배경 */
 .gnb {

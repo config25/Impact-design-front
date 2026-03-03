@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { DashboardContext } from "../contexts/DashboardContext";
 import GNB from "../components/common/GNB";
 import TipsModal from "../components/common/TipsModal";
 import "./BuildWinScreen.css";
@@ -10,6 +11,7 @@ import pencil from "../resource/start/pencil.png";
 import { getBuildWinCanvas, saveBuildWinCanvas, submitBuildWinCanvas } from "../services/buildWinCanvasService";
 
 const BuildWinScreen = ({ onNavigate, gameStep }) => {
+    const { dashboard } = useContext(DashboardContext);
     // Editable fields state
     const [alignment, setAlignment] = useState("");
     const [taskName, setTaskName] = useState("");
@@ -43,7 +45,7 @@ const BuildWinScreen = ({ onNavigate, gameStep }) => {
             const result = await getBuildWinCanvas();
             if (result.success && result.data) {
                 const d = result.data;
-                if (d.imageUrl) setLogoUrl(getImageUrl(d.imageUrl));
+                if (!dashboard?.classImage && d.imageUrl) setLogoUrl(getImageUrl(d.imageUrl));
                 setAlignment(d.strategicGoal || "");
                 setTaskName(d.taskName || "");
                 setTaskContent(d.taskDescription || "");
@@ -182,9 +184,9 @@ const BuildWinScreen = ({ onNavigate, gameStep }) => {
                             </p>
                         </div>
                     </div>
-                    {logoUrl && (
+                    {(dashboard?.classImage || logoUrl) && (
                         <div className="logo-wrapper">
-                            <img src={logoUrl} alt="logo" className="logo-img" />
+                            <img src={dashboard?.classImage ? getImageUrl(dashboard.classImage) : logoUrl} alt="logo" className="logo-img" />
                         </div>
                     )}
                 </header>

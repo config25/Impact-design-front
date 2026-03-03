@@ -1,3 +1,7 @@
+import { useContext } from "react";
+import { AuthContext } from "../../contexts/AuthContext";
+import { DashboardContext } from "../../contexts/DashboardContext";
+import iconsImg from "../../resource/GNB/icons.png";
 import "./GNB.css";
 
 const STEP_MAP = {
@@ -10,6 +14,8 @@ const STEP_MAP = {
 };
 
 const GNB = ({ activeScreen, onNavigate, gameStep }) => {
+    const { logout } = useContext(AuthContext);
+    const { dashboard, clearDashboard } = useContext(DashboardContext);
     const menuItems = [
         { id: "impactcheck", title: "IMPACT Check", subtitle: "성과관리 현황진단" },
         { id: "identity", title: "Strategic Identity Canvas", subtitle: "정체성 설계" },
@@ -35,6 +41,19 @@ const GNB = ({ activeScreen, onNavigate, gameStep }) => {
     };
 
     return (
+        <>
+        <div className="gnb-topbar">
+            <div className="gnb-topbar-left">
+                <img src={iconsImg} alt="icon" className="gnb-topbar-icon" />
+                <span className="gnb-topbar-title">{dashboard?.className || "강의실"}</span>
+            </div>
+            <div className="gnb-topbar-right">
+                <span className="gnb-topbar-team">{dashboard?.teamName || ""}</span>
+                <span className="gnb-topbar-divider">|</span>
+                <span className="gnb-topbar-user">{dashboard?.userName || ""}</span>
+                <button className="gnb-topbar-logout" onClick={() => { if (window.confirm("로그아웃 하시겠습니까?")) { clearDashboard(); logout(); } }}>로그아웃</button>
+            </div>
+        </div>
         <nav className="gnb">
             <div className="gnb-inner">
                 {menuItems.map((item) => {
@@ -53,6 +72,7 @@ const GNB = ({ activeScreen, onNavigate, gameStep }) => {
                 })}
             </div>
         </nav>
+        </>
     );
 };
 

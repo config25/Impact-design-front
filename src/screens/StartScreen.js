@@ -1,3 +1,5 @@
+import { useContext, useEffect } from "react";
+import { DashboardContext } from "../contexts/DashboardContext";
 import "./StartScreen.css";
 import backgroundImage from "../resource/start/background.jpg";
 import isolationIcon1 from "../resource/start/_격리_모드.png";
@@ -8,6 +10,12 @@ import isolationIcon5 from "../resource/start/_격리_모드5.png";
 import isolationIcon6 from "../resource/start/_격리_모드6.png";
 
 const StartScreen = ({ onStart }) => {
+    const { dashboard, fetchDashboard } = useContext(DashboardContext);
+
+    useEffect(() => {
+        if (!dashboard) fetchDashboard();
+    }, [dashboard, fetchDashboard]);
+
     const canvasItems = [
         {
             koreanTitle: "성과관리 현황진단",

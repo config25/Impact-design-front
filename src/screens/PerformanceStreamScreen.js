@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { DashboardContext } from "../contexts/DashboardContext";
 import GNB from "../components/common/GNB";
 import TipsModal from "../components/common/TipsModal";
 import "./PerformanceStreamScreen.css";
@@ -10,6 +11,7 @@ import pencilIcon from "../resource/identity/pencil.png";
 import { getFlowCanvas, saveFlowCanvas, submitFlowCanvas } from "../services/flowCanvasService";
 
 const PerformanceStreamScreen = ({ onNavigate, gameStep }) => {
+    const { dashboard } = useContext(DashboardContext);
     // Goal cards state
     const [goalCards, setGoalCards] = useState([
         { goalId: null, title: "", content: "" },
@@ -70,7 +72,7 @@ const PerformanceStreamScreen = ({ onNavigate, gameStep }) => {
         const fetchData = async () => {
             const result = await getFlowCanvas();
             if (result.success && result.data) {
-                if (result.data.imageUrl) setLogoUrl(getImageUrl(result.data.imageUrl));
+                if (!dashboard?.classImage && result.data.imageUrl) setLogoUrl(getImageUrl(result.data.imageUrl));
                 if (result.data.newVision) {
                     setNewVision(result.data.newVision);
                 }
@@ -242,9 +244,9 @@ const PerformanceStreamScreen = ({ onNavigate, gameStep }) => {
                             </p>
                         </div>
                     </div>
-                    {logoUrl && (
+                    {(dashboard?.classImage || logoUrl) && (
                         <div className="logo-wrapper">
-                            <img src={logoUrl} alt="logo" className="logo-img" />
+                            <img src={dashboard?.classImage ? getImageUrl(dashboard.classImage) : logoUrl} alt="logo" className="logo-img" />
                         </div>
                     )}
                 </header>

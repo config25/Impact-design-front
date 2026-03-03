@@ -1,10 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { DashboardContext } from "../contexts/DashboardContext";
 import GNB from "../components/common/GNB";
 import "./ImpactCheckScreen.css";
 import pencilIcon from "../resource/start/pencil.png";
 import { getImpactCheck, saveImpactCheck, submitImpactCheck } from "../services/impactCheckService";
 
 const ImpactCheckScreen = ({ onNavigate, gameStep }) => {
+    const { dashboard } = useContext(DashboardContext);
     const [department, setDepartment] = useState("");
     const [answers, setAnswers] = useState({});
     const [submitted, setSubmitted] = useState(false);
@@ -24,7 +26,7 @@ const ImpactCheckScreen = ({ onNavigate, gameStep }) => {
                 if (data.q16Text) loaded[16] = data.q16Text;
                 setAnswers(loaded);
                 setSubmitted(data.submitted || false);
-                if (data.gameName) setDepartment(data.gameName);
+                if (data.gameName && !dashboard?.className) setDepartment(data.gameName);
             }
         };
         fetchData();
@@ -116,8 +118,9 @@ const ImpactCheckScreen = ({ onNavigate, gameStep }) => {
                     <label>부서명</label>
                     <input
                         type="text"
-                        value={department}
+                        value={dashboard?.className || department}
                         onChange={(e) => setDepartment(e.target.value)}
+                        readOnly={!!dashboard?.className}
                         placeholder="부서명을 입력하세요"
                     />
                 </div>
