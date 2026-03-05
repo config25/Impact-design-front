@@ -44,7 +44,7 @@ const GNB = ({ activeScreen, onNavigate, gameStep }) => {
         <>
         <div className="gnb-topbar">
             <div className="gnb-topbar-left">
-                <img src={iconsImg} alt="icon" className="gnb-topbar-icon" />
+                <img src={iconsImg} alt="icon" className="gnb-topbar-icon" onClick={() => onNavigate && onNavigate("start")} style={{ cursor: "pointer" }} />
                 <span className="gnb-topbar-title">{dashboard?.className || "강의실"}</span>
             </div>
             <div className="gnb-topbar-right">

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { getStudentList, updateTeamMember } from "../../services/teacherService";
+import { getStudentList } from "../../services/teachClassService";
+import { updateTeamMember } from "../../services/teachTeamService";
 import "./StudentList.css";
 
 const StudentList = ({ onNavigate, params }) => {

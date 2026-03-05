@@ -1,20 +1,7 @@
-import { API_BASE, authFetch } from "./apiConfig";
+import { createCanvasService } from "./canvasServiceFactory";
 
-const BASE_URL = `${API_BASE}/flow-canvas`;
-
-export const getFlowCanvas = async () => {
-    const response = await authFetch(BASE_URL);
-    const result = await response.json();
-
-    if (response.ok) {
-        return { success: true, data: result.data };
-    }
-
-    return { success: false, message: result.data?.message || "조회에 실패했습니다." };
-};
-
-const buildGoals = (goalCards, tacticalTables, strategicTables) => {
-    return goalCards.map((card, i) => ({
+const buildBody = (goalCards, tacticalTables, strategicTables) => ({
+    goals: goalCards.map((card, i) => ({
         goalId: card.goalId || null,
         goalTitle: card.title || null,
         goalDescription: card.content || null,
@@ -31,43 +18,11 @@ const buildGoals = (goalCards, tacticalTables, strategicTables) => {
             interCriteria: row.target || null,
             orderNo: j + 1,
         })),
-    }));
-};
+    })),
+});
 
-export const saveFlowCanvas = async (goalCards, tacticalTables, strategicTables) => {
-    const goals = buildGoals(goalCards, tacticalTables, strategicTables);
+const service = createCanvasService("flow-canvas", buildBody);
 
-    const response = await authFetch(BASE_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ goals }),
-    });
-    const result = await response.json();
-
-    if (response.ok) {
-        return { success: true, data: result.data };
-    }
-
-    return { success: false, message: result.data?.message || "저장에 실패했습니다." };
-};
-
-export const submitFlowCanvas = async (goalCards, tacticalTables, strategicTables) => {
-    const goals = buildGoals(goalCards, tacticalTables, strategicTables);
-
-    const response = await authFetch(`${BASE_URL}/submit`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ goals }),
-    });
-    const result = await response.json();
-
-    if (response.ok) {
-        return { success: true, data: result.data };
-    }
-
-    if (response.status === 409) {
-        return { success: false, message: "이미 제출되었습니다." };
-    }
-
-    return { success: false, message: result.data?.message || "제출에 실패했습니다." };
-};
+export const getFlowCanvas = service.get;
+export const saveFlowCanvas = service.save;
+export const submitFlowCanvas = service.submit;

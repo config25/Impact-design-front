@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getTeachList } from "../../services/teacherService";
+import { getTeachList } from "../../services/teachClassService";
 import "./TeachList.css";
 
 /* 날짜 포맷: "2025-02-01T00:00:00" → "2025-02-01 00시 00분" */

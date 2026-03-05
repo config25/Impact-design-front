@@ -650,7 +650,6 @@
 
 .editable-input:focus {
     outline: none;
-    border-color: #353B72;
 }
 
 /* 입력된 값 표시 */

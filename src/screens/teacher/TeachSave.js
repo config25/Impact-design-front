@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createClass } from "../../services/teacherService";
+import { createClass } from "../../services/teachClassService";
 import "./TeachSave.css";
 
 const TeachSave = ({ onNavigate }) => {

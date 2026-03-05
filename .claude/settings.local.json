@@ -16,7 +16,10 @@
       "Bash(grep:*)",
       "Bash(node:*)",
       "Bash(npx eslint:*)",
-      "Bash(head:*)"
+      "Bash(head:*)",
+      "Bash(xargs wc:*)",
+      "Bash(npx:*)",
+      "Bash(ls:*)"
     ]
   }
 }

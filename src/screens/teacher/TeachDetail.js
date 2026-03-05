@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { getTeachDetail2, getTeamInfo, updateTeamInfo, startClass, endClass, restoreClass, deleteTeamMembers, addTeam, addEvaluationTeam, setTeamWriter, addTeamMember } from "../../services/teacherService";
+import { getTeachDetail2, startClass, endClass, restoreClass } from "../../services/teachClassService";
+import { getTeamInfo, updateTeamInfo, deleteTeamMembers, addTeam, addEvaluationTeam, setTeamWriter, addTeamMember } from "../../services/teachTeamService";
 import { getLogoUrl } from "../../utils/logoUtil";
 import "./TeachDetail.css";
 

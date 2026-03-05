@@ -224,14 +224,20 @@ Impact Check(Q1~Q12) 점수 기반 **4사분면 조직 프로파일** 분류
 src/
 ├── components/          # 재사용 컴포넌트
 │   ├── common/          #   GNB, TipsModal
-│   ├── identity/        #   Identity Canvas 관련
-│   └── teacher/         #   강사 레이아웃 (Header, Sidebar, Layout)
+│   ├── identity/        #   Identity Canvas 관련 (5개 컴포넌트)
+│   ├── report/          #   PDF 리포트 페이지별 컴포넌트 (13개)
+│   └── teacher/         #   강사 레이아웃 + TeachDetail2Modals
 ├── screens/             # 화면 컴포넌트
 │   ├── *Screen.js       #   A~F 단계 학생 화면
-│   └── teacher/         #   강사 화면 (Dashboard, List, Detail 등)
+│   ├── WinCanvasScreen  #   D/E 공용 Win Canvas 통합 화면
+│   └── teacher/         #   강사 화면 (Dashboard, List, Detail2 등)
+├── constants/           # 공용 상수 (평가 문항, 차트 설정 등)
 ├── contexts/            # React Context (Auth, Dashboard, IdentityCanvas)
-├── services/            # API 서비스 모듈 (단계별 + 강사용)
-├── utils/               # 유틸리티
+├── services/            # API 서비스 모듈
+│   ├── teach*Service    #   강사용 (Class, Team, Submission 분리)
+│   ├── *CanvasService   #   캔버스 서비스 (팩토리 패턴)
+│   └── fundingService   #   펀딩/평가 API
+├── utils/               # 유틸리티 (logo, reportUtils, reportPdfUtils)
 └── resource/            # 이미지 리소스
 ```
 
