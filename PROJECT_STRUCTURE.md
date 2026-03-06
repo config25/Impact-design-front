@@ -82,6 +82,10 @@ id_front/
 │   │       ├── StudentList.js     #     학생 목록 관리
 │   │       └── ReportScreen.js    #     리포트 화면 (PDF 출력)
 │   │
+│   ├── hooks/                 # 커스텀 훅
+│   │   ├── useTeachDetail2Modals.js  #  TeachDetail2 모달 상태/핸들러
+│   │   └── usePdfDownload.js         #  PDF 벌크 다운로드 로직
+│   │
 │   ├── constants/             # 상수 및 공용 서브컴포넌트
 │   │   └── teachDetail2Constants.js  #  평가 문항, 차트 상수, FundingModalBody 등
 │   │
@@ -107,6 +111,9 @@ id_front/
 │   │   ├── teachTeamService.js      #   강사 - 팀 관리 API
 │   │   ├── teachSubmissionService.js #  강사 - 제출물 조회 API
 │   │   └── teacherService.js        #   (레거시 - 위 3개로 분리됨)
+│   │
+│   ├── styles/                # 공통 CSS
+│   │   └── common.css         #   공유 버튼 스타일 (tips, save, submit)
 │   │
 │   ├── utils/                 # 유틸리티
 │   │   ├── logoUtil.js        #   이미지/로고 URL 처리

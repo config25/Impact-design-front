@@ -231,12 +231,14 @@ src/
 │   ├── *Screen.js       #   A~F 단계 학생 화면
 │   ├── WinCanvasScreen  #   D/E 공용 Win Canvas 통합 화면
 │   └── teacher/         #   강사 화면 (Dashboard, List, Detail2 등)
+├── hooks/               # 커스텀 훅 (useTeachDetail2Modals, usePdfDownload)
 ├── constants/           # 공용 상수 (평가 문항, 차트 설정 등)
 ├── contexts/            # React Context (Auth, Dashboard, IdentityCanvas)
 ├── services/            # API 서비스 모듈
 │   ├── teach*Service    #   강사용 (Class, Team, Submission 분리)
 │   ├── *CanvasService   #   캔버스 서비스 (팩토리 패턴)
 │   └── fundingService   #   펀딩/평가 API
+├── styles/              # 공통 CSS (버튼, 테이블 등 공유 스타일)
 ├── utils/               # 유틸리티 (logo, reportUtils, reportPdfUtils)
 └── resource/            # 이미지 리소스
 ```
