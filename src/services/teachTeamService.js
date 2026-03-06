@@ -18,7 +18,7 @@ export const saveStep = async (gameId, step) => {
 };
 
 export const addTeam = async (gameId) => {
-    const response = await authFetch(`${BASE_URL}/team?gameId=${gameId}`, {
+    const response = await authFetch(`${BASE_URL}/team?gameId=${encodeURIComponent(gameId)}`, {
         method: "POST",
     });
     const result = await response.json();
@@ -31,7 +31,7 @@ export const addTeam = async (gameId) => {
 };
 
 export const addEvaluationTeam = async (gameId) => {
-    const response = await authFetch(`${BASE_URL}/evaluation-team?gameId=${gameId}`, {
+    const response = await authFetch(`${BASE_URL}/evaluation-team?gameId=${encodeURIComponent(gameId)}`, {
         method: "POST",
     });
     const result = await response.json();
@@ -44,7 +44,7 @@ export const addEvaluationTeam = async (gameId) => {
 };
 
 export const deleteTeam = async (teamId, gameId) => {
-    const response = await authFetch(`${BASE_URL}/team/${teamId}?gameId=${gameId}`, {
+    const response = await authFetch(`${BASE_URL}/team/${encodeURIComponent(teamId)}?gameId=${encodeURIComponent(gameId)}`, {
         method: "DELETE",
     });
     const result = await response.json();
@@ -57,7 +57,7 @@ export const deleteTeam = async (teamId, gameId) => {
 };
 
 export const getDeletedTeams = async (gameId) => {
-    const response = await authFetch(`${BASE_URL}/deleted-teams?gameId=${gameId}`);
+    const response = await authFetch(`${BASE_URL}/deleted-teams?gameId=${encodeURIComponent(gameId)}`);
     const result = await response.json();
 
     if (response.ok) {
@@ -68,7 +68,7 @@ export const getDeletedTeams = async (gameId) => {
 };
 
 export const restoreTeam = async (teamId, gameId) => {
-    const response = await authFetch(`${BASE_URL}/team/${teamId}/restore?gameId=${gameId}`, {
+    const response = await authFetch(`${BASE_URL}/team/${encodeURIComponent(teamId)}/restore?gameId=${encodeURIComponent(gameId)}`, {
         method: "POST",
     });
     const result = await response.json();
@@ -81,7 +81,7 @@ export const restoreTeam = async (teamId, gameId) => {
 };
 
 export const getTeamInfo = async (teamId) => {
-    const response = await authFetch(`${BASE_URL}/team/${teamId}`);
+    const response = await authFetch(`${BASE_URL}/team/${encodeURIComponent(teamId)}`);
     const result = await response.json();
 
     if (response.ok) {
@@ -92,7 +92,7 @@ export const getTeamInfo = async (teamId) => {
 };
 
 export const updateTeamInfo = async (teamId, data) => {
-    const response = await authFetch(`${BASE_URL}/team/${teamId}`, {
+    const response = await authFetch(`${BASE_URL}/team/${encodeURIComponent(teamId)}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
@@ -107,7 +107,7 @@ export const updateTeamInfo = async (teamId, data) => {
 };
 
 export const addTeamMember = async (teamId, gameId) => {
-    const response = await authFetch(`${BASE_URL}/team/${teamId}/members?gameId=${gameId}`, {
+    const response = await authFetch(`${BASE_URL}/team/${encodeURIComponent(teamId)}/members?gameId=${encodeURIComponent(gameId)}`, {
         method: "POST",
     });
     const result = await response.json();
@@ -120,7 +120,7 @@ export const addTeamMember = async (teamId, gameId) => {
 };
 
 export const setTeamWriter = async (teamId, userId) => {
-    const response = await authFetch(`${BASE_URL}/team/${teamId}/writer`, {
+    const response = await authFetch(`${BASE_URL}/team/${encodeURIComponent(teamId)}/writer`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId }),

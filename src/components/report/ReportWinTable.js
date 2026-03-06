@@ -53,7 +53,7 @@ const ReportWinTable = ({
                 <tbody>
                     {(() => {
                         const rows = displayList.map((item, i) => (
-                            <tr key={i}>
+                            <tr key={item.canvasId || `win-${i}`}>
                                 <td>{truncateText(item.taskName, 20) || "-"}</td>
                                 <td>{truncateText(item.taskDescription, 40) || "-"}</td>
                                 <td className="p20-td-center">{item.totalScore || 0}</td>

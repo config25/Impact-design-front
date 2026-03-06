@@ -5,7 +5,7 @@ import { API_BASE, authFetch } from "./apiConfig";
  * @param {string} canvasType - "quick" 또는 "build"
  */
 export const getFundingTeams = async (canvasType) => {
-    const response = await authFetch(`${API_BASE}/funding/${canvasType}/teams`);
+    const response = await authFetch(`${API_BASE}/funding/${encodeURIComponent(canvasType)}/teams`);
     const result = await response.json();
 
     if (response.ok) {
@@ -21,7 +21,7 @@ export const getFundingTeams = async (canvasType) => {
  * @param {number} teamId - 투자 대상 팀 ID
  */
 export const getFundingInvestment = async (canvasType, teamId) => {
-    const response = await authFetch(`${API_BASE}/funding/${canvasType}/investment?teamId=${teamId}`);
+    const response = await authFetch(`${API_BASE}/funding/${encodeURIComponent(canvasType)}/investment?teamId=${encodeURIComponent(teamId)}`);
     const result = await response.json();
 
     if (response.ok) {
@@ -36,7 +36,7 @@ export const getFundingInvestment = async (canvasType, teamId) => {
  * @param {string} canvasType - "quick" 또는 "build"
  */
 export const getFundingStatus = async (canvasType) => {
-    const response = await authFetch(`${API_BASE}/funding/${canvasType}/status`);
+    const response = await authFetch(`${API_BASE}/funding/${encodeURIComponent(canvasType)}/status`);
     const result = await response.json();
 
     if (response.ok) {
@@ -52,7 +52,7 @@ export const getFundingStatus = async (canvasType) => {
  * @param {object} data - { investmentTarget, investmentPrice, score1~9, opinion }
  */
 export const saveFundingInvestment = async (canvasType, data) => {
-    const response = await authFetch(`${API_BASE}/funding/${canvasType}/investment`, {
+    const response = await authFetch(`${API_BASE}/funding/${encodeURIComponent(canvasType)}/investment`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
@@ -72,7 +72,7 @@ export const saveFundingInvestment = async (canvasType, data) => {
  * @param {object} data - { investmentTarget, investmentPrice, score1~9, opinion }
  */
 export const submitFundingInvestment = async (canvasType, data) => {
-    const response = await authFetch(`${API_BASE}/funding/${canvasType}/submit`, {
+    const response = await authFetch(`${API_BASE}/funding/${encodeURIComponent(canvasType)}/submit`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
@@ -95,7 +95,7 @@ export const submitFundingInvestment = async (canvasType, data) => {
  * @param {string} canvasType - "quick" 또는 "build"
  */
 export const getFundingPortfolio = async (canvasType) => {
-    const response = await authFetch(`${API_BASE}/funding/${canvasType}/portfolio`);
+    const response = await authFetch(`${API_BASE}/funding/${encodeURIComponent(canvasType)}/portfolio`);
     const result = await response.json();
 
     if (response.ok) {
@@ -110,7 +110,7 @@ export const getFundingPortfolio = async (canvasType) => {
  * @param {string} canvasType - "quick" 또는 "build"
  */
 export const getFundingScores = async (canvasType) => {
-    const response = await authFetch(`${API_BASE}/funding/${canvasType}/scores`);
+    const response = await authFetch(`${API_BASE}/funding/${encodeURIComponent(canvasType)}/scores`);
     const result = await response.json();
 
     if (response.ok) {

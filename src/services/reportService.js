@@ -14,7 +14,7 @@ export const getReport = async () => {
 };
 
 export const getReportByTeam = async (teamId) => {
-    const response = await authFetch(`${API_BASE}/teach/report/${teamId}`);
+    const response = await authFetch(`${API_BASE}/teach/report/${encodeURIComponent(teamId)}`);
     const result = await response.json();
 
     if (response.ok) {
@@ -25,7 +25,7 @@ export const getReportByTeam = async (teamId) => {
 };
 
 export const getBulkReport = async (gameId) => {
-    const response = await authFetch(`${API_BASE}/teach/report/bulk/${gameId}`);
+    const response = await authFetch(`${API_BASE}/teach/report/bulk/${encodeURIComponent(gameId)}`);
     const result = await response.json();
 
     if (response.ok) {

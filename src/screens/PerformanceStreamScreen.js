@@ -274,7 +274,7 @@ const PerformanceStreamScreen = ({ onNavigate, gameStep }) => {
                             </p>
                             <div className="goal-cards">
                                 {goalCards.map((card, index) => (
-                                    <div key={index} className={`goal-card ${isGoalFilled(card) ? 'filled' : 'empty'}`}>
+                                    <div key={card.goalId || `goal-${index}`} className={`goal-card ${isGoalFilled(card) ? 'filled' : 'empty'}`}>
                                         <div
                                             className={`goal-card-title ${card.title.trim() ? 'has-content' : ''}`}
                                             onClick={() => !editingGoal && handleGoalEdit(index, 'title')}

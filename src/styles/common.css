@@ -1,0 +1,119 @@
+/* ── 공통 툴바 버튼 스타일 ── */
+
+/* 작성 Tips 버튼 */
+.tips-button {
+    width: 256px;
+    height: 45px;
+    border-radius: 8px;
+    border: 1px dashed #D9D9D9;
+    background: rgba(53, 59, 114, 0.05);
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 18px;
+    line-height: 100%;
+    letter-spacing: 0;
+    color: #353B72;
+    white-space: nowrap;
+}
+
+.tips-button:hover {
+    background: rgba(53, 59, 114, 0.1);
+}
+
+.tips-button .pencil-icon {
+    width: 16px;
+    height: 16px;
+}
+
+.tips-text-bold {
+    font-weight: 600;
+}
+
+.tips-text-regular {
+    font-weight: 400;
+}
+
+/* 저장 버튼 */
+.save-button {
+    width: 99px;
+    height: 56px;
+    border-radius: 4px;
+    border: 2px solid #353B72;
+    background: #FFFFFF;
+    padding: 16px 32px;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    color: #353B72;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.save-button:hover {
+    background: #F3F5F9;
+}
+
+.save-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* 제출완료 버튼 */
+.submit-button {
+    width: 134px;
+    height: 56px;
+    border-radius: 4px;
+    border: none;
+    background: #353B72;
+    padding: 16px 32px;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    color: #FFFFFF;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.submit-button:hover {
+    background: #2A2F5C;
+}
+
+.submit-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* 반응형 */
+@media (max-width: 1400px) {
+    .tips-button {
+        width: auto;
+        padding: 10px 16px;
+        font-size: 13px;
+    }
+
+    .save-button,
+    .submit-button {
+        height: 48px;
+        padding: 12px 24px;
+        font-size: 14px;
+    }
+
+    .save-button {
+        width: auto;
+    }
+
+    .submit-button {
+        width: auto;
+    }
+}

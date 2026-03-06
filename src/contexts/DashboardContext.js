@@ -7,10 +7,10 @@ export const DashboardProvider = ({ children }) => {
     const [dashboard, setDashboard] = useState(null);
 
     const fetchDashboard = useCallback(async () => {
-        try {
-            const data = await getDashboard();
-            setDashboard(data);
-        } catch {
+        const result = await getDashboard();
+        if (result.success) {
+            setDashboard(result.data);
+        } else {
             setDashboard(null);
         }
     }, []);

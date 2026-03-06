@@ -18,7 +18,7 @@ export const getTeachIndex = async () => {
 };
 
 export const getTeachDetail = async (gameId) => {
-    const response = await authFetch(`${BASE_URL}/detail?gameId=${gameId}`);
+    const response = await authFetch(`${BASE_URL}/detail?gameId=${encodeURIComponent(gameId)}`);
     const result = await response.json();
 
     if (response.ok) {
@@ -29,7 +29,7 @@ export const getTeachDetail = async (gameId) => {
 };
 
 export const getTeachDetail2 = async (gameId) => {
-    const url = gameId ? `${BASE_URL}/detail2?gameId=${gameId}` : `${BASE_URL}/detail2`;
+    const url = gameId ? `${BASE_URL}/detail2?gameId=${encodeURIComponent(gameId)}` : `${BASE_URL}/detail2`;
     const response = await authFetch(url);
     const text = await response.text();
     const result = text ? JSON.parse(text) : null;
@@ -54,7 +54,7 @@ export const getTeachList = async () => {
 };
 
 export const getStudentList = async (gameId) => {
-    const response = await authFetch(`${BASE_URL}/student-list?gameId=${gameId}`);
+    const response = await authFetch(`${BASE_URL}/student-list?gameId=${encodeURIComponent(gameId)}`);
     const result = await response.json();
 
     if (response.ok) {
@@ -84,7 +84,7 @@ export const createClass = async (data, imageFile) => {
 };
 
 export const updateClass = async (gameId, data) => {
-    const response = await authFetch(`${BASE_URL}/class/${gameId}`, {
+    const response = await authFetch(`${BASE_URL}/class/${encodeURIComponent(gameId)}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
@@ -99,7 +99,7 @@ export const updateClass = async (gameId, data) => {
 };
 
 export const startClass = async (gameId, enddate) => {
-    const response = await authFetch(`${BASE_URL}/class/${gameId}/start`, {
+    const response = await authFetch(`${BASE_URL}/class/${encodeURIComponent(gameId)}/start`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ enddate }),
@@ -114,7 +114,7 @@ export const startClass = async (gameId, enddate) => {
 };
 
 export const endClass = async (gameId) => {
-    const response = await authFetch(`${BASE_URL}/class/${gameId}/end`, {
+    const response = await authFetch(`${BASE_URL}/class/${encodeURIComponent(gameId)}/end`, {
         method: "POST",
     });
     const result = await response.json();
@@ -127,7 +127,7 @@ export const endClass = async (gameId) => {
 };
 
 export const restoreClass = async (gameId, enddate) => {
-    const response = await authFetch(`${BASE_URL}/class/${gameId}/restore`, {
+    const response = await authFetch(`${BASE_URL}/class/${encodeURIComponent(gameId)}/restore`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ enddate }),

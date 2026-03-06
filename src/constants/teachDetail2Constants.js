@@ -189,7 +189,7 @@ export const FundingModalBody = ({ data, type, teamId }) => {
                         <div className="ir-field-box" style={{ width: "100%" }}>
                             <select value={selectedIdx} onChange={(e) => setSelectedIdx(Number(e.target.value))}>
                                 {filtered.map((d, i) => (
-                                    <option key={i} value={i}>{d.teamName}{d.submitted ? " (제출완료)" : " (미제출)"}</option>
+                                    <option key={d.teamName} value={i}>{d.teamName}{d.submitted ? " (제출완료)" : " (미제출)"}</option>
                                 ))}
                             </select>
                         </div>
@@ -251,8 +251,8 @@ export const FundingModalBody = ({ data, type, teamId }) => {
                 <div className="ir-right-card" style={{ padding: "32px 28px 28px" }}>
                     <div className="ir-right-card-title" style={{ fontSize: 20 }}>예산 투자 포트폴리오</div>
                     <div className="ir-portfolio-header"><span>투자 대상</span><span>투자 금액</span></div>
-                    {investments.map((p, i) => (
-                        <div key={i} className="ir-portfolio-row">
+                    {investments.map((p) => (
+                        <div key={p.teamName} className="ir-portfolio-row">
                             <span className="ir-portfolio-name">{p.teamName}</span>
                             <span className="ir-portfolio-amount">{formatNumber(Number(p.investmentPrice))} 원</span>
                         </div>
@@ -267,7 +267,7 @@ export const FundingModalBody = ({ data, type, teamId }) => {
                     <div className="ir-right-card-title" style={{ fontSize: 20 }}>투자 포트폴리오 현황</div>
                     <div className="ir-line-legend">
                         {investments.map((p, i) => (
-                            <div key={i} className="ir-line-legend-item" onClick={() => toggleDonut(i)} style={{ cursor: "pointer", opacity: donutHidden[i] ? 0.4 : 1 }}>
+                            <div key={p.teamName} className="ir-line-legend-item" onClick={() => toggleDonut(i)} style={{ cursor: "pointer", opacity: donutHidden[i] ? 0.4 : 1 }}>
                                 <span className="ir-line-legend-box" style={{ background: CHART_COLORS[i % CHART_COLORS.length] }} />
                                 <span className="ir-line-legend-label">{p.teamName}</span>
                             </div>
@@ -281,7 +281,7 @@ export const FundingModalBody = ({ data, type, teamId }) => {
                     <div className="ir-right-card-title" style={{ fontSize: 20 }}>나의 아이디어 및 BM 평가 현황</div>
                     <div className="ir-line-legend">
                         {filtered.map((d, i) => (
-                            <div key={i} className="ir-line-legend-item" onClick={() => toggleLine(i)} style={{ cursor: "pointer", opacity: lineHidden[i] ? 0.4 : 1 }}>
+                            <div key={d.teamName} className="ir-line-legend-item" onClick={() => toggleLine(i)} style={{ cursor: "pointer", opacity: lineHidden[i] ? 0.4 : 1 }}>
                                 <span className="ir-line-legend-box" style={{ background: CHART_COLORS[i % CHART_COLORS.length] }} />
                                 <span className="ir-line-legend-label">{d.teamName}</span>
                             </div>

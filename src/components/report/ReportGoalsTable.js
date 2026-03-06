@@ -38,7 +38,7 @@ const ReportGoalsTable = ({ logoUrl, reportData, page, isSecondPage }) => {
                     <tbody>
                         {(() => {
                             const rows = page2Goals.map((goal, i) => (
-                                <tr key={i}>
+                                <tr key={goal.goalId || i}>
                                     <td>{i + 21}</td>
                                     <td>{truncateText(goal.title, 20)}</td>
                                     <td>{truncateText(goal.description || "", 50)}</td>
@@ -126,7 +126,7 @@ const ReportGoalsTable = ({ logoUrl, reportData, page, isSecondPage }) => {
                 <tbody>
                     {(() => {
                         const rows = displayGoals.map((goal, i) => (
-                            <tr key={i}>
+                            <tr key={goal.goalId || i}>
                                 <td>{i + 1}</td>
                                 <td>{truncateText(goal.title, 20)}</td>
                                 <td>{truncateText(goal.description || "", 50)}</td>

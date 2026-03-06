@@ -378,8 +378,8 @@ const RightPanel = ({ type }) => {
                         <span>투자 대상</span>
                         <span>투자 금액</span>
                     </div>
-                    {investments.map((p, i) => (
-                        <div key={i} className="ir-portfolio-row">
+                    {investments.map((p) => (
+                        <div key={p.teamName} className="ir-portfolio-row">
                             <span className="ir-portfolio-name">{p.teamName}</span>
                             <span className="ir-portfolio-amount">{formatNumber(p.investmentPrice)} 원</span>
                         </div>
@@ -397,7 +397,7 @@ const RightPanel = ({ type }) => {
                 <div className="ir-right-card-title">투자 포트폴리오 현황</div>
                 <div className="ir-line-legend">
                     {investments.map((p, i) => (
-                        <div key={i} className="ir-line-legend-item" onClick={() => toggleDonut(i)} style={{ cursor: "pointer", opacity: donutHidden[i] ? 0.4 : 1 }}>
+                        <div key={p.teamName} className="ir-line-legend-item" onClick={() => toggleDonut(i)} style={{ cursor: "pointer", opacity: donutHidden[i] ? 0.4 : 1 }}>
                             <span className="ir-line-legend-box" style={{ background: CHART_COLORS[i % CHART_COLORS.length] }} />
                             <span className="ir-line-legend-label">{p.teamName}</span>
                         </div>
@@ -413,7 +413,7 @@ const RightPanel = ({ type }) => {
                 <div className="ir-right-card-title">나의 아이디어 및 BM 평가 현황</div>
                 <div className="ir-line-legend">
                     {(scores?.teamScores || []).map((t, i) => (
-                        <div key={i} className="ir-line-legend-item" onClick={() => toggleLine(i)} style={{ cursor: "pointer", opacity: lineHidden[i] ? 0.4 : 1 }}>
+                        <div key={t.teamName} className="ir-line-legend-item" onClick={() => toggleLine(i)} style={{ cursor: "pointer", opacity: lineHidden[i] ? 0.4 : 1 }}>
                             <span className="ir-line-legend-box" style={{ background: CHART_COLORS[i % CHART_COLORS.length] }} />
                             <span className="ir-line-legend-label">{t.teamName}</span>
                         </div>

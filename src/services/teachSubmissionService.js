@@ -3,7 +3,7 @@ import { API_BASE, authFetch } from "./apiConfig";
 const BASE_URL = `${API_BASE}/teach`;
 
 export const getSubmissionList = async (gameId) => {
-    const response = await authFetch(`${BASE_URL}/submission/list?gameId=${gameId}`);
+    const response = await authFetch(`${BASE_URL}/submission/list?gameId=${encodeURIComponent(gameId)}`);
     const result = await response.json();
 
     if (response.ok) {
@@ -14,7 +14,7 @@ export const getSubmissionList = async (gameId) => {
 };
 
 export const getImpactCheckByTeam = async (teamId) => {
-    const response = await authFetch(`${BASE_URL}/submission/impact-check?teamId=${teamId}`);
+    const response = await authFetch(`${BASE_URL}/submission/impact-check?teamId=${encodeURIComponent(teamId)}`);
     const result = await response.json();
 
     if (response.ok) {
@@ -25,7 +25,7 @@ export const getImpactCheckByTeam = async (teamId) => {
 };
 
 export const getIdentityCanvasByTeam = async (teamId) => {
-    const response = await authFetch(`${BASE_URL}/submission/identity-canvas?teamId=${teamId}`);
+    const response = await authFetch(`${BASE_URL}/submission/identity-canvas?teamId=${encodeURIComponent(teamId)}`);
     const result = await response.json();
 
     if (response.ok) {
@@ -36,7 +36,7 @@ export const getIdentityCanvasByTeam = async (teamId) => {
 };
 
 export const getFlowCanvasByTeam = async (teamId) => {
-    const response = await authFetch(`${BASE_URL}/submission/flow-canvas?teamId=${teamId}`);
+    const response = await authFetch(`${BASE_URL}/submission/flow-canvas?teamId=${encodeURIComponent(teamId)}`);
     const result = await response.json();
 
     if (response.ok) {
@@ -47,7 +47,7 @@ export const getFlowCanvasByTeam = async (teamId) => {
 };
 
 export const getQuickWinByTeam = async (teamId) => {
-    const response = await authFetch(`${BASE_URL}/submission/quick-win?teamId=${teamId}`);
+    const response = await authFetch(`${BASE_URL}/submission/quick-win?teamId=${encodeURIComponent(teamId)}`);
     const result = await response.json();
 
     if (response.ok) {
@@ -58,7 +58,7 @@ export const getQuickWinByTeam = async (teamId) => {
 };
 
 export const getBuildWinByTeam = async (teamId) => {
-    const response = await authFetch(`${BASE_URL}/submission/build-win?teamId=${teamId}`);
+    const response = await authFetch(`${BASE_URL}/submission/build-win?teamId=${encodeURIComponent(teamId)}`);
     const result = await response.json();
 
     if (response.ok) {
@@ -72,7 +72,7 @@ export const getBuildWinByTeam = async (teamId) => {
  * 실행과제 검증 열람 (F-1: quick, F-2: build)
  */
 export const getFundingByTeam = async (canvasType, teamId) => {
-    const response = await authFetch(`${BASE_URL}/submission/funding/${canvasType}?teamId=${teamId}`);
+    const response = await authFetch(`${BASE_URL}/submission/funding/${encodeURIComponent(canvasType)}?teamId=${encodeURIComponent(teamId)}`);
     const result = await response.json();
 
     if (response.ok) {
@@ -86,7 +86,7 @@ export const getFundingByTeam = async (canvasType, teamId) => {
  * 팀별 최종 결과 열람 (F-3: Quick Win + Build Win)
  */
 export const getFundingResultByTeam = async (teamId) => {
-    const response = await authFetch(`${BASE_URL}/submission/funding/result?teamId=${teamId}`);
+    const response = await authFetch(`${BASE_URL}/submission/funding/result?teamId=${encodeURIComponent(teamId)}`);
     const result = await response.json();
 
     if (response.ok) {
