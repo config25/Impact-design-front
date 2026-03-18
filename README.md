@@ -268,6 +268,13 @@ npm start       # 개발 서버 (localhost:3000)
 npm run build   # 프로덕션 빌드
 ```
 
+### 배포 (spring 백엔드 정적 리소스로 복사 후 같이 배포) 
+
+```bash
+xcopy /E /Y build\* ..\id_backend\Impact_design\src\main\resources\static\
+```
+단, 프로젝트 경로에 따라 명령어의 경로는 달라질수 있음
+
 > 개발 모드에서 `/api` 요청은 자동으로 `localhost:8080`으로 프록시됩니다.
 
 ---
