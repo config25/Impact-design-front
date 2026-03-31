@@ -24,13 +24,13 @@ export const getReportByTeam = async (teamId) => {
     return { success: false, message: result.data?.message || "리포트 조회에 실패했습니다." };
 };
 
-export const getBulkReport = async (gameId) => {
-    const response = await authFetch(`${API_BASE}/teach/report/bulk/${encodeURIComponent(gameId)}`);
+export const getTeamCanvases = async (gameId) => {
+    const response = await authFetch(`${API_BASE}/teach/report/canvas/${encodeURIComponent(gameId)}`);
     const result = await response.json();
 
     if (response.ok) {
         return { success: true, data: result.data };
     }
 
-    return { success: false, message: result.data?.message || "전체 리포트 조회에 실패했습니다." };
+    return { success: false, message: result.data?.message || "캔버스 데이터 조회에 실패했습니다." };
 };

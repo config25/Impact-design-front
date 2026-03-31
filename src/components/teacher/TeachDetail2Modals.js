@@ -1,127 +1,175 @@
+import { useState } from "react";
 import ReportScreen from "../../screens/teacher/ReportScreen";
 import { FundingModalBody, FundingResultModalBody, impactQuestions } from "../../constants/teachDetail2Constants";
 
-/* ── QuickWin / BuildWin 통합 모달 본문 ── */
-const WinCanvasModalBody = ({ data, sideLabel }) => {
+/* ── 클릭하면 전체 내용 팝오버로 표시하는 td ── */
+const extractText = (node) => {
+    if (node == null) return "";
+    if (typeof node === "string" || typeof node === "number") return String(node);
+    if (Array.isArray(node)) return node.map(extractText).join("");
+    if (node.props?.children) return extractText(node.props.children);
+    return "";
+};
+
+const ClickableTd = ({ children, className, rowSpan, colSpan }) => {
+    const [show, setShow] = useState(false);
+    const text = extractText(children).trim();
+    return (
+        <td
+            className={`${className || ""} td2-clickable-cell`}
+            rowSpan={rowSpan}
+            colSpan={colSpan}
+            onClick={() => { if (text) setShow(true); }}
+        >
+            {children}
+            {show && text && (
+                <div className="td2-popover-overlay" onClick={e => { e.stopPropagation(); setShow(false); }}>
+                    <div className="td2-popover" onClick={e => e.stopPropagation()}>
+                        <div className="td2-popover-body">{text}</div>
+                        <button className="td2-popover-close" onClick={() => setShow(false)}>닫기</button>
+                    </div>
+                </div>
+            )}
+        </td>
+    );
+};
+
+/* ── 클릭하면 전체 내용 팝오버로 표시하는 div ── */
+const ClickableDiv = ({ children, className, text }) => {
+    const [show, setShow] = useState(false);
+    const content = text || "";
+    return (
+        <div
+            className={`${className || ""} td2-clickable-cell`}
+            onClick={() => { if (content) setShow(true); }}
+        >
+            {children}
+            {show && content && (
+                <div className="td2-popover-overlay" onClick={e => { e.stopPropagation(); setShow(false); }}>
+                    <div className="td2-popover" onClick={e => e.stopPropagation()}>
+                        <div className="td2-popover-body">{content}</div>
+                        <button className="td2-popover-close" onClick={() => setShow(false)}>닫기</button>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+};
+
+/* ── QuickWin / BuildWin 통합 모달 본문 (학생 UI 동일 — 고정 5행) ── */
+const WinCanvasModalBody = ({ data, sideLabel, winColor, title, titleSub, headerDescs }) => {
     const inputs = data.taskInputs || [];
     const activities = data.taskActivities || [];
-    const maxRows = Math.max(inputs.length, activities.length, 1);
+    const qualitative = (data.taskOutcomes || []).filter(o => o.outcomeType === "QUALITATIVE").sort((a, b) => a.orderNo - b.orderNo);
+    const quantitative = (data.taskOutcomes || []).filter(o => o.outcomeType === "QUANTITATIVE").sort((a, b) => a.orderNo - b.orderNo);
+
+    /* 5개 행에 맞춰 데이터 셀 렌더 */
+    const renderDataCells = (rowIdx) => (
+        <>
+            <ClickableTd>{inputs[rowIdx]?.resourceName || ""}</ClickableTd>
+            <ClickableTd className="td2-qw-center">{inputs[rowIdx]?.quantity != null ? String(inputs[rowIdx].quantity) : ""}</ClickableTd>
+            <ClickableTd>{activities[rowIdx]?.processStep || ""}</ClickableTd>
+            <ClickableTd>{activities[rowIdx]?.activityContent || ""}</ClickableTd>
+            <ClickableTd>{activities[rowIdx]?.duration || ""}</ClickableTd>
+        </>
+    );
 
     return (
-        <div className="td2-qw-modal-body">
+        <div className="td2-qw-modal-body" style={{ "--win-color": winColor }}>
+            {/* 헤더 */}
+            <div className="td2-qw-header">
+                <h2 className="td2-qw-header-title">{title} <span className="td2-qw-header-sub">{titleSub}</span></h2>
+                {headerDescs.map((desc, i) => (
+                    <p key={i} className="td2-qw-header-desc">{desc}</p>
+                ))}
+            </div>
+
             {/* 전략목표 Alignment */}
-            <div className="td2-qw-align-row">
-                <span className="td2-qw-align-label">전략목표 Alignment</span>
-                <span className="td2-qw-align-value">{data.strategicGoal || ""}</span>
+            <div className="td2-qw-align-section">
+                <div className="td2-qw-align-label">전략목표 Alignment</div>
+                <ClickableDiv className="td2-qw-align-value" text={data.strategicGoal || ""}>{data.strategicGoal || ""}</ClickableDiv>
             </div>
 
             {/* 과제명 + 주요내용 */}
-            <div className="td2-qw-task-row">
-                <div className="td2-qw-task-side-label" dangerouslySetInnerHTML={{ __html: sideLabel }} />
-                <div className="td2-qw-task-fields">
-                    <div className="td2-qw-task-field">
-                        <span className="td2-qw-task-label">과제명</span>
-                        <span className="td2-qw-task-value highlight">{data.taskName || ""}</span>
-                    </div>
-                    <div className="td2-qw-task-field">
-                        <span className="td2-qw-task-label">주요 내용</span>
-                        <span className="td2-qw-task-value">{data.taskDescription || ""}</span>
-                    </div>
-                </div>
+            <div className="td2-qw-task-grid">
+                <div className="td2-qw-task-side" dangerouslySetInnerHTML={{ __html: sideLabel }} />
+                <div className="td2-qw-task-label">과제명</div>
+                <ClickableDiv className="td2-qw-task-name" text={data.taskName || ""}>{data.taskName || ""}</ClickableDiv>
+                <div className="td2-qw-task-label td2-qw-task-label-main">주요 내용</div>
+                <ClickableDiv className="td2-qw-task-content" text={data.taskDescription || ""}>{data.taskDescription || ""}</ClickableDiv>
             </div>
 
-            {/* 메인 테이블 */}
-            <table className="td2-qw-table">
-                <thead>
-                    <tr>
-                        <th className="td2-qw-th-situation" rowSpan="2">상황(Situation)</th>
-                        <th className="td2-qw-th-input" colSpan="2">투입(Input)</th>
-                        <th className="td2-qw-th-activity" colSpan="4">활동(Activity)</th>
-                        <th className="td2-qw-th-output">산출(Outputs)</th>
-                    </tr>
-                    <tr>
-                        <th className="td2-qw-th-sub">필요 자원</th>
-                        <th className="td2-qw-th-sub">수량</th>
-                        <th className="td2-qw-th-sub">추진 절차</th>
-                        <th className="td2-qw-th-sub">주요 내용</th>
-                        <th className="td2-qw-th-sub">소요기간</th>
-                        <th className="td2-qw-th-sub">팀워크</th>
-                        <th className="td2-qw-th-sub">산출물</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {(() => {
-                        const rows = [];
-                        for (let i = 0; i < maxRows; i++) {
-                            rows.push(
-                                <tr key={i}>
-                                    {i === 0 && (
-                                        <td rowSpan={maxRows} className="td2-qw-situation-cell">
-                                            <div className="td2-qw-situation-top">
-                                                <strong>위기의 신호</strong>
-                                                <div>{data.crisisSignal || ""}</div>
-                                            </div>
-                                            <div className="td2-qw-situation-divider">Pain/Touch point</div>
-                                            <div className="td2-qw-situation-bottom">
-                                                {data.painTouchPoint || ""}
-                                            </div>
-                                        </td>
-                                    )}
-                                    <td>{inputs[i]?.resourceName || ""}</td>
-                                    <td className="td2-qw-center">{inputs[i]?.quantity != null ? inputs[i].quantity : ""}</td>
-                                    <td>{activities[i]?.processStep || ""}</td>
-                                    <td>{activities[i]?.activityContent || ""}</td>
-                                    <td>{activities[i]?.duration || ""}</td>
-                                    {i === 0 && (
-                                        <>
-                                            <td rowSpan={maxRows} className="td2-qw-teamwork-cell">
-                                                {data.teamwork?.activityTeamwork || ""}
-                                            </td>
-                                            <td rowSpan={maxRows} className="td2-qw-teamwork-cell">
-                                                {data.teamwork?.workType || ""}
-                                            </td>
-                                        </>
-                                    )}
-                                </tr>
-                            );
-                        }
-                        return rows;
-                    })()}
-                </tbody>
-            </table>
+            {/* 메인 테이블 — 학생과 동일한 고정 5행 구조 */}
+            <div className="td2-qw-table-wrap">
+                <table className="td2-qw-table">
+                    <thead>
+                        <tr className="td2-qw-header-row">
+                            <th className="td2-qw-th-situation">상황(Situation)</th>
+                            <th colSpan="2">투입(Input)</th>
+                            <th colSpan="4">활동(Activity)</th>
+                            <th colSpan="2">산출(Outputs)</th>
+                        </tr>
+                        <tr className="td2-qw-subheader-row">
+                            <th className="td2-qw-sub-crisis">위기의 신호 (Crisis Signal)</th>
+                            <th>필요 자원</th>
+                            <th>수량</th>
+                            <th>추진 절차</th>
+                            <th>주요 내용</th>
+                            <th>소요기간</th>
+                            <th>팀 워크</th>
+                            <th>팀 워크</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {/* 행 0: 위기의 신호 시작 (rowSpan=2) + 팀워크(rowSpan=5) + 산출(rowSpan=5) */}
+                        <tr>
+                            <ClickableTd rowSpan={2} className="td2-qw-crisis-cell">{data.crisisSignal || ""}</ClickableTd>
+                            {renderDataCells(0)}
+                            <ClickableTd rowSpan={5} className="td2-qw-teamwork-cell">{data.teamwork?.activityTeamwork || ""}</ClickableTd>
+                            <ClickableTd rowSpan={5} className="td2-qw-output-cell">{data.teamwork?.workType || ""}</ClickableTd>
+                        </tr>
+                        {/* 행 1: 위기의 신호 계속 */}
+                        <tr>
+                            {renderDataCells(1)}
+                        </tr>
+                        {/* 행 2: Pain/Touch point 헤더 */}
+                        <tr>
+                            <td className="td2-qw-pain-header">Pain/Touch point</td>
+                            {renderDataCells(2)}
+                        </tr>
+                        {/* 행 3: Pain 내용 시작 (rowSpan=2) */}
+                        <tr>
+                            <ClickableTd rowSpan={2} className="td2-qw-pain-cell">{data.painTouchPoint || ""}</ClickableTd>
+                            {renderDataCells(3)}
+                        </tr>
+                        {/* 행 4: Pain 내용 계속 */}
+                        <tr>
+                            {renderDataCells(4)}
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
             {/* 성과(Outcomes) */}
             <div className="td2-qw-outcomes">
                 <div className="td2-qw-outcomes-header">성과(Outcomes)</div>
-                <div className="td2-qw-outcomes-grid">
-                    <div className="td2-qw-outcomes-col">
-                        <div className="td2-qw-outcomes-col-title">정성적 효과 (체감되는 변화)</div>
-                        {(data.taskOutcomes || [])
-                            .filter(o => o.outcomeType === "QUALITATIVE")
-                            .sort((a, b) => a.orderNo - b.orderNo)
-                            .map((o, i) => (
-                                <div className="td2-qw-outcomes-item" key={o.outcomeNo || i}>
-                                    {i + 1}. {o.outcomeContent || ""}
-                                </div>
-                            ))}
-                        {(data.taskOutcomes || []).filter(o => o.outcomeType === "QUALITATIVE").length === 0 && (
-                            <div className="td2-qw-outcomes-item">-</div>
-                        )}
+                <div className="td2-qw-outcomes-body">
+                    <div className="td2-qw-outcomes-titles">
+                        <div className="td2-qw-outcomes-title-cell">정성적 효과 (체감되는 변화)</div>
+                        <div className="td2-qw-outcomes-title-cell">정량적 효과 (측정가능한 변화)</div>
                     </div>
-                    <div className="td2-qw-outcomes-col">
-                        <div className="td2-qw-outcomes-col-title">정량적 효과 (측정가능한 변화)</div>
-                        {(data.taskOutcomes || [])
-                            .filter(o => o.outcomeType === "QUANTITATIVE")
-                            .sort((a, b) => a.orderNo - b.orderNo)
-                            .map((o, i) => (
-                                <div className="td2-qw-outcomes-item" key={o.outcomeNo || i}>
-                                    {i + 1}. {o.outcomeContent || ""}
-                                </div>
-                            ))}
-                        {(data.taskOutcomes || []).filter(o => o.outcomeType === "QUANTITATIVE").length === 0 && (
-                            <div className="td2-qw-outcomes-item">-</div>
-                        )}
-                    </div>
+                    {[0, 1, 2].map(idx => (
+                        <div key={idx} className={`td2-qw-outcomes-row ${idx === 2 ? "last" : ""}`}>
+                            <ClickableDiv className="td2-qw-outcomes-cell left" text={qualitative[idx]?.outcomeContent || ""}>
+                                <span className="td2-qw-outcomes-num">{idx + 1}.</span>
+                                <span>{qualitative[idx]?.outcomeContent || ""}</span>
+                            </ClickableDiv>
+                            <ClickableDiv className="td2-qw-outcomes-cell right" text={quantitative[idx]?.outcomeContent || ""}>
+                                <span className="td2-qw-outcomes-num">{idx + 1}.</span>
+                                <span>{quantitative[idx]?.outcomeContent || ""}</span>
+                            </ClickableDiv>
+                        </div>
+                    ))}
                 </div>
             </div>
         </div>
@@ -152,17 +200,35 @@ const TeachDetail2Modals = ({
     /* 보고서 모달 */
     showReportModal, setShowReportModal, reportTeamId,
     /* 전체 PDF */
-    pdfRenderTeamId, pdfReportRef, pdfRenderData, handlePdfReportReady,
+    pdfReportRef, pdfRenderData, pdfRenderTeamCanvas, handlePdfReportReady,
     pdfAllRunning, pdfProgress, setPdfProgress,
     /* 강의실 수정 모달 */
     showModifyModal, setShowModifyModal, gameInfo,
-    modifyName, setModifyName, modifyMonth, setModifyMonth, modifyDay, setModifyDay,
+    modifyName, setModifyName, modifyTarget, setModifyTarget, modifyMonth, setModifyMonth, modifyDay, setModifyDay,
     modifyHour, setModifyHour, modifyMinute, setModifyMinute,
     handleModifySave, rangeArray,
+    /* 모달 내 팀 선택 */
+    activeTeamId, handleModalTeamChange,
+    teams,
 }) => {
+    /* 모달 안 팀 선택 바 */
+    const TeamSelectBar = () => (
+        <div className="td2-modal-team-bar">
+            {(teams || []).map(t => (
+                <button
+                    key={t.teamId}
+                    className={`td2-modal-team-btn ${activeTeamId === t.teamId ? "active" : ""}`}
+                    onClick={() => handleModalTeamChange(t.teamId, t.teamName)}
+                >
+                    {t.teamName}
+                </button>
+            ))}
+        </div>
+    );
+
     return (
         <>
-            {/* 미션 열람 모달 (ImpactCheck) */}
+            {/* 미션 열람 모달 (ImpactCheck) - 학생 UI 동일 */}
             {showMissionModal && missionModalData && (
                 <div className="td2-modal-overlay" onClick={() => setShowMissionModal(false)}>
                     <div className="td2-impact-modal" onClick={e => e.stopPropagation()}>
@@ -170,45 +236,56 @@ const TeachDetail2Modals = ({
                             <span className="td2-impact-modal-title">{missionModalTitle}</span>
                             <button className="td2-modify-close" onClick={() => setShowMissionModal(false)}>&times;</button>
                         </div>
+                        <TeamSelectBar />
                         <div className="td2-impact-modal-body">
-                            <table className="td2-impact-table">
-                                <thead>
-                                    <tr>
-                                        <th className="td2-impact-no">No.</th>
-                                        <th className="td2-impact-q">Questionnaires</th>
-                                        <th className="td2-impact-rating">매우 부정</th>
-                                        <th className="td2-impact-rating"></th>
-                                        <th className="td2-impact-rating"></th>
-                                        <th className="td2-impact-rating"></th>
-                                        <th className="td2-impact-rating">매우 긍정</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {impactQuestions.map(q =>
-                                        q.type === "text" ? (
-                                            <tr key={q.no} className="td2-impact-text-row">
-                                                <td className="td2-impact-no-cell">{q.no}</td>
-                                                <td className="td2-impact-q-cell">{q.text}</td>
-                                                <td colSpan={5} className="td2-impact-text-cell">
-                                                    {missionModalData[`q${q.no}Text`] || ""}
-                                                </td>
-                                            </tr>
-                                        ) : (
-                                            <tr key={q.no}>
-                                                <td className="td2-impact-no-cell">{q.no}</td>
-                                                <td className="td2-impact-q-cell">{q.text}</td>
-                                                {[1, 2, 3, 4, 5].map(r => (
-                                                    <td key={r} className="td2-impact-rating-cell">
-                                                        <span className={`td2-impact-rating-dot ${missionModalData[`q${q.no}Score`] === r ? "td2-impact-selected" : ""}`}>
-                                                            {r}
-                                                        </span>
+                            {/* 헤더 */}
+                            <div className="td2-impact-header">
+                                <h2 className="td2-impact-header-title">IMPACT Check 16</h2>
+                                <p className="td2-impact-header-desc">
+                                    본 진단은 우리 조직이 단순히 열심히 일하는 것을 넘어, 실질적인 성과(Impact)를 창출할 수 있는
+                                    건전한 구조를 갖추고 있는지 점검하는 'Health Check' 도구입니다.
+                                </p>
+                            </div>
+                            <div className="td2-impact-table-wrap">
+                                <table className="td2-impact-table">
+                                    <thead>
+                                        <tr>
+                                            <th className="td2-impact-no">No.</th>
+                                            <th className="td2-impact-q" colSpan="2">Questionnaires</th>
+                                            <th className="td2-impact-rating">매우 부정</th>
+                                            <th className="td2-impact-rating"></th>
+                                            <th className="td2-impact-rating"></th>
+                                            <th className="td2-impact-rating"></th>
+                                            <th className="td2-impact-rating">매우 긍정</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {impactQuestions.map(q =>
+                                            q.type === "text" ? (
+                                                <tr key={q.no} className="td2-impact-text-row">
+                                                    <td className="td2-impact-no-cell">{q.no}</td>
+                                                    <td className="td2-impact-q-cell">{q.text}</td>
+                                                    <td colSpan={6} className="td2-impact-text-cell">
+                                                        {missionModalData[`q${q.no}Text`] || ""}
                                                     </td>
-                                                ))}
-                                            </tr>
-                                        )
-                                    )}
-                                </tbody>
-                            </table>
+                                                </tr>
+                                            ) : (
+                                                <tr key={q.no}>
+                                                    <td className="td2-impact-no-cell">{q.no}</td>
+                                                    <td className="td2-impact-q-cell" colSpan="2">{q.text}</td>
+                                                    {[1, 2, 3, 4, 5].map(r => (
+                                                        <td key={r} className="td2-impact-rating-cell">
+                                                            <span className={`td2-impact-rating-dot ${missionModalData[`q${q.no}Score`] === r ? "td2-impact-selected" : ""}`}>
+                                                                {r}
+                                                            </span>
+                                                        </td>
+                                                    ))}
+                                                </tr>
+                                            )
+                                        )}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -222,65 +299,99 @@ const TeachDetail2Modals = ({
                             <span className="td2-impact-modal-title">{identityModalTitle}</span>
                             <button className="td2-modify-close" onClick={() => setShowIdentityModal(false)}>&times;</button>
                         </div>
+                        <TeamSelectBar />
                         <div className="td2-identity-modal-body">
+                            {/* 헤더 */}
+                            <div className="td2-id-header">
+                                <h2 className="td2-id-header-title">Strategic Identity Canvas</h2>
+                                <p className="td2-id-header-desc">성과창출의 첫 걸음은, 무엇을 할 것인가가 아니라 달성하고자 하는 미래를 먼저 그리는 것입니다.
+                                </p>
+                                <p className="td2-id-header-desc">우리의 미래는 무엇입니까? 앞으로 우리가 도달해야 할 ‘새로운 미래’를 여러분의 언어로 제시해보십시오
+                                </p>
+                            </div>
+
                             {/* 3단 레이아웃 */}
                             <div className="td2-id-grid">
                                 {/* 좌: 기존 가치체계 */}
                                 <div className="td2-id-col">
                                     <div className="td2-id-section-header td2-id-legacy">기존 가치체계 (Current Legacy)</div>
-                                    <div className="td2-id-card">
-                                        <div className="td2-id-card-title">미션 (Mission)</div>
-                                        <div className="td2-id-card-body">{identityModalData.mission || ""}</div>
-                                    </div>
-                                    <div className="td2-id-card">
-                                        <div className="td2-id-card-title">비전 (Vision)</div>
-                                        <div className="td2-id-card-body">{identityModalData.vision || ""}</div>
-                                    </div>
-                                    <div className="td2-id-card">
-                                        <div className="td2-id-card-title">핵심가치 (Value)</div>
-                                        <div className="td2-id-card-body">{identityModalData.value || ""}</div>
+                                    <div className="td2-id-legacy-content">
+                                        <div className="td2-id-card">
+                                            <div className="td2-id-card-title">미션 (Mission)</div>
+                                            <div className="td2-id-card-body">
+                                                <span className="td2-id-card-value">{identityModalData.mission || ""}</span>
+                                            </div>
+                                        </div>
+                                        <div className="td2-id-card">
+                                            <div className="td2-id-card-title">비전 (Vision)</div>
+                                            <div className="td2-id-card-body">
+                                                <span className="td2-id-card-value">{identityModalData.vision || ""}</span>
+                                            </div>
+                                        </div>
+                                        <div className="td2-id-card">
+                                            <div className="td2-id-card-title">핵심가치 (Value)</div>
+                                            <div className="td2-id-card-body">
+                                                <span className="td2-id-card-value">{identityModalData.value || ""}</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
                                 {/* 중: 외부의 위협 신호 + 내부의 한계점 */}
                                 <div className="td2-id-col-center">
-                                    <div className="td2-id-section-header td2-id-threat">외부의 위협 신호 (External Threats)</div>
-                                    <div className="td2-id-threat-grid">
-                                        <div className="td2-id-mini-card">
-                                            <div className="td2-id-mini-title">정책/경제</div>
-                                            <div className="td2-id-mini-body">{identityModalData.macro || ""}</div>
+                                    {/* 외부의 위협 신호 */}
+                                    <div className="td2-id-threat-block">
+                                        <div className="td2-id-threat-header">
+                                            <div className="td2-id-threat-header-title">외부의 위협 신호 (External Threats)</div>
+                                            <div className="td2-id-threat-header-sub">"우리를 위협하는 외부의 경고는 무엇입니까?"</div>
                                         </div>
-                                        <div className="td2-id-mini-card">
-                                            <div className="td2-id-mini-title">기술</div>
-                                            <div className="td2-id-mini-body">{identityModalData.tech || ""}</div>
-                                        </div>
-                                        <div className="td2-id-mini-card">
-                                            <div className="td2-id-mini-title">고객/사회</div>
-                                            <div className="td2-id-mini-body">{identityModalData.customer || ""}</div>
-                                        </div>
-                                        <div className="td2-id-mini-card">
-                                            <div className="td2-id-mini-title">경쟁</div>
-                                            <div className="td2-id-mini-body">{identityModalData.competitor || ""}</div>
+                                        <div className="td2-id-threat-body">
+                                            <div className="td2-id-threat-grid">
+                                                <div className="td2-id-mini-card">
+                                                    <div className="td2-id-mini-title">정책/경제<br/>(Macro)</div>
+                                                    <div className="td2-id-mini-body">{identityModalData.macro || ""}</div>
+                                                </div>
+                                                <div className="td2-id-mini-card">
+                                                    <div className="td2-id-mini-title">기술<br/>(Tech)</div>
+                                                    <div className="td2-id-mini-body">{identityModalData.tech || ""}</div>
+                                                </div>
+                                                <div className="td2-id-mini-card">
+                                                    <div className="td2-id-mini-title">고객/사회<br/>(Customer)</div>
+                                                    <div className="td2-id-mini-body">{identityModalData.customer || ""}</div>
+                                                </div>
+                                                <div className="td2-id-mini-card">
+                                                    <div className="td2-id-mini-title">경쟁<br/>(Competitor)</div>
+                                                    <div className="td2-id-mini-body">{identityModalData.competitor || ""}</div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div className="td2-id-section-header td2-id-threat" style={{ marginTop: 12 }}>내부의 한계점 (Internal Limits)</div>
-                                    <div className="td2-id-threat-grid">
-                                        <div className="td2-id-mini-card">
-                                            <div className="td2-id-mini-title">역량</div>
-                                            <div className="td2-id-mini-body">{identityModalData.capability || ""}</div>
+                                    {/* 내부의 한계점 */}
+                                    <div className="td2-id-threat-block">
+                                        <div className="td2-id-threat-header">
+                                            <div className="td2-id-threat-header-title">내부의 한계점 (Internal Limits)</div>
+                                            <div className="td2-id-threat-header-sub">"앞으로의 성장을 위해 넘어서야 할 내부의 한계는 무엇입니까?"</div>
                                         </div>
-                                        <div className="td2-id-mini-card">
-                                            <div className="td2-id-mini-title">문화</div>
-                                            <div className="td2-id-mini-body">{identityModalData.culture || ""}</div>
-                                        </div>
-                                        <div className="td2-id-mini-card">
-                                            <div className="td2-id-mini-title">구조</div>
-                                            <div className="td2-id-mini-body">{identityModalData.structure || ""}</div>
-                                        </div>
-                                        <div className="td2-id-mini-card">
-                                            <div className="td2-id-mini-title">기타</div>
-                                            <div className="td2-id-mini-body">{identityModalData.etc || ""}</div>
+                                        <div className="td2-id-threat-body">
+                                            <div className="td2-id-threat-grid">
+                                                <div className="td2-id-mini-card">
+                                                    <div className="td2-id-mini-title">역량<br/>(Capability)</div>
+                                                    <div className="td2-id-mini-body">{identityModalData.capability || ""}</div>
+                                                </div>
+                                                <div className="td2-id-mini-card">
+                                                    <div className="td2-id-mini-title">문화<br/>(Culture)</div>
+                                                    <div className="td2-id-mini-body">{identityModalData.culture || ""}</div>
+                                                </div>
+                                                <div className="td2-id-mini-card">
+                                                    <div className="td2-id-mini-title">구조<br/>(Structure)</div>
+                                                    <div className="td2-id-mini-body">{identityModalData.structure || ""}</div>
+                                                </div>
+                                                <div className="td2-id-mini-card">
+                                                    <div className="td2-id-mini-title">기타</div>
+                                                    <div className="td2-id-mini-body">{identityModalData.etc || ""}</div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -288,17 +399,25 @@ const TeachDetail2Modals = ({
                                 {/* 우: 미래 방향성 */}
                                 <div className="td2-id-col">
                                     <div className="td2-id-section-header td2-id-new">미래 방향성 (New Identity)</div>
-                                    <div className="td2-id-card">
-                                        <div className="td2-id-card-title">New 미션 (Mission)</div>
-                                        <div className="td2-id-card-body">{identityModalData.newMission || ""}</div>
-                                    </div>
-                                    <div className="td2-id-card">
-                                        <div className="td2-id-card-title">New 비전 (Vision)</div>
-                                        <div className="td2-id-card-body">{identityModalData.newVision || ""}</div>
-                                    </div>
-                                    <div className="td2-id-card">
-                                        <div className="td2-id-card-title">New 핵심가치 (Value)</div>
-                                        <div className="td2-id-card-body">{identityModalData.newValue || ""}</div>
+                                    <div className="td2-id-new-content">
+                                        <div className="td2-id-card">
+                                            <div className="td2-id-card-title td2-id-card-title-bold">New 미션 (Mission)</div>
+                                            <div className="td2-id-card-body">
+                                                <span className="td2-id-card-value">{identityModalData.newMission || ""}</span>
+                                            </div>
+                                        </div>
+                                        <div className="td2-id-card">
+                                            <div className="td2-id-card-title td2-id-card-title-bold">New 비전 (Vision)</div>
+                                            <div className="td2-id-card-body">
+                                                <span className="td2-id-card-value">{identityModalData.newVision || ""}</span>
+                                            </div>
+                                        </div>
+                                        <div className="td2-id-card">
+                                            <div className="td2-id-card-title td2-id-card-title-bold">New 핵심가치 (Value)</div>
+                                            <div className="td2-id-card-body">
+                                                <span className="td2-id-card-value">{identityModalData.newValue || ""}</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -315,72 +434,122 @@ const TeachDetail2Modals = ({
                             <span className="td2-impact-modal-title">{flowModalTitle}</span>
                             <button className="td2-modify-close" onClick={() => setShowFlowModal(false)}>&times;</button>
                         </div>
+                        <TeamSelectBar />
                         <div className="td2-flow-modal-body">
+                            {/* 헤더 */}
+                            <div className="td2-flow-header">
+                                <h2 className="td2-flow-header-title">Performance Flow Canvas</h2>
+                                <p className="td2-flow-header-desc">비전은 선언만으로 달성되지 않습니다.</p>
+                                <p className="td2-flow-header-desc">비전을 달성하기 위해서는 전략목표가 필요하고, 전략목표를 현실로 만들기 위해서는 전술적 성과와 전략적 활동이 함께 설계되어야 합니다.</p>
+                            </div>
+
                             {/* New Vision 배너 */}
                             <div className="td2-flow-vision">
                                 <span className="td2-flow-vision-label">New Vision</span>
                                 <span className="td2-flow-vision-text">{flowModalData.newVision || ""}</span>
                             </div>
 
-                            {/* 전략목표 카드 */}
-                            <div className="td2-flow-section-title">1. 3대 전략목표 (Strategic Goal)</div>
-                            <div className="td2-flow-goal-cards">
-                                {(flowModalData.goals || []).map((goal, idx) => (
-                                    <div className="td2-flow-goal-card" key={goal.goalId || idx}>
-                                        <div className="td2-flow-goal-title">{goal.goalTitle || `전략목표 ${idx + 1}`}</div>
-                                        <div className="td2-flow-goal-desc">{goal.goalDescription || ""}</div>
+                            {/* 콘텐츠 */}
+                            <div className="td2-flow-content">
+                                {/* Row 1: 전략목표 */}
+                                <div className="td2-flow-row">
+                                    <div className="td2-flow-row-label">
+                                        <div className="td2-flow-label-number">1. 3대 전략목표</div>
+                                        <div className="td2-flow-label-sub">(Strategic Goal)</div>
                                     </div>
-                                ))}
-                            </div>
-
-                            {/* 전술적 성과 */}
-                            <div className="td2-flow-section-title">2. 전술적 성과 (성과)</div>
-                            <div className="td2-flow-tables">
-                                {(flowModalData.goals || []).map((goal, idx) => (
-                                    <table className="td2-flow-table" key={`t-${goal.goalId || idx}`}>
-                                        <thead>
-                                            <tr>
-                                                <th>전술적 성과 지표</th>
-                                                <th>목표</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {(goal.tacticals || []).length === 0 ? (
-                                                <tr><td colSpan="2" className="td2-flow-empty">-</td></tr>
-                                            ) : (goal.tacticals || []).map((t, ti) => (
-                                                <tr key={t.metricId || ti}>
-                                                    <td>{t.tacticalMetric || ""}</td>
-                                                    <td>{t.tacticalGoal || ""}</td>
-                                                </tr>
+                                    <div className="td2-flow-row-content">
+                                        <p className="td2-flow-row-desc">
+                                            <span className="td2-flow-desc-main">전략목표는 '무엇을 더 할 것인가'가 아니라 '어떤 방식의 성과를 만들겠다는 선택'이어야 합니다.</span>
+                                            <span className="td2-flow-desc-example"> 예) 매출 확대 X, 고수익 구조로의 전환 O</span>
+                                        </p>
+                                        <div className="td2-flow-goal-cards">
+                                            {(flowModalData.goals || []).map((goal, idx) => (
+                                                <div className="td2-flow-goal-card" key={goal.goalId || idx}>
+                                                    <div className={`td2-flow-goal-title ${goal.goalTitle ? "has-content" : ""}`}>
+                                                        {goal.goalTitle || `전략목표 ${idx + 1}`}
+                                                    </div>
+                                                    <div className="td2-flow-goal-desc">{goal.goalDescription || ""}</div>
+                                                </div>
                                             ))}
-                                        </tbody>
-                                    </table>
-                                ))}
-                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
-                            {/* 전략적 활동 */}
-                            <div className="td2-flow-section-title">3. 전략적 활동 (체질)</div>
-                            <div className="td2-flow-tables">
-                                {(flowModalData.goals || []).map((goal, idx) => (
-                                    <table className="td2-flow-table" key={`s-${goal.goalId || idx}`}>
-                                        <thead>
-                                            <tr>
-                                                <th>전략적 활동 지표</th>
-                                                <th>내재화 기준</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {(goal.strategicActivities || []).length === 0 ? (
-                                                <tr><td colSpan="2" className="td2-flow-empty">-</td></tr>
-                                            ) : (goal.strategicActivities || []).map((a, ai) => (
-                                                <tr key={a.activityId || ai}>
-                                                    <td>{a.activityMetric || ""}</td>
-                                                    <td>{a.interCriteria || ""}</td>
-                                                </tr>
+                                {/* Row 2: 전술적 성과 */}
+                                <div className="td2-flow-row">
+                                    <div className="td2-flow-row-label">
+                                        <div className="td2-flow-label-number">2. 전술적 성과</div>
+                                        <div className="td2-flow-label-sub">(성과)</div>
+                                    </div>
+                                    <div className="td2-flow-row-content">
+                                        <p className="td2-flow-row-desc">
+                                            <span className="td2-flow-desc-main">전술적 성과지표는 전략목표를 향해 가고 있음을 단기적으로 확인할 수 있는 지표를 의미합니다.</span>
+                                            <span className="td2-flow-desc-example"> 예) 영업 활동 강화 X, 고수익 고객 매출 비중 +8% O</span>
+                                        </p>
+                                        <div className="td2-flow-tables">
+                                            {(flowModalData.goals || []).map((goal, idx) => (
+                                                <div className="td2-flow-table-wrapper" key={`t-${goal.goalId || idx}`}>
+                                                    <table className="td2-flow-table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>전술적 성과 지표</th>
+                                                                <th>목표</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {(goal.tacticals || []).length === 0 ? (
+                                                                <tr><td colSpan="2" className="td2-flow-empty">-</td></tr>
+                                                            ) : (goal.tacticals || []).map((t, ti) => (
+                                                                <tr key={t.metricId || ti}>
+                                                                    <ClickableTd><span className="td2-flow-row-num">{ti + 1}.</span> {t.tacticalMetric || ""}</ClickableTd>
+                                                                    <ClickableTd>{t.tacticalGoal || ""}</ClickableTd>
+                                                                </tr>
+                                                            ))}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
                                             ))}
-                                        </tbody>
-                                    </table>
-                                ))}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Row 3: 전략적 활동 */}
+                                <div className="td2-flow-row">
+                                    <div className="td2-flow-row-label">
+                                        <div className="td2-flow-label-number">3. 전략적 활동</div>
+                                        <div className="td2-flow-label-sub">(체질)</div>
+                                    </div>
+                                    <div className="td2-flow-row-content">
+                                        <p className="td2-flow-row-desc">
+                                            <span className="td2-flow-desc-main">전략적 성과지표는 반복 가능한 구조와 체질로 자리 잡았는지를 확인하는 기준을 의미합니다.</span>
+                                            <span className="td2-flow-desc-example"> 예) 3분기 연속 유지, 규범화 완료 등</span>
+                                        </p>
+                                        <div className="td2-flow-tables">
+                                            {(flowModalData.goals || []).map((goal, idx) => (
+                                                <div className="td2-flow-table-wrapper" key={`s-${goal.goalId || idx}`}>
+                                                    <table className="td2-flow-table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>전략적 활동 지표</th>
+                                                                <th>내재화 기준</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {(goal.strategicActivities || []).length === 0 ? (
+                                                                <tr><td colSpan="2" className="td2-flow-empty">-</td></tr>
+                                                            ) : (goal.strategicActivities || []).map((a, ai) => (
+                                                                <tr key={a.activityId || ai}>
+                                                                    <ClickableTd><span className="td2-flow-row-num">{ai + 1}.</span> {a.activityMetric || ""}</ClickableTd>
+                                                                    <ClickableTd>{a.interCriteria || ""}</ClickableTd>
+                                                                </tr>
+                                                            ))}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -395,7 +564,18 @@ const TeachDetail2Modals = ({
                             <span className="td2-impact-modal-title">{quickWinModalTitle}</span>
                             <button className="td2-modify-close" onClick={() => setShowQuickWinModal(false)}>&times;</button>
                         </div>
-                        <WinCanvasModalBody data={quickWinModalData} sideLabel="전술적<br/>실행과제" />
+                        <TeamSelectBar />
+                        <WinCanvasModalBody
+                            data={quickWinModalData}
+                            sideLabel="전술적<br/>실행과제"
+                            winColor="#25AEA7"
+                            title="Quick Win Canvas"
+                            titleSub="(전술적 실행과제)"
+                            headerDescs={[
+                                "Quick Win은 전략목표 달성을 가로막는 장애물을 빠르게 제거하여 단기적으로 가시적인 성과를 만들어내는 실행과제입니다.",
+                                "이 Quick Win이 실행되지 않으면, 우리는 지금 만들 수 있는 성과를 계속 ‘놓치게’ 됩니다."
+                            ]}
+                        />
                     </div>
                 </div>
             )}
@@ -408,7 +588,18 @@ const TeachDetail2Modals = ({
                             <span className="td2-impact-modal-title">{buildWinModalTitle}</span>
                             <button className="td2-modify-close" onClick={() => setShowBuildWinModal(false)}>&times;</button>
                         </div>
-                        <WinCanvasModalBody data={buildWinModalData} sideLabel="전략적<br/>실행과제" />
+                        <TeamSelectBar />
+                        <WinCanvasModalBody
+                            data={buildWinModalData}
+                            sideLabel="전략적<br/>실행과제"
+                            winColor="#5E4FB1"
+                            title="Build Win Canvas"
+                            titleSub="(전략적 실행과제)"
+                            headerDescs={[
+                                "Build Win은 단기 성과를 만드는 과제가 아니라, 성과가 반복되게 만드는 ‘체질’을 바꾸는 과제입니다.",
+                                "이 Build Win이 성공하면, 우리는 한 차원 높은 성과창출 역량을 확보하게 됩니다."
+                            ]}
+                        />
                     </div>
                 </div>
             )}
@@ -421,6 +612,7 @@ const TeachDetail2Modals = ({
                             <span className="td2-impact-modal-title">{fundingModalTitle}</span>
                             <button className="td2-modify-close" onClick={() => setShowFundingModal(false)}>&times;</button>
                         </div>
+                        <TeamSelectBar />
                         <div className="td2-funding-modal-body">
                             {fundingModalData.length === 0 ? (
                                 <div style={{ textAlign: "center", padding: 40, color: "#999" }}>등록된 평가 데이터가 없습니다.</div>
@@ -440,6 +632,7 @@ const TeachDetail2Modals = ({
                             <span className="td2-impact-modal-title">{resultModalTitle}</span>
                             <button className="td2-modify-close" onClick={() => setShowResultModal(false)}>&times;</button>
                         </div>
+                        <TeamSelectBar />
                         <FundingResultModalBody data={resultModalData} />
                     </div>
                 </div>
@@ -569,7 +762,7 @@ const TeachDetail2Modals = ({
 
             {/* 보고서(파일 다운) 모달 - 개별 보기용 */}
             {showReportModal && reportTeamId && (
-                <div className="td2-modal-overlay" onClick={() => setShowReportModal(false)}>
+                <div className="td2-modal-overlay">
                     <div className="td2-report-modal" onClick={e => e.stopPropagation()}>
                         <div className="td2-impact-modal-header">
                             <span className="td2-impact-modal-title">팀 보고서</span>
@@ -583,9 +776,16 @@ const TeachDetail2Modals = ({
             )}
 
             {/* 전체 PDF 다운 - 숨겨진 렌더링 영역 */}
-            {pdfRenderTeamId && (
-                <div style={{ position: "fixed", left: "-10000px", top: 0, width: 1000, height: 1415, overflow: "hidden" }}>
-                    <ReportScreen ref={pdfReportRef} teamId={pdfRenderTeamId} initialData={pdfRenderData} hideControls onReady={handlePdfReportReady} />
+            {pdfRenderData && pdfRenderTeamCanvas && (
+                <div style={{ position: "fixed", left: "-10000px", top: 0, width: 1000, overflow: "hidden" }}>
+                    <ReportScreen
+                        ref={pdfReportRef}
+                        initialData={pdfRenderData}
+                        hideControls
+                        bulkMode
+                        bulkCanvasData={pdfRenderTeamCanvas}
+                        onReady={handlePdfReportReady}
+                    />
                 </div>
             )}
 
@@ -668,6 +868,18 @@ const TeachDetail2Modals = ({
                                         value={modifyName}
                                         onChange={e => setModifyName(e.target.value)}
                                         placeholder="강의실 명"
+                                    />
+                                </div>
+                            </div>
+                            <div className="td2-modify-row">
+                                <label className="td2-modify-label">강의대상</label>
+                                <div className="td2-modify-field">
+                                    <input
+                                        type="text"
+                                        className="td2-modify-input"
+                                        value={modifyTarget}
+                                        onChange={e => setModifyTarget(e.target.value)}
+                                        placeholder="강의대상"
                                     />
                                 </div>
                             </div>

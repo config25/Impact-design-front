@@ -92,6 +92,12 @@ const TeachDetail = ({ onNavigate, params }) => {
         return arr;
     };
 
+    const daysInMonth = new Date(deadlineYear, deadlineMonth, 0).getDate();
+
+    useEffect(() => {
+        if (deadlineDay > daysInMonth) setDeadlineDay(daysInMonth);
+    }, [deadlineYear, deadlineMonth]);
+
     /* 강의실 종료 */
     const handleEndGame = async () => {
         if (!window.confirm("강의실을 종료하시겠습니까?")) return;
@@ -397,7 +403,7 @@ const TeachDetail = ({ onNavigate, params }) => {
                         </select>
                         <span className="tdt-deadline-unit">월</span>
                         <select className="tdt-deadline-select" value={deadlineDay} onChange={e => setDeadlineDay(Number(e.target.value))}>
-                            {rangeArray(1, 31).map(d => (
+                            {rangeArray(1, daysInMonth).map(d => (
                                 <option key={d} value={d}>{d}</option>
                             ))}
                         </select>

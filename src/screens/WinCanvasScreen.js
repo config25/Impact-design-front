@@ -69,18 +69,18 @@ const WinCanvasScreen = ({
                 setTableCells(cells);
 
                 const taskOutcomes = d.taskOutcomes || [];
-                const qual = ["", "", ""];
-                const quant = ["", "", ""];
-                taskOutcomes.forEach((o) => {
-                    if (o.outcomeType === "QUALITATIVE") {
-                        const idx = o.orderNo - 1;
-                        if (idx >= 0 && idx < 3) qual[idx] = o.outcomeContent || "";
-                    } else if (o.outcomeType === "QUANTITATIVE") {
-                        const idx = o.orderNo - 4;
-                        if (idx >= 0 && idx < 3) quant[idx] = o.outcomeContent || "";
-                    }
+                const qual = taskOutcomes
+                    .filter(o => o.outcomeType === "QUALITATIVE")
+                    .sort((a, b) => a.orderNo - b.orderNo)
+                    .map(o => o.outcomeContent || "");
+                const quant = taskOutcomes
+                    .filter(o => o.outcomeType === "QUANTITATIVE")
+                    .sort((a, b) => a.orderNo - b.orderNo)
+                    .map(o => o.outcomeContent || "");
+                setOutcomes({
+                    qualitative: [qual[0] || "", qual[1] || "", qual[2] || ""],
+                    quantitative: [quant[0] || "", quant[1] || "", quant[2] || ""],
                 });
-                setOutcomes({ qualitative: qual, quantitative: quant });
 
                 setSubmitted(d.submitted || false);
             }

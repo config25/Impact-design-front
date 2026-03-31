@@ -61,7 +61,7 @@ const TeachDetail2 = ({ onNavigate, params }) => {
         gameId,
         gameInfo,
         refreshTeams,
-        onGameInfoUpdate: (name) => setGameInfo(prev => ({ ...prev, name })),
+        onGameInfoUpdate: (name, target) => setGameInfo(prev => ({ ...prev, name, target })),
     });
 
     const pdf = usePdfDownload({ gameId, teams, gameInfo });
@@ -84,6 +84,7 @@ const TeachDetail2 = ({ onNavigate, params }) => {
                     enddate: d.mission ? formatDate(d.mission.enddate) : "-",
                     code: d.code,
                     logoUrl: getLogoUrl(d.gameLogo),
+                    target: d.target || "",
                 });
 
                 const submissionMap = {};
@@ -134,6 +135,7 @@ const TeachDetail2 = ({ onNavigate, params }) => {
             alert(result.message);
         }
     };
+
 
     /* 단계 체크박스 */
     const handleStepCheck = (value) => {
@@ -245,6 +247,7 @@ const TeachDetail2 = ({ onNavigate, params }) => {
                             <table className="td2-info-table">
                                 <tbody>
                                     <tr><th>강의실</th><td>{gameInfo.name}</td></tr>
+                                    <tr><th>강의대상</th><td>{gameInfo.target || "-"}</td></tr>
                                     <tr><th>팀 수</th><td>{gameInfo.numTeam}</td></tr>
                                     <tr><th>교육시간</th><td>{gameInfo.startdate} ~ {gameInfo.enddate}</td></tr>
                                     <tr><th>강의실 코드</th><td>{gameInfo.code}</td></tr>
@@ -313,7 +316,7 @@ const TeachDetail2 = ({ onNavigate, params }) => {
                     <div className="td2-panel">
                         <div className="td2-panel-heading">
                             <span className="td2-panel-title">진행 현황</span>
-                            <button className="td2-btn-pdf-all" onClick={pdf.handleDownloadAllPDF} disabled={pdf.pdfAllRunning}>
+<button className="td2-btn-pdf-all" onClick={pdf.handleDownloadAllPDF} disabled={pdf.pdfAllRunning}>
                                 {pdf.pdfAllRunning ? "생성 중..." : "전체 PDF 다운"}
                             </button>
                         </div>
@@ -378,8 +381,9 @@ const TeachDetail2 = ({ onNavigate, params }) => {
 
             {/* 다음 단계 설정 */}
             <div className="td2-panel">
-                <div className="td2-panel-heading">
+                <div className="td2-panel-heading td2-step-heading">
                     <span className="td2-panel-title">다음 단계 설정</span>
+                    <button className="td2-btn-primary td2-step-save-btn" onClick={handleStepSave}>저장</button>
                 </div>
                 <div className="td2-step-body">
                     {stepConfig.map(group => (
@@ -399,9 +403,6 @@ const TeachDetail2 = ({ onNavigate, params }) => {
                             </div>
                         </div>
                     ))}
-                    <div style={{ textAlign: "center", marginTop: 10 }}>
-                        <button className="td2-btn-primary" onClick={handleStepSave}>저장</button>
-                    </div>
                 </div>
             </div>
 
@@ -410,20 +411,7 @@ const TeachDetail2 = ({ onNavigate, params }) => {
                 <div className="td2-mission-header">
                     <div>
                         <h3 className="td2-mission-title">미션확인</h3>
-                        <p className="td2-mission-desc">팀을 선택한 후 미션 버튼을 클릭하여 상세내용을 확인하세요.</p>
-                    </div>
-                    <div className="td2-mission-team-select">
-                        <span className="td2-mission-team-label">팀 선택</span>
-                        <select
-                            className="td2-deadline-select"
-                            value={modals.missionModalTeamId || ""}
-                            onChange={e => modals.setMissionModalTeamId(e.target.value ? Number(e.target.value) : null)}
-                        >
-                            <option value="">선택</option>
-                            {teams.map(t => (
-                                <option key={t.teamId} value={t.teamId}>{t.teamName}</option>
-                            ))}
-                        </select>
+                        <p className="td2-mission-desc">미션 버튼을 클릭하면 팀을 선택하여 상세내용을 확인할 수 있습니다.</p>
                     </div>
                 </div>
 
@@ -438,14 +426,7 @@ const TeachDetail2 = ({ onNavigate, params }) => {
                                 <div
                                     className={`td2-mission-item td2-mission-clickable ${row.bgItem}`}
                                     key={item.code}
-                                    onClick={() => {
-                                        if (!modals.missionModalTeamId) {
-                                            alert("팀을 먼저 선택해주세요.");
-                                            return;
-                                        }
-                                        const team = teams.find(t => t.teamId === modals.missionModalTeamId);
-                                        modals.handleMissionClick(item.code, modals.missionModalTeamId, team?.teamName || "");
-                                    }}
+                                    onClick={() => modals.handleMissionItemClick(item.code, teams)}
                                 >
                                     <span className="td2-mission-item-code">{item.code}</span>
                                     <span className="td2-mission-item-name">{item.name}</span>
@@ -461,7 +442,9 @@ const TeachDetail2 = ({ onNavigate, params }) => {
                 {...pdf}
                 gameInfo={gameInfo}
                 rangeArray={rangeArray}
+                teams={teams}
             />
+
         </div>
     );
 };

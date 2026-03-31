@@ -257,8 +257,37 @@
     cursor: pointer;
 }
 
+.td2-btn-pdf-preview {
+    padding: 4px 12px;
+    background: #5cb85c;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.td2-btn-pdf-preview:hover {
+    background: #449d44;
+}
+
 .td2-btn-pdf-all:hover {
     background: #286090;
+}
+
+/* 전체 PDF 미리보기 모달 */
+.td2-bulk-preview-modal {
+    background: #fff;
+    border-radius: 6px;
+    width: 1000px;
+    max-width: 96vw;
+    max-height: 92vh;
+    overflow-y: auto;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+}
+
+.td2-bulk-preview-body {
+    padding: 0;
 }
 
 /* 팀 관리 버튼 그룹 */
@@ -348,10 +377,10 @@
 
 /* 다음 단계 설정 */
 .td2-step-group {
-    margin-bottom: 15px;
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 5px;
+    min-width: 200px;
 }
 
 .td2-step-group-title {
@@ -389,8 +418,24 @@
     accent-color: #337ab7;
 }
 
+.td2-step-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.td2-step-save-btn {
+    padding: 4px 16px;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
 .td2-step-body {
     padding: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
 }
 
 /* 미션확인 섹션 */
@@ -442,6 +487,7 @@
     font-size: 12px;
     margin-top: 2px;
 }
+
 
 /* 화살표형 서브 아이템 */
 .td2-mission-items {
@@ -867,9 +913,9 @@
 .td2-impact-modal {
     background: #fff;
     border-radius: 6px;
-    width: 900px;
-    max-width: 95vw;
-    max-height: 85vh;
+    width: 1400px;
+    max-width: 96vw;
+    max-height: 92vh;
     overflow-y: auto;
     box-shadow: 0 8px 30px rgba(0,0,0,0.3);
 }
@@ -898,132 +944,209 @@
 }
 
 .td2-impact-modal-body {
-    padding: 20px;
+    padding: 20px 24px 24px;
+}
+
+/* 모달 내 헤더 */
+.td2-impact-header {
+    margin-bottom: 16px;
+}
+
+.td2-impact-header-title {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: #1a237e;
+    margin: 0 0 8px 0;
+}
+
+.td2-impact-header-desc {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    color: #000;
+    margin: 0;
+    line-height: 1.6;
 }
 
 /* ImpactCheck 테이블 */
+.td2-impact-table-wrap {
+    overflow-x: auto;
+}
+
 .td2-impact-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 12px;
-}
-
-.td2-impact-table thead tr {
-    background: #353B72;
-    color: #fff;
+    table-layout: fixed;
+    border-top: 4px solid #3F51B5;
+    border-left: 1px solid #CACACA;
+    border-right: 1px solid #CACACA;
+    border-bottom: 1px solid #CACACA;
 }
 
 .td2-impact-table th {
-    padding: 10px 8px;
-    font-weight: 600;
-    font-size: 11px;
-    border: 1px solid #2d3260;
+    background: #F3F5F9;
+    padding: 0;
+    height: 44px;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    color: #353B72;
+    border-bottom: 1px solid #CACACA;
     text-align: center;
-    color: #fff;
+    vertical-align: middle;
 }
 
 .td2-impact-no {
-    width: 50px;
+    width: 4%;
+    border-right: 1px solid #CACACA;
 }
 
 .td2-impact-q {
-    text-align: left !important;
+    text-align: center;
 }
 
 .td2-impact-rating {
-    width: 70px;
+    width: 5%;
 }
 
 .td2-impact-table tbody tr {
-    border-bottom: 1px solid #e8e8e8;
+    border-bottom: 1px solid #CACACA;
 }
 
 .td2-impact-table tbody tr:hover {
-    background: #f9f9f9;
+    background: #fafafa;
 }
 
 .td2-impact-no-cell {
     text-align: center;
-    font-weight: 600;
-    color: #555;
-    padding: 10px 8px;
-    border: 1px solid #e8e8e8;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    color: #333;
+    padding: 0 8px;
+    height: 44px;
+    border-right: 1px solid #CACACA;
+    border-bottom: 1px solid #CACACA;
+    vertical-align: middle;
 }
 
 .td2-impact-q-cell {
     text-align: left;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
     color: #333;
-    padding: 10px 12px;
-    line-height: 1.5;
-    border: 1px solid #e8e8e8;
+    padding: 0 16px;
+    height: 44px;
+    line-height: 1.8;
+    border-right: 1px solid #CACACA;
+    border-bottom: 1px solid #CACACA;
+    vertical-align: middle;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .td2-impact-rating-cell {
     text-align: center;
-    padding: 8px 4px;
-    border: 1px solid #e8e8e8;
+    padding: 0;
+    height: 44px;
+    border-left: 1px solid #CACACA;
+    border-bottom: 1px solid #CACACA;
+    vertical-align: middle;
 }
 
 .td2-impact-rating-dot {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    font-size: 12px;
-    font-weight: 600;
-    color: #999;
-    background: #f0f0f0;
-    border: 1px solid #ddd;
+    width: 100%;
+    height: 100%;
+    min-height: 44px;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    color: #333;
+    background: #fff;
+    border: none;
+    cursor: default;
 }
 
 .td2-impact-selected {
     background: #3F51B5;
     color: #fff;
-    border-color: #3F51B5;
 }
 
 .td2-impact-text-row {
-    background: #fafafa;
+    background: #fff;
 }
 
 .td2-impact-text-cell {
-    padding: 10px 12px;
-    color: #333;
+    text-align: left;
+    padding: 0 20px;
+    height: 44px;
+    font-family: 'Pretendard', sans-serif;
     font-size: 13px;
-    border: 1px solid #e8e8e8;
-    line-height: 1.5;
+    color: #333;
+    border-bottom: 1px solid #CACACA;
+    vertical-align: middle;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 0;
 }
 
 /* ========== 정체성 설계 열람 모달 ========== */
+/* ========== 정체성 설계 모달 (학생 UI 동일) ========== */
 .td2-identity-modal {
     background: #fff;
     border-radius: 6px;
-    width: 1100px;
-    max-width: 95vw;
-    max-height: 90vh;
+    width: 1200px;
+    max-width: 96vw;
+    max-height: 92vh;
     overflow-y: auto;
     box-shadow: 0 8px 30px rgba(0,0,0,0.3);
 }
 
 .td2-identity-modal-body {
-    padding: 20px;
+    padding: 20px 24px 24px;
+    background: #fff;
+}
+
+/* 모달 내 헤더 */
+.td2-id-header {
+    margin-bottom: 20px;
+}
+
+.td2-id-header-title {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: #353B72;
+    margin: 0 0 8px 0;
+}
+
+.td2-id-header-desc {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 14px;
+    color: #555;
+    margin: 0;
+    line-height: 1.6;
 }
 
 /* 3단 그리드 */
 .td2-id-grid {
     display: flex;
-    gap: 16px;
+    gap: 20px;
     align-items: flex-start;
 }
 
 /* 좌/우 컬럼 (Legacy, New Identity) */
 .td2-id-col {
-    flex: 0 0 240px;
+    flex: 0 0 250px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
 }
 
 /* 중앙 컬럼 (Threats + Internal) */
@@ -1031,29 +1154,35 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 12px;
 }
 
-/* 섹션 헤더 */
+/* 섹션 헤더 공통 */
 .td2-id-section-header {
-    padding: 10px 12px;
+    padding: 14px 12px;
     border-radius: 4px;
-    font-size: 13px;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 16px;
     font-weight: 700;
     color: #fff;
     text-align: center;
+    margin-bottom: 20px;
 }
 
 .td2-id-legacy {
     background: #2c2f7c;
 }
 
-.td2-id-threat {
-    background: #C73457;
-}
-
 .td2-id-new {
     background: #3D49BE;
+}
+
+/* Legacy / New Identity 카드 목록 */
+.td2-id-legacy-content,
+.td2-id-new-content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
 }
 
 /* 카드 (Legacy / New Identity) */
@@ -1065,184 +1194,420 @@
 
 .td2-id-card-title {
     background: #f0f0f0;
-    padding: 8px 12px;
-    font-size: 12px;
-    font-weight: 600;
+    padding: 10px 12px;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
     text-align: center;
-    color: #333;
+    color: #111;
     border-bottom: 1px solid #e0e0e0;
 }
 
+.td2-id-card-title-bold {
+    font-weight: 700;
+}
+
 .td2-id-card-body {
-    padding: 12px;
+    padding: 14px;
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 6px;
+    background: #fff;
+    overflow-y: auto;
+}
+
+.td2-id-card-subtitle {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 12px;
+    color: #999;
+    text-align: center;
+}
+
+.td2-id-card-value {
+    font-family: 'Pretendard', sans-serif;
     font-size: 13px;
     color: #333;
+    text-align: center;
     line-height: 1.6;
-    min-height: 60px;
     white-space: pre-wrap;
     word-break: break-word;
 }
 
-/* 미니 카드 4열 그리드 (Threats / Internal) */
-.td2-id-threat-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 6px;
-}
-
-.td2-id-mini-card {
-    border: 1px solid #e0e0e0;
+/* ---- 위협/한계 블록 (빨간 배경) ---- */
+.td2-id-threat-block {
     border-radius: 4px;
     overflow: hidden;
 }
 
-.td2-id-mini-title {
-    background: #f5f5f5;
-    padding: 6px 8px;
-    font-size: 11px;
-    font-weight: 600;
+.td2-id-threat-header {
+    background: #C73457;
+    padding: 14px 16px;
     text-align: center;
-    color: #555;
+}
+
+.td2-id-threat-header-title {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.td2-id-threat-header-sub {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    color: #fff;
+    margin-top: 4px;
+}
+
+.td2-id-threat-body {
+    background: #C73457;
+    padding: 6px 16px 14px;
+}
+
+/* 미니 카드 4열 그리드 */
+.td2-id-threat-grid {
+    display: flex;
+    gap: 6px;
+}
+
+.td2-id-mini-card {
+    flex: 1;
+    border-radius: 4px;
+    overflow: hidden;
+    background: #fff;
+}
+
+.td2-id-mini-title {
+    background: #fff;
+    padding: 8px 6px;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    text-align: center;
+    color: #333;
+    line-height: 1.4;
     border-bottom: 1px solid #e0e0e0;
 }
 
 .td2-id-mini-body {
     padding: 10px 8px;
+    font-family: 'Pretendard', sans-serif;
     font-size: 12px;
     color: #333;
     line-height: 1.5;
-    min-height: 50px;
+    height: 120px;
     white-space: pre-wrap;
     word-break: break-word;
+    text-align: center;
+    background: #fff;
+    overflow-y: auto;
 }
 
-/* ========== 성과경로 설계 열람 모달 ========== */
+/* ========== 성과경로 설계 열람 모달 (학생 UI 동일) ========== */
 .td2-flow-modal {
     background: #fff;
     border-radius: 6px;
-    width: 1000px;
-    max-width: 95vw;
-    max-height: 90vh;
+    width: 1200px;
+    max-width: 96vw;
+    max-height: 92vh;
     overflow-y: auto;
     box-shadow: 0 8px 30px rgba(0,0,0,0.3);
 }
 
 .td2-flow-modal-body {
-    padding: 20px;
+    padding: 20px 24px 24px;
+    background: #fff;
+}
+
+/* 모달 내 헤더 */
+.td2-flow-header {
+    margin-bottom: 20px;
+}
+
+.td2-flow-header-title {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: #3D49BE;
+    margin: 0 0 8px 0;
+}
+
+.td2-flow-header-desc {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 14px;
+    color: #222;
+    margin: 0;
+    line-height: 1.6;
 }
 
 /* New Vision 배너 */
 .td2-flow-vision {
+    background: #3D49BE;
+    border-radius: 4px;
+    padding: 14px 28px;
+    margin-bottom: 24px;
     display: flex;
     align-items: center;
-    gap: 16px;
-    background: #f0f2ff;
-    border: 1px solid #d0d4f0;
-    border-radius: 6px;
-    padding: 12px 20px;
-    margin-bottom: 20px;
 }
 
 .td2-flow-vision-label {
-    background: #353B72;
-    color: #fff;
-    padding: 4px 12px;
-    border-radius: 4px;
-    font-size: 12px;
+    font-family: 'Pretendard', sans-serif;
     font-weight: 700;
+    font-size: 18px;
+    color: #fff;
+    margin-right: 16px;
     white-space: nowrap;
 }
 
 .td2-flow-vision-text {
-    font-size: 14px;
-    font-weight: 600;
-    color: #333;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    color: #FFEC3E;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-/* 섹션 타이틀 */
-.td2-flow-section-title {
-    font-size: 13px;
+/* 콘텐츠 영역 */
+.td2-flow-content {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+/* Row (라벨 + 콘텐츠) */
+.td2-flow-row {
+    display: flex;
+    gap: 14px;
+}
+
+/* 왼쪽 파란색 라벨 박스 */
+.td2-flow-row-label {
+    width: 150px;
+    min-height: 140px;
+    background: #3D49BE;
+    border-radius: 4px;
+    padding: 24px 14px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.td2-flow-label-number {
+    font-family: 'Pretendard', sans-serif;
     font-weight: 700;
-    color: #353B72;
-    margin: 16px 0 8px;
-    padding-bottom: 6px;
-    border-bottom: 2px solid #353B72;
+    font-size: 16px;
+    color: #fff;
+    line-height: 1.6;
+}
+
+.td2-flow-label-sub {
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 500;
+    font-size: 13px;
+    color: #fff;
+    line-height: 1.6;
+}
+
+/* Row 콘텐츠 */
+.td2-flow-row-content {
+    flex: 1;
+    min-width: 0;
+}
+
+/* Row 설명 텍스트 */
+.td2-flow-row-desc {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
+    line-height: 1.6;
+    margin: 0 0 10px 0;
+}
+
+.td2-flow-desc-example {
+    font-weight: 600;
+    color: #999;
 }
 
 /* 전략목표 카드 */
 .td2-flow-goal-cards {
     display: flex;
-    gap: 10px;
+    gap: 14px;
 }
 
 .td2-flow-goal-card {
     flex: 1;
-    border: 1px solid #e0e0e0;
+    border: 1px solid #E6E6E6;
     border-radius: 4px;
     overflow: hidden;
 }
 
 .td2-flow-goal-title {
-    background: #eef0f8;
-    padding: 8px 12px;
-    font-size: 13px;
+    background: #EFF0F2;
+    padding: 10px 12px;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 14px;
     font-weight: 700;
-    color: #353B72;
+    color: #999;
     text-align: center;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid #E6E6E6;
+}
+
+.td2-flow-goal-title.has-content {
+    color: #333;
 }
 
 .td2-flow-goal-desc {
-    padding: 12px;
+    padding: 10px 14px;
+    font-family: 'Pretendard', sans-serif;
     font-size: 13px;
     color: #333;
     line-height: 1.6;
-    min-height: 40px;
+    height: 80px;
     white-space: pre-wrap;
     word-break: break-word;
+    overflow-y: auto;
+    text-align: center;
+    background: #F7F7F7;
 }
 
 /* 테이블 영역 */
 .td2-flow-tables {
     display: flex;
-    gap: 10px;
+    gap: 14px;
+}
+
+.td2-flow-table-wrapper {
+    flex: 1;
+    min-width: 0;
 }
 
 .td2-flow-table {
-    flex: 1;
+    width: 100%;
     border-collapse: collapse;
-    font-size: 12px;
-}
-
-.td2-flow-table thead tr {
-    background: #353B72;
-    color: #fff;
+    table-layout: fixed;
 }
 
 .td2-flow-table th {
-    padding: 8px 10px;
-    font-weight: 600;
-    font-size: 11px;
-    border: 1px solid #2d3260;
+    height: 36px;
+    background: #EFF0F2;
+    padding: 8px 12px;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    color: #111;
     text-align: center;
-    color: #fff;
+    border: none;
 }
 
-.td2-flow-table tbody tr {
-    border-bottom: 1px solid #e8e8e8;
+.td2-flow-table th:first-child {
+    width: 62%;
+    border-right: 1px solid #fff;
+    border-top-left-radius: 4px;
 }
 
-.td2-flow-table tbody tr:hover {
-    background: #f9f9f9;
+.td2-flow-table th:last-child {
+    width: 38%;
+    border-top-right-radius: 4px;
 }
 
 .td2-flow-table td {
-    padding: 8px 10px;
-    border: 1px solid #e8e8e8;
+    height: 36px;
+    max-height: 60px;
+    padding: 6px 12px;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 13px;
     color: #333;
-    line-height: 1.5;
+    background: #fff;
+    border: 1px solid #E6E6E6;
+    border-top: none;
+    line-height: 1.6;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.td2-flow-table td:first-child {
+    width: 62%;
+}
+
+.td2-flow-table td:last-child {
+    width: 38%;
+}
+
+.td2-flow-row-num {
+    color: #999;
+    margin-right: 4px;
+}
+
+/* 클릭 가능 셀 */
+.td2-clickable-cell {
+    cursor: pointer;
+    position: relative;
+}
+
+.td2-clickable-cell:hover {
+    background: #f5f7ff;
+}
+
+/* 팝오버 */
+.td2-popover-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.3);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.td2-popover {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+    padding: 20px 24px;
+    max-width: 500px;
+    min-width: 280px;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.td2-popover-body {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 14px;
+    color: #333;
+    line-height: 1.8;
     white-space: pre-wrap;
     word-break: break-word;
+}
+
+.td2-popover-close {
+    display: block;
+    margin: 16px auto 0;
+    padding: 6px 24px;
+    background: #337ab7;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.td2-popover-close:hover {
+    background: #286090;
 }
 
 .td2-flow-empty {
@@ -1269,6 +1634,24 @@
         width: 100%;
     }
 
+    .td2-id-threat-grid {
+        flex-wrap: wrap;
+    }
+
+    .td2-id-mini-card {
+        flex: 1 1 45%;
+    }
+
+    .td2-flow-row {
+        flex-direction: column;
+    }
+
+    .td2-flow-row-label {
+        width: 100%;
+        min-height: auto;
+        padding: 14px;
+    }
+
     .td2-flow-goal-cards,
     .td2-flow-tables {
         flex-direction: column;
@@ -1276,257 +1659,383 @@
 }
 
 /* ========== 전술적 실행과제 (QuickWin) 열람 모달 ========== */
+/* ========== 전술적/전략적 실행과제 모달 (학생 UI 동일) ========== */
 .td2-qw-modal {
     background: #fff;
     border-radius: 6px;
-    width: 1060px;
-    max-width: 95vw;
-    max-height: 90vh;
+    width: 1200px;
+    max-width: 96vw;
+    max-height: 92vh;
     overflow-y: auto;
     box-shadow: 0 8px 30px rgba(0,0,0,0.3);
 }
 
 .td2-qw-modal-body {
-    padding: 20px;
+    padding: 20px 24px 24px;
+}
+
+/* 모달 내 헤더 */
+.td2-qw-header {
+    margin-bottom: 16px;
+}
+
+.td2-qw-header-title {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--win-color);
+    margin: 0 0 8px 0;
+}
+
+.td2-qw-header-sub {
+    font-weight: 700;
+    font-size: 28px;
+    color: var(--win-color);
+}
+
+.td2-qw-header-desc {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 14px;
+    color: #222;
+    margin: 0 0 4px 0;
+    line-height: 1.6;
 }
 
 /* 전략목표 Alignment */
-.td2-qw-align-row {
+.td2-qw-align-section {
     display: flex;
-    align-items: center;
-    gap: 12px;
-    background: #e8f6f3;
-    border: 1px solid #b2dfdb;
-    border-radius: 4px;
-    padding: 10px 16px;
-    margin-bottom: 12px;
+    align-items: stretch;
+    margin-bottom: 0;
 }
 
 .td2-qw-align-label {
-    background: #00897B;
+    width: 200px;
+    padding: 10px 20px;
+    background: var(--win-color);
     color: #fff;
-    padding: 4px 10px;
-    border-radius: 4px;
-    font-size: 11px;
+    font-family: 'Pretendard', sans-serif;
     font-weight: 700;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-top-left-radius: 4px;
+    border-bottom: 1px solid #fff;
+    box-sizing: border-box;
     white-space: nowrap;
 }
 
 .td2-qw-align-value {
-    font-size: 13px;
-    font-weight: 600;
+    flex: 1;
+    padding: 10px 16px;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 14px;
     color: #333;
-}
-
-/* 과제명 + 주요내용 */
-.td2-qw-task-row {
+    background: #fff;
+    border: 1px solid #E6E6E6;
+    border-left: none;
+    border-top-right-radius: 4px;
     display: flex;
-    gap: 0;
-    margin-bottom: 14px;
-    border: 1px solid #e0e0e0;
-    border-radius: 4px;
+    align-items: center;
+    box-sizing: border-box;
+    white-space: nowrap;
     overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.td2-qw-task-side-label {
-    background: #00897B;
+/* 과제명 + 주요내용 그리드 */
+.td2-qw-task-grid {
+    display: grid;
+    grid-template-columns: 80px 120px 1fr;
+    grid-template-rows: auto auto;
+    margin-bottom: 16px;
+}
+
+.td2-qw-task-side {
+    grid-row: 1 / 3;
+    background: var(--win-color);
     color: #fff;
-    padding: 10px 12px;
-    font-size: 12px;
+    font-family: 'Pretendard', sans-serif;
     font-weight: 700;
+    font-size: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
-    min-width: 70px;
-    line-height: 1.4;
-}
-
-.td2-qw-task-fields {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-.td2-qw-task-field {
-    display: flex;
-    align-items: stretch;
-    border-bottom: 1px solid #e0e0e0;
-}
-
-.td2-qw-task-field:last-child {
-    border-bottom: none;
+    line-height: 1.5;
+    border-bottom-left-radius: 4px;
+    border-right: 1px solid #fff;
 }
 
 .td2-qw-task-label {
-    background: #f5f5f5;
-    padding: 8px 12px;
-    font-size: 12px;
-    font-weight: 600;
-    color: #555;
-    min-width: 70px;
+    background: var(--win-color);
+    color: #fff;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    padding: 10px 8px;
     display: flex;
     align-items: center;
-    border-right: 1px solid #e0e0e0;
+    justify-content: center;
+    border-bottom: 1px solid #fff;
+    box-sizing: border-box;
 }
 
-.td2-qw-task-value {
-    padding: 8px 14px;
-    font-size: 13px;
-    color: #333;
-    flex: 1;
+.td2-qw-task-label-main {
+    border-bottom: none;
+    font-weight: 600;
+}
+
+.td2-qw-task-name {
+    padding: 10px 16px;
+    background: #FFEEF0;
+    color: #E41833;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    border-right: 1px solid #E6E6E6;
+    border-bottom: 1px solid #E6E6E6;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     display: flex;
     align-items: center;
+    box-sizing: border-box;
     white-space: pre-wrap;
     word-break: break-word;
 }
 
-.td2-qw-task-value.highlight {
-    font-weight: 700;
-    color: #d32f2f;
+.td2-qw-task-content {
+    padding: 10px 16px;
     background: #fff;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 14px;
+    color: #333;
+    border-right: 1px solid #E6E6E6;
+    border-bottom: 1px solid #E6E6E6;
+    border-bottom-right-radius: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    min-height: 50px;
+    white-space: pre-wrap;
+    word-break: break-word;
 }
 
 /* 메인 테이블 */
+.td2-qw-table-wrap {
+    margin-bottom: 16px;
+    overflow-x: auto;
+}
+
 .td2-qw-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 12px;
-    margin-bottom: 14px;
+    font-size: 13px;
 }
 
-.td2-qw-table th {
-    padding: 7px 6px;
-    font-weight: 600;
-    font-size: 11px;
+/* 헤더 행 - 테마 색상 */
+.td2-qw-header-row th {
+    padding: 8px 12px;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
     text-align: center;
     color: #fff;
-    border: 1px solid rgba(255,255,255,0.3);
+    background: var(--win-color);
+    border-right: 1px solid #fff;
 }
 
-.td2-qw-th-situation { background: #C73457; width: 160px; }
-.td2-qw-th-input { background: #00897B; }
-.td2-qw-th-activity { background: #1565C0; }
-.td2-qw-th-output { background: #F57C00; }
-.td2-qw-th-sub { font-size: 10px; }
+.td2-qw-header-row th:first-child {
+    border-top-left-radius: 4px;
+}
 
-.td2-qw-th-situation + .td2-qw-th-sub,
-th.td2-qw-th-sub { background: inherit; }
+.td2-qw-header-row th:last-child {
+    border-top-right-radius: 4px;
+    border-right: none;
+}
 
-.td2-qw-table thead tr:nth-child(2) th:nth-child(1),
-.td2-qw-table thead tr:nth-child(2) th:nth-child(2) { background: #00897B; }
-.td2-qw-table thead tr:nth-child(2) th:nth-child(3),
-.td2-qw-table thead tr:nth-child(2) th:nth-child(4),
-.td2-qw-table thead tr:nth-child(2) th:nth-child(5),
-.td2-qw-table thead tr:nth-child(2) th:nth-child(6) { background: #1565C0; }
-.td2-qw-table thead tr:nth-child(2) th:nth-child(7) { background: #F57C00; }
+.td2-qw-th-situation { width: 200px; }
+.td2-qw-sub-crisis { width: 200px; }
 
+/* 서브헤더 행 */
+.td2-qw-subheader-row th {
+    padding: 8px 10px;
+    background: #EFF0F2;
+    border: 1px solid #E6E6E6;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 500;
+    font-size: 13px;
+    text-align: center;
+    color: #111;
+}
+
+/* 데이터 셀 */
 .td2-qw-table td {
-    padding: 7px 8px;
-    border: 1px solid #e0e0e0;
+    padding: 8px 10px;
+    border: 1px solid #E6E6E6;
     color: #333;
-    font-size: 12px;
-    line-height: 1.5;
-    vertical-align: top;
-    white-space: pre-wrap;
-    word-break: break-word;
+    font-size: 13px;
+    line-height: 1.6;
+    vertical-align: middle;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    background: #fff;
 }
 
 .td2-qw-center { text-align: center; }
 
-.td2-qw-situation-cell {
-    background: #fef0f3;
-    vertical-align: top;
-    padding: 0 !important;
-}
-
-.td2-qw-situation-top {
-    padding: 8px 10px;
-    font-size: 12px;
-    color: #333;
-    line-height: 1.6;
-}
-
-.td2-qw-situation-top strong {
-    display: block;
-    color: #C73457;
-    font-size: 11px;
-    margin-bottom: 4px;
-}
-
-.td2-qw-situation-divider {
-    background: #C73457;
-    color: #fff;
+/* 위기의 신호 셀 (2행 span) */
+.td2-qw-crisis-cell {
+    width: 200px;
+    background: #fff;
+    vertical-align: middle;
     text-align: center;
-    font-size: 10px;
+    padding: 8px 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Pain/Touch point 헤더 */
+.td2-qw-table td.td2-qw-pain-header {
+    width: 200px;
+    background: #EFF0F2;
+    font-family: 'Pretendard', sans-serif;
     font-weight: 600;
-    padding: 3px 0;
-}
-
-.td2-qw-situation-bottom {
+    font-size: 13px;
+    color: #111;
+    text-align: center;
     padding: 8px 10px;
-    font-size: 12px;
-    color: #333;
-    line-height: 1.6;
 }
 
+/* Pain 셀 (2행 span) */
+.td2-qw-pain-cell {
+    width: 200px;
+    background: #fff;
+    vertical-align: middle;
+    text-align: center;
+    padding: 8px 12px;
+    border-bottom-left-radius: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 팀워크 셀 (5행 span) */
 .td2-qw-teamwork-cell {
     background: #fff;
     text-align: center;
     vertical-align: middle;
-    font-size: 12px;
-    line-height: 1.5;
+    font-size: 13px;
+    line-height: 1.6;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 산출 셀 (5행 span) */
+.td2-qw-output-cell {
+    background: #fff;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 13px;
+    line-height: 1.6;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /* 성과(Outcomes) */
 .td2-qw-outcomes {
-    border: 1px solid #e0e0e0;
-    border-radius: 4px;
     overflow: hidden;
 }
 
 .td2-qw-outcomes-header {
-    background: #353B72;
+    background: var(--win-color);
     color: #fff;
     padding: 8px 14px;
-    font-size: 13px;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 14px;
     font-weight: 700;
     text-align: center;
 }
 
-.td2-qw-outcomes-grid {
+.td2-qw-outcomes-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.td2-qw-outcomes-titles {
     display: flex;
 }
 
-.td2-qw-outcomes-col {
+.td2-qw-outcomes-title-cell {
     flex: 1;
-    border-right: 1px solid #e0e0e0;
+    padding: 8px 12px;
+    background: #EFF0F2;
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 500;
+    font-size: 13px;
+    color: #111;
+    text-align: center;
+    border: 1px solid #E6E6E6;
+    border-top: none;
+    box-sizing: border-box;
 }
 
-.td2-qw-outcomes-col:last-child {
+.td2-qw-outcomes-title-cell:first-child {
     border-right: none;
 }
 
-.td2-qw-outcomes-col-title {
-    background: #eef0f8;
-    padding: 7px 12px;
-    font-size: 12px;
-    font-weight: 600;
-    color: #353B72;
-    text-align: center;
-    border-bottom: 1px solid #e0e0e0;
+.td2-qw-outcomes-row {
+    display: flex;
 }
 
-.td2-qw-outcomes-item {
-    padding: 6px 14px;
-    font-size: 12px;
+.td2-qw-outcomes-cell {
+    flex: 1;
+    padding: 8px 14px;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 13px;
     color: #333;
-    line-height: 1.5;
-    border-bottom: 1px solid #f0f0f0;
+    background: #fff;
+    border: 1px solid #E6E6E6;
+    border-top: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-sizing: border-box;
+    overflow: hidden;
+    min-height: 38px;
 }
 
-.td2-qw-outcomes-item:last-child {
-    border-bottom: none;
+.td2-qw-outcomes-cell.left {
+    border-right: none;
+}
+
+.td2-qw-outcomes-row.last .td2-qw-outcomes-cell.left {
+    border-bottom-left-radius: 4px;
+}
+
+.td2-qw-outcomes-row.last .td2-qw-outcomes-cell.right {
+    border-bottom-right-radius: 4px;
+}
+
+.td2-qw-outcomes-num {
+    color: #999;
+    flex-shrink: 0;
+}
+
+.td2-qw-outcomes-cell span:not(.td2-qw-outcomes-num) {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
 }
 
 /* ── 실행과제 검증 열람 모달 (F-1, F-2) ── */
@@ -1710,4 +2219,106 @@ th.td2-qw-th-sub { background: inherit; }
     font-size: 14px;
     color: #dc3545;
     font-weight: 600;
+}
+
+/* 모달 내 팀 선택 바 */
+.td2-modal-team-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 10px 20px;
+    background: #f5f6f8;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.td2-modal-team-btn {
+    padding: 6px 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #fff;
+    cursor: pointer;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 12px;
+    color: #333;
+    transition: all 0.15s;
+}
+
+.td2-modal-team-btn:hover {
+    border-color: #337ab7;
+    color: #337ab7;
+}
+
+.td2-modal-team-btn.active {
+    background: #337ab7;
+    color: #fff;
+    border-color: #337ab7;
+}
+
+/* 팀 선택 모달 (미사용) */
+.td2-team-select-modal {
+    background: #fff;
+    border-radius: 8px;
+    width: 400px;
+    max-width: 90vw;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+.td2-team-select-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.td2-team-select-modal-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #333;
+}
+
+.td2-team-select-modal-body {
+    padding: 20px;
+}
+
+.td2-team-select-desc {
+    font-size: 13px;
+    color: #666;
+    margin: 0 0 15px 0;
+}
+
+.td2-team-select-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.td2-team-select-btn {
+    padding: 8px 16px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #fff;
+    cursor: pointer;
+    font-size: 13px;
+    color: #333;
+    transition: all 0.15s;
+}
+
+.td2-team-select-btn:hover {
+    border-color: #337ab7;
+    color: #337ab7;
+}
+
+.td2-team-select-btn.active {
+    background: #337ab7;
+    color: #fff;
+    border-color: #337ab7;
+}
+
+.td2-team-select-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 12px 20px;
+    border-top: 1px solid #eee;
 }

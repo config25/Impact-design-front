@@ -37,7 +37,7 @@ id_front/
 │   │   │   ├── LegacySection.js         #  레거시 섹션
 │   │   │   ├── NewIdentitySection.js    #  신규 아이덴티티 섹션
 │   │   │   └── ThreatSection.js         #  위협 섹션
-│   │   ├── report/            #   PDF 리포트 페이지별 컴포넌트 (13개)
+│   │   ├── report/            #   PDF 리포트 페이지별 컴포넌트 (14개)
 │   │   │   ├── ReportCover.js           #  표지
 │   │   │   ├── ReportAbout.js           #  소개 페이지
 │   │   │   ├── ReportContents.js        #  목차
@@ -47,6 +47,7 @@ id_front/
 │   │   │   ├── ReportGoalsTable.js      #  전략목표 테이블
 │   │   │   ├── ReportTwoColTable.js     #  2컬럼 테이블 (전술/전략)
 │   │   │   ├── ReportWinTable.js        #  Win Canvas 테이블
+│   │   │   ├── BulkCanvasPages.js       #  전체 PDF용 캔버스 페이지 (가로 1415x820)
 │   │   │   ├── ReportBackCover.js       #  뒤표지
 │   │   │   ├── ReportFooter.js          #  페이지 푸터
 │   │   │   ├── ReportSectionHeader.js   #  섹션 헤더

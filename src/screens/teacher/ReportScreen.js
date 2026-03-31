@@ -15,10 +15,11 @@ import ReportGoalsTable from "../../components/report/ReportGoalsTable";
 import ReportTwoColTable from "../../components/report/ReportTwoColTable";
 import ReportWinTable from "../../components/report/ReportWinTable";
 import ReportBackCover from "../../components/report/ReportBackCover";
+import BulkCanvasPages from "../../components/report/BulkCanvasPages";
 
 const VOICE_DESC = "Strategic Identity는 조직을 둘러싼 위협적인 '외부 변화'와 이를 극복하기 위한 '내부 한계점'에 대한 구성원들의 생생한 목소리를 담고 있습니다. 우리 조직의 존재 이유와 목표를 재정의하고, 구성원들이 도출한 새로운 미션, 비전, 핵심가치를 통해 위기를 돌파할 실질적인 미래 청사진을 제안합니다.";
 
-const ReportScreen = forwardRef(({ onNavigate, gameStep, teamId, onClose, onReady, hideControls, initialData }, ref) => {
+const ReportScreen = forwardRef(({ onNavigate, gameStep, teamId, onClose, onReady, hideControls, bulkMode, bulkCanvasData, initialData }, ref) => {
     const containerRef = useRef(null);
     const [isExporting, setIsExporting] = useState(false);
     const [reportData, setReportData] = useState(null);
@@ -49,7 +50,7 @@ const ReportScreen = forwardRef(({ onNavigate, gameStep, teamId, onClose, onRead
     }, [teamId, initialData]);
 
     const generatePDFBlob = async () => {
-        const pdf = await generatePDFFromContainer(containerRef);
+        const pdf = await generatePDFFromContainer(containerRef, { landscape: !!bulkMode });
         return pdf ? pdf.output("blob") : null;
     };
 
@@ -62,7 +63,13 @@ const ReportScreen = forwardRef(({ onNavigate, gameStep, teamId, onClose, onRead
         }
     }, [loading, reportData, onReady]);
 
-    if (loading) return <div className="report-loading">리포트를 불러오는 중...</div>;
+    if (loading) return (
+        <div className="report-loading">
+            <div className="report-loading-spinner"></div>
+            <p className="report-loading-text">리포트를 불러오는 중...</p>
+            <div className="report-loading-bar"><div className="report-loading-bar-fill"></div></div>
+        </div>
+    );
     if (!reportData) return <div className="report-loading">리포트 데이터가 없습니다.</div>;
 
     const handleDownloadPDF = async () => {
@@ -78,8 +85,8 @@ const ReportScreen = forwardRef(({ onNavigate, gameStep, teamId, onClose, onRead
         }
     };
 
-    const scores = calculateScores(reportData.impactCheckScores);
-    const profileType = getProfileType(scores.performanceCreation, scores.futureCompetitiveness);
+    const scores = bulkMode ? {} : calculateScores(reportData.impactCheckScores);
+    const profileType = bulkMode ? "" : getProfileType(scores.performanceCreation, scores.futureCompetitiveness);
 
     const has11P = (reportData?.flowCanvasGoals?.goals?.length || 0) >= 21;
     const has13P = (reportData?.tacticals?.length || 0) >= 45;
@@ -98,11 +105,12 @@ const ReportScreen = forwardRef(({ onNavigate, gameStep, teamId, onClose, onRead
             )}
 
             {/* Page 1 - Cover */}
-            <ReportCover reportData={reportData} />
+            {!bulkMode && <ReportCover reportData={reportData} />}
 
             {/* Page 2 - About */}
-            <ReportAbout />
+            {!bulkMode && <ReportAbout />}
 
+            {!bulkMode && <>
             {/* Page 3 - Contents I */}
             <ReportContents activeSection={1} />
 
@@ -266,9 +274,15 @@ const ReportScreen = forwardRef(({ onNavigate, gameStep, teamId, onClose, onRead
                 subtitleLeft="[별첨 2] Build Win Canvas(전략적 실행과제) 모음집"
                 list={reportData?.buildWinCanvasList || []}
             />
+            </>}
+
+            {/* Bulk Canvas Pages */}
+            {bulkMode && bulkCanvasData && (
+                <BulkCanvasPages canvasData={bulkCanvasData} />
+            )}
 
             {/* Page 19 - Back Cover */}
-            <ReportBackCover />
+            {!bulkMode && <ReportBackCover />}
         </div>
     );
 });

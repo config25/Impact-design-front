@@ -1,12 +1,54 @@
 .report-loading {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     font-family: 'Pretendard', sans-serif;
-    font-size: 24px;
     color: #2B4AC1;
     background-color: #e0e0e0;
+    gap: 16px;
+}
+
+.report-loading-spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid #ddd;
+    border-top: 4px solid #2B4AC1;
+    border-radius: 50%;
+    animation: report-spin 0.8s linear infinite;
+}
+
+@keyframes report-spin {
+    to { transform: rotate(360deg); }
+}
+
+.report-loading-text {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.report-loading-bar {
+    width: 240px;
+    height: 6px;
+    background: #ccc;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.report-loading-bar-fill {
+    width: 30%;
+    height: 100%;
+    background: #2B4AC1;
+    border-radius: 3px;
+    animation: report-bar 1.5s ease-in-out infinite;
+}
+
+@keyframes report-bar {
+    0% { width: 10%; margin-left: 0; }
+    50% { width: 40%; margin-left: 30%; }
+    100% { width: 10%; margin-left: 90%; }
 }
 
 .report-container {
@@ -731,8 +773,9 @@
 }
 
 .p4-bank-logo {
-    width: 99px;
-    height: 26px;
+    max-width: 120px;
+    max-height: 40px;
+    object-fit: contain;
 }
 
 .p4-confidential {
@@ -1456,6 +1499,13 @@
     position: relative;
 }
 
+.p6-voice-count {
+    font-weight: 400;
+    font-size: 16px;
+    color: #666;
+    margin-left: 6px;
+}
+
 .p6-voice-bubbles {
     margin-top: 30px;
     display: flex;
@@ -1739,6 +1789,16 @@
     height: 80px;
     background: #F6F7FB;
     flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 14px;
+    color: #333;
+    padding: 8px 12px;
+    box-sizing: border-box;
+    line-height: 1.5;
 }
 
 /* ==============================
@@ -2030,6 +2090,10 @@
     border-bottom: 1px solid #ACB1BD;
     color: #333333;
     background: #FFFFFF;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 0;
 }
 
 .p12-td-center {
@@ -2406,4 +2470,35 @@
     color: #FFFFFF;
     opacity: 0.4;
     z-index: 1;
+}
+
+/* ========== Bulk Canvas Pages ========== */
+.bulk-canvas-page {
+    background: #fff;
+    width: 1000px;
+    min-height: 1415px;
+    overflow: hidden;
+    position: relative;
+}
+
+.bulk-canvas-page .identity-grid {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.bulk-canvas-page .stream-content {
+    padding: 0 51px 0 35px;
+}
+
+.bulk-canvas-page .win-canvas {
+    min-height: auto;
+}
+
+.bulk-canvas-page .win-canvas .main-content-box {
+    min-height: auto;
+}
+
+.bulk-canvas-page .win-canvas .sub-header {
+    display: none;
 }

@@ -475,8 +475,8 @@ export const stepConfig = [
     {
         key: "F", label: "[F] 실행과제 검증", colorClass: "step-f",
         items: [
-            { value: "F-1", label: "F-1 quickwin평가" },
-            { value: "F-2", label: "F-2 buildwin평가" },
+            { value: "F-1", label: "F-1 quick win평가" },
+            { value: "F-2", label: "F-2 build win평가" },
             { value: "F-3", label: "F-3 최종결과 확인" },
         ]
     },

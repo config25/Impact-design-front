@@ -18,6 +18,8 @@ const ReportVoicePage = ({
     const aiSummary = data?.aiSummary;
     const top4 = data?.top4;
     const keywords = data?.keywords;
+    const totalCount = data?.totalCount;
+    const truncate = (text, max = 55) => text && text.length > max ? text.substring(0, max) + "..." : text;
 
     return (
         <div className={`report-page report-page-${pageNumber}`}>
@@ -38,7 +40,7 @@ const ReportVoicePage = ({
                 <div className="p6-threat-items">
                     {aiSummary?.map((summary, idx) => (
                         <div className="p6-threat-item" key={idx}>
-                            <p className="p6-threat-text">{idx + 1}. {summary}</p>
+                            <p className="p6-threat-text">{idx + 1}. {truncate(summary)}</p>
                         </div>
                     )) || (
                         <>
@@ -51,11 +53,11 @@ const ReportVoicePage = ({
             </div>
 
             <div className="p6-voice-section">
-                <h3 className="p6-voice-title">Voice of Employee</h3>
+                <h3 className="p6-voice-title">Voice of Employee {totalCount != null && <span className="p6-voice-count">({totalCount}개)</span>}</h3>
                 <div className="p6-voice-bubbles">
                     {top4?.slice(0, 4).map((item, idx) => (
                         <div className="p6-voice-bubble" key={idx} style={{ width: 'auto', maxWidth: dataMaxWidth }}>
-                            <p className="p6-voice-text">"{item.content}"</p>
+                            <p className="p6-voice-text">"{truncate(item.content)}"</p>
                         </div>
                     )) || (
                         <>

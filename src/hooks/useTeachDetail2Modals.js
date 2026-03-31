@@ -4,6 +4,10 @@ import { getTeamInfo, updateTeamInfo, deleteTeamMembers, setTeamWriter, addTeamM
 import { getImpactCheckByTeam, getIdentityCanvasByTeam, getFlowCanvasByTeam, getQuickWinByTeam, getBuildWinByTeam, getFundingByTeam, getFundingResultByTeam } from "../services/teachSubmissionService";
 
 const useTeachDetail2Modals = ({ gameId, gameInfo, refreshTeams, onGameInfoUpdate }) => {
+    /* 현재 열린 미션 코드 + 선택된 팀 ID (모달 내 팀 전환용) */
+    const [activeMissionCode, setActiveMissionCode] = useState(null);
+    const [activeTeamId, setActiveTeamId] = useState(null);
+
     /* 미션 열람 모달 */
     const [showMissionModal, setShowMissionModal] = useState(false);
     const [missionModalTitle, setMissionModalTitle] = useState("");
@@ -60,6 +64,7 @@ const useTeachDetail2Modals = ({ gameId, gameInfo, refreshTeams, onGameInfoUpdat
     /* 강의실 수정 모달 */
     const [showModifyModal, setShowModifyModal] = useState(false);
     const [modifyName, setModifyName] = useState("");
+    const [modifyTarget, setModifyTarget] = useState("");
     const [modifyMonth, setModifyMonth] = useState(new Date().getMonth() + 1);
     const [modifyDay, setModifyDay] = useState(new Date().getDate());
     const [modifyHour, setModifyHour] = useState(1);
@@ -67,6 +72,8 @@ const useTeachDetail2Modals = ({ gameId, gameInfo, refreshTeams, onGameInfoUpdat
 
     /* 미션 아이템 클릭 */
     const handleMissionClick = async (missionCode, teamId, teamName) => {
+        setActiveMissionCode(missionCode);
+        setActiveTeamId(teamId);
         if (missionCode === "A-1") {
             const result = await getImpactCheckByTeam(teamId);
             if (result.success) {
@@ -272,7 +279,10 @@ const useTeachDetail2Modals = ({ gameId, gameInfo, refreshTeams, onGameInfoUpdat
 
     /* 강의실 수정 모달 열기 */
     const handleOpenModify = () => {
-        if (gameInfo) setModifyName(gameInfo.name);
+        if (gameInfo) {
+            setModifyName(gameInfo.name);
+            setModifyTarget(gameInfo.target || "");
+        }
         setShowModifyModal(true);
     };
 
@@ -293,21 +303,39 @@ const useTeachDetail2Modals = ({ gameId, gameInfo, refreshTeams, onGameInfoUpdat
         const result = await updateClass(gameId, {
             name: modifyName,
             enddate: enddate,
+            target: modifyTarget,
         });
 
         if (result.success) {
             alert("강의실이 수정되었습니다.");
-            onGameInfoUpdate(modifyName);
+            onGameInfoUpdate(modifyName, modifyTarget);
             setShowModifyModal(false);
         } else {
             alert(result.message);
         }
     };
 
+    /* 미션 아이템 클릭 → 바로 팀1 데이터로 모달 열기 */
+    const handleMissionItemClick = (missionCode, teams) => {
+        if (!teams || teams.length === 0) {
+            alert("등록된 팀이 없습니다.");
+            return;
+        }
+        const firstTeam = teams[0];
+        handleMissionClick(missionCode, firstTeam.teamId, firstTeam.teamName);
+    };
+
+    /* 모달 안에서 팀 변경 */
+    const handleModalTeamChange = (teamId, teamName) => {
+        if (activeMissionCode && teamId) {
+            handleMissionClick(activeMissionCode, teamId, teamName);
+        }
+    };
+
     return {
         /* 미션 섹션 (TeachDetail2 JSX에서 직접 사용) */
-        missionModalTeamId, setMissionModalTeamId,
-        handleMissionClick,
+        handleMissionItemClick,
+        activeTeamId, handleModalTeamChange,
 
         /* 팀 모달 열기 (TeachDetail2 JSX에서 직접 사용) */
         handleOpenTeamModal,
@@ -343,7 +371,7 @@ const useTeachDetail2Modals = ({ gameId, gameInfo, refreshTeams, onGameInfoUpdat
         handleAddMember, handleSetWriter, handleTeamModalSave,
         showReportModal, reportTeamId,
         showModifyModal, setShowModifyModal,
-        modifyName, setModifyName,
+        modifyName, setModifyName, modifyTarget, setModifyTarget,
         modifyMonth, setModifyMonth, modifyDay, setModifyDay,
         modifyHour, setModifyHour, modifyMinute, setModifyMinute,
         handleModifySave,

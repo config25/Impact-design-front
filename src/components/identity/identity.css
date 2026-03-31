@@ -302,7 +302,7 @@
 }
 
 .threat-header-subtitle {
-    width: 349px;
+    width: auto;
     height: 24px;
     font-family: 'Pretendard', sans-serif;
     font-weight: 400;
