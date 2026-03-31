@@ -52,7 +52,6 @@ const ReportTwoColTable = ({
 
             <div className={`p10-title-row ${isSecondPage ? 'p11-title-row' : 'p12-title-row'}`}>
                 <span className="p10-title-kr">{titleKr}</span>
-                <span className="p10-title-note">(중복 포함)</span>
             </div>
 
             <table className="p12-table">
