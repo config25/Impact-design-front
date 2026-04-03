@@ -5,11 +5,12 @@ import "./ImpactCheckScreen.css";
 import pencilIcon from "../resource/start/pencil.png";
 import { getImpactCheck, saveImpactCheck, submitImpactCheck } from "../services/impactCheckService";
 
-const ImpactCheckScreen = ({ onNavigate, gameStep }) => {
+const ImpactCheckScreen = () => {
     const { dashboard } = useContext(DashboardContext);
     const [department, setDepartment] = useState("");
     const [answers, setAnswers] = useState({});
     const [submitted, setSubmitted] = useState(false);
+    const [dataLoaded, setDataLoaded] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -27,6 +28,7 @@ const ImpactCheckScreen = ({ onNavigate, gameStep }) => {
                 setAnswers(loaded);
                 setSubmitted(data.submitted || false);
                 if (data.gameName && !dashboard?.className) setDepartment(data.gameName);
+                setDataLoaded(true);
             }
         };
         fetchData();
@@ -72,6 +74,7 @@ const ImpactCheckScreen = ({ onNavigate, gameStep }) => {
     };
 
     const handleSave = async () => {
+        if (!dataLoaded) return alert("데이터를 불러오는 중입니다. 잠시 후 다시 시도해주세요.");
         const result = await saveImpactCheck(answers);
         if (result.success) {
             alert("저장되었습니다.");
@@ -81,6 +84,7 @@ const ImpactCheckScreen = ({ onNavigate, gameStep }) => {
     };
 
     const handleSubmit = async () => {
+        if (!dataLoaded) return alert("데이터를 불러오는 중입니다. 잠시 후 다시 시도해주세요.");
         if (submitted) return;
         if (!window.confirm("진단완료 후에는 수정이 불가능합니다. 제출하시겠습니까?")) return;
         const result = await submitImpactCheck(answers);
@@ -95,7 +99,7 @@ const ImpactCheckScreen = ({ onNavigate, gameStep }) => {
     return (
         <div className="impact-check-container">
             {/* GNB */}
-            <GNB activeScreen="impactcheck" onNavigate={onNavigate} gameStep={gameStep} />
+            <GNB activeScreen="impactcheck" />
 
             {/* 헤더 */}
             <header className="impact-header">

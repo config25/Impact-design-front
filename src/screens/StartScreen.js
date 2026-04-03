@@ -1,4 +1,5 @@
 import { useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { DashboardContext } from "../contexts/DashboardContext";
 import "./StartScreen.css";
 import backgroundImage from "../resource/start/background.jpg";
@@ -10,11 +11,17 @@ import isolationIcon5 from "../resource/start/_격리_모드5.png";
 import isolationIcon6 from "../resource/start/_격리_모드6.png";
 
 const StartScreen = ({ onStart }) => {
+    const navigate = useNavigate();
     const { dashboard, fetchDashboard } = useContext(DashboardContext);
 
     useEffect(() => {
         if (!dashboard) fetchDashboard();
     }, [dashboard, fetchDashboard]);
+
+    const handleStart = async () => {
+        const path = await onStart();
+        navigate(path);
+    };
 
     const canvasItems = [
         {
@@ -67,7 +74,7 @@ const StartScreen = ({ onStart }) => {
                     </p>
                     <h1 className="start-title">Impact Design Canvas</h1>
 
-                    <button className="start-button" onClick={onStart}>
+                    <button className="start-button" onClick={handleStart}>
                         시작하기
                     </button>
 

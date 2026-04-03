@@ -8,7 +8,6 @@ import pencil from "../resource/start/pencil.png";
 import "./WinCanvasScreen.css";
 
 const WinCanvasScreen = ({
-    onNavigate, gameStep,
     // Config props
     containerClass, headerClass, contentClass,
     activeScreen, stepNumber, stepBadgeImg, stepBadgeVector,
@@ -37,6 +36,7 @@ const WinCanvasScreen = ({
 
     const [editing, setEditing] = useState(null);
     const [submitted, setSubmitted] = useState(false);
+    const [dataLoaded, setDataLoaded] = useState(false);
     const [showTips, setShowTips] = useState(false);
     const [logoUrl, setLogoUrl] = useState(null);
 
@@ -83,6 +83,7 @@ const WinCanvasScreen = ({
                 });
 
                 setSubmitted(d.submitted || false);
+                setDataLoaded(true);
             }
         };
         fetchData();
@@ -95,6 +96,7 @@ const WinCanvasScreen = ({
     });
 
     const handleSave = async () => {
+        if (!dataLoaded) return alert("데이터를 불러오는 중입니다. 잠시 후 다시 시도해주세요.");
         const result = await serviceFns.save(buildPayload());
         if (result.success) {
             alert("저장되었습니다.");
@@ -104,6 +106,7 @@ const WinCanvasScreen = ({
     };
 
     const handleSubmit = async () => {
+        if (!dataLoaded) return alert("데이터를 불러오는 중입니다. 잠시 후 다시 시도해주세요.");
         if (submitted) return;
         if (!window.confirm("제출완료 후에는 수정이 불가능합니다. 제출하시겠습니까?")) return;
         const result = await serviceFns.submit(buildPayload());
@@ -160,7 +163,7 @@ const WinCanvasScreen = ({
 
     return (
         <div className={`win-canvas ${containerClass}`}>
-            <GNB activeScreen={activeScreen} onNavigate={onNavigate} gameStep={gameStep} />
+            <GNB activeScreen={activeScreen} />
 
             <div className="sub-header">
                 <div className="sub-header-title">{stepNumber}. {title}</div>

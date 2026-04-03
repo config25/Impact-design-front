@@ -1,20 +1,10 @@
 import { useState, useEffect } from "react";
+import { useParams, useSearchParams, useNavigate } from "react-router-dom";
 import { getTeachDetail2, startClass, endClass, restoreClass } from "../../services/teachClassService";
 import { getTeamInfo, updateTeamInfo, deleteTeamMembers, addTeam, addEvaluationTeam, setTeamWriter, addTeamMember } from "../../services/teachTeamService";
 import { getLogoUrl } from "../../utils/logoUtil";
+import formatDate from "../../utils/formatDate";
 import "./TeachDetail.css";
-
-/* 날짜 포맷 */
-const formatDate = (isoStr) => {
-    if (!isoStr) return "-";
-    const d = new Date(isoStr);
-    const yyyy = d.getFullYear();
-    const mm = String(d.getMonth() + 1).padStart(2, "0");
-    const dd = String(d.getDate()).padStart(2, "0");
-    const hh = String(d.getHours()).padStart(2, "0");
-    const min = String(d.getMinutes()).padStart(2, "0");
-    return `${yyyy}-${mm}-${dd} ${hh}시 ${min}분`;
-};
 
 /* 상태값 → 표시 텍스트 */
 const statusText = (status) => {
@@ -26,9 +16,11 @@ const statusText = (status) => {
     }
 };
 
-const TeachDetail = ({ onNavigate, params }) => {
-    const gameStatus = params?.status || "setting"; // "setting" | "closed"
-    const [gameId] = useState(params?.gameId);
+const TeachDetail = () => {
+    const { gameId } = useParams();
+    const [searchParams] = useSearchParams();
+    const navigate = useNavigate();
+    const gameStatus = searchParams.get("status") || "setting";
     const [gameInfo, setGameInfo] = useState(null);
     const [teams, setTeams] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -105,7 +97,7 @@ const TeachDetail = ({ onNavigate, params }) => {
         const result = await endClass(gameId);
         if (result.success) {
             alert("강의실이 종료되었습니다.");
-            onNavigate("teach_list");
+            navigate("/teacher/list");
         } else {
             alert(result.message);
         }
@@ -124,7 +116,7 @@ const TeachDetail = ({ onNavigate, params }) => {
         const result = await restoreClass(gameId, enddate);
         if (result.success) {
             alert("강의실이 복원되었습니다.");
-            onNavigate("teach_detail2", { gameId });
+            navigate(`/teacher/detail2/${gameId}`);
         } else {
             alert(result.message);
         }
@@ -249,7 +241,7 @@ const TeachDetail = ({ onNavigate, params }) => {
         const result = await startClass(gameId, enddate);
         if (result.success) {
             alert("교육이 시작되었습니다.");
-            onNavigate("teach_detail2", { gameId });
+            navigate(`/teacher/detail2/${gameId}`);
         } else {
             alert(result.message);
         }
@@ -375,7 +367,7 @@ const TeachDetail = ({ onNavigate, params }) => {
                         </div>
                         <div className="tdt-panel-footer">
                             <button className="tdt-btn-default" onClick={handleTeamAdd}>팀 추가</button>
-                            <button className="tdt-btn-default" onClick={() => onNavigate("student_list", { gameId })}>교육생 목록</button>
+                            <button className="tdt-btn-default" onClick={() => navigate(`/teacher/students/${gameId}`)}>교육생 목록</button>
                             <button className="tdt-btn-default" onClick={handleEvalTeamAdd}>평가팀 추가</button>
                         </div>
                     </div>

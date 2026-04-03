@@ -9,14 +9,16 @@ import { getImageUrl } from "../utils/logoUtil";
 import { IdentityCanvasProvider, IdentityCanvasContext } from "../contexts/IdentityCanvasContext";
 import { DashboardContext } from "../contexts/DashboardContext";
 
-const IdentityCanvasInner = ({ onNavigate, gameStep }) => {
+const IdentityCanvasInner = () => {
     const { values, loadFromResponse } = useContext(IdentityCanvasContext);
     const { dashboard } = useContext(DashboardContext);
     const [submitted, setSubmitted] = useState(false);
+    const [dataLoaded, setDataLoaded] = useState(false);
     const [showTips, setShowTips] = useState(false);
     const [logoUrl, setLogoUrl] = useState(null);
 
     const handleSave = async () => {
+        if (!dataLoaded) return alert("데이터를 불러오는 중입니다. 잠시 후 다시 시도해주세요.");
         const result = await saveIdentityCanvas(values);
         if (result.success) {
             alert("저장되었습니다.");
@@ -26,6 +28,7 @@ const IdentityCanvasInner = ({ onNavigate, gameStep }) => {
     };
 
     const handleSubmit = async () => {
+        if (!dataLoaded) return alert("데이터를 불러오는 중입니다. 잠시 후 다시 시도해주세요.");
         if (submitted) return;
         if (!window.confirm("제출완료 후에는 수정이 불가능합니다. 제출하시겠습니까?")) return;
         const result = await submitIdentityCanvas(values);
@@ -43,6 +46,7 @@ const IdentityCanvasInner = ({ onNavigate, gameStep }) => {
             if (result.success && result.data) {
                 loadFromResponse(result.data);
                 setSubmitted(result.data.submitted || false);
+                setDataLoaded(true);
                 if (!dashboard?.classImage && result.data.imageUrl) setLogoUrl(getImageUrl(result.data.imageUrl));
             }
         };
@@ -51,7 +55,7 @@ const IdentityCanvasInner = ({ onNavigate, gameStep }) => {
 
     return (
         <div className="identity-screen">
-            <GNB activeScreen="identity" onNavigate={onNavigate} gameStep={gameStep} />
+            <GNB activeScreen="identity" />
 
             <div className="identity-toolbar">
                 <h2 className="identity-page-title">1. Strategic Identity Canvas</h2>
@@ -82,10 +86,10 @@ const IdentityCanvasInner = ({ onNavigate, gameStep }) => {
     );
 };
 
-const IdentityCanvasScreen = ({ onNavigate, gameStep }) => {
+const IdentityCanvasScreen = () => {
     return (
         <IdentityCanvasProvider>
-            <IdentityCanvasInner onNavigate={onNavigate} gameStep={gameStep} />
+            <IdentityCanvasInner />
         </IdentityCanvasProvider>
     );
 };

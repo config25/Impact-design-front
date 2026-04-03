@@ -1,37 +1,18 @@
-import { useState, useEffect } from "react";
+import { useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { getTeachList } from "../../services/teachClassService";
+import useFetchData from "../../hooks/useFetchData";
+import formatDate from "../../utils/formatDate";
 import "./TeachList.css";
 
-/* 날짜 포맷: "2025-02-01T00:00:00" → "2025-02-01 00시 00분" */
-const formatDate = (isoStr) => {
-    if (!isoStr) return "-";
-    const d = new Date(isoStr);
-    const yyyy = d.getFullYear();
-    const mm = String(d.getMonth() + 1).padStart(2, "0");
-    const dd = String(d.getDate()).padStart(2, "0");
-    const hh = String(d.getHours()).padStart(2, "0");
-    const min = String(d.getMinutes()).padStart(2, "0");
-    return `${yyyy}-${mm}-${dd} ${hh}시 ${min}분`;
-};
+const TeachList = () => {
+    const navigate = useNavigate();
+    const fetchFn = useCallback(() => getTeachList(), []);
+    const { data, loading } = useFetchData(fetchFn);
 
-const TeachList = ({ onNavigate }) => {
-    const [inProgress, setInProgress] = useState([]);
-    const [setting, setSetting] = useState([]);
-    const [closed, setClosed] = useState([]);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const result = await getTeachList();
-            if (result.success) {
-                setInProgress(result.data.inProgress || []);
-                setSetting(result.data.setting || []);
-                setClosed(result.data.completed || []);
-            }
-            setLoading(false);
-        };
-        fetchData();
-    }, []);
+    const inProgress = data?.inProgress || [];
+    const setting = data?.setting || [];
+    const closed = data?.completed || [];
 
     return (
         <div className="tls-container">
@@ -69,7 +50,7 @@ const TeachList = ({ onNavigate }) => {
                                                     <td>
                                                         <button
                                                             className="tls-btn-primary"
-                                                            onClick={() => onNavigate("teach_detail2", { gameId: c.gameId })}
+                                                            onClick={() => navigate(`/teacher/detail2/${c.gameId}`)}
                                                         >
                                                             {c.name}
                                                         </button>
@@ -114,7 +95,7 @@ const TeachList = ({ onNavigate }) => {
                                                     <td>
                                                         <button
                                                             className="tls-btn-danger"
-                                                            onClick={() => onNavigate("teach_detail", { gameId: c.gameId, status: "setting" })}
+                                                            onClick={() => navigate(`/teacher/detail/${c.gameId}?status=setting`)}
                                                         >
                                                             {c.name}
                                                         </button>
@@ -156,7 +137,7 @@ const TeachList = ({ onNavigate }) => {
                                                     <td>
                                                         <button
                                                             className="tls-btn-default"
-                                                            onClick={() => onNavigate("teach_detail", { gameId: c.gameId, status: "closed" })}
+                                                            onClick={() => navigate(`/teacher/detail/${c.gameId}?status=closed`)}
                                                         >
                                                             {c.name}
                                                         </button>

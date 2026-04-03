@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./MemberRegister.css";
 import backgroundImage from "../resource/start/background.jpg";
 import { checkLoginId, checkCode, signup } from "../services/authService";
 
-const MemberRegister = ({ onRegister }) => {
+const MemberRegister = () => {
+    const navigate = useNavigate();
     const [id, setId] = useState("");
     const [password, setPassword] = useState("");
     const [code, setCode] = useState("");
@@ -53,7 +55,7 @@ const MemberRegister = ({ onRegister }) => {
         const result = await signup(id, password, code, Number(team));
         if (result.success) {
             alert("회원가입이 완료되었습니다.");
-            onRegister();
+            navigate("/");
         } else {
             alert(result.message);
         }

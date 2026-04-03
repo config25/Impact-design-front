@@ -1,10 +1,16 @@
 import { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./TeacherSidebar.css";
 
-const TeacherSidebar = ({ currentScreen, onNavigate, collapsed, onToggleCollapse }) => {
+const TeacherSidebar = ({ collapsed, onToggleCollapse }) => {
     const [openMenus, setOpenMenus] = useState({});
+    const navigate = useNavigate();
+    const location = useLocation();
+    const pathname = location.pathname;
 
-    const isClassroomActive = ["teach_save", "teach_list", "teach_detail", "teach_modify"].includes(currentScreen);
+    const isClassroomActive = pathname.startsWith("/teacher/save") ||
+        pathname.startsWith("/teacher/list") ||
+        pathname.startsWith("/teacher/detail");
 
     const isGroupOpen = (groupKey) => {
         if (openMenus[groupKey] !== undefined) return openMenus[groupKey];
@@ -16,10 +22,6 @@ const TeacherSidebar = ({ currentScreen, onNavigate, collapsed, onToggleCollapse
         setOpenMenus((prev) => ({ ...prev, [groupKey]: !isGroupOpen(groupKey) }));
     };
 
-    const handleNav = (screen, params) => {
-        if (onNavigate) onNavigate(screen, params);
-    };
-
     return (
         <aside id="sidebar_left" className={collapsed ? "ts-collapsed" : ""}>
             <div className="ts-sidebar-menu">
@@ -28,8 +30,8 @@ const TeacherSidebar = ({ currentScreen, onNavigate, collapsed, onToggleCollapse
                     <li className="ts-sidebar-label">HOME</li>
                     <li>
                         <button
-                            className={`ts-nav-link ${currentScreen === "teach" ? "ts-nav-link--active" : ""}`}
-                            onClick={() => handleNav("teach")}
+                            className={`ts-nav-link ${pathname === "/teacher" ? "ts-nav-link--active" : ""}`}
+                            onClick={() => navigate("/teacher")}
                             title="Dashboard"
                         >
                             <span className="fa fa-home ts-nav-icon"></span>
@@ -56,8 +58,8 @@ const TeacherSidebar = ({ currentScreen, onNavigate, collapsed, onToggleCollapse
                         <ul className={`ts-sub-nav ${isGroupOpen("classroom") ? "ts-sub-nav--open" : ""}`}>
                             <li>
                                 <button
-                                    className={`ts-sub-link ${currentScreen === "teach_save" ? "ts-sub-link--active" : ""}`}
-                                    onClick={() => handleNav("teach_save")}
+                                    className={`ts-sub-link ${pathname === "/teacher/save" ? "ts-sub-link--active" : ""}`}
+                                    onClick={() => navigate("/teacher/save")}
                                 >
                                     <span className="fa fa-file-pdf-o ts-sub-icon"></span>
                                     강의실 생성
@@ -65,8 +67,8 @@ const TeacherSidebar = ({ currentScreen, onNavigate, collapsed, onToggleCollapse
                             </li>
                             <li>
                                 <button
-                                    className={`ts-sub-link ${["teach_list", "teach_detail"].includes(currentScreen) ? "ts-sub-link--active" : ""}`}
-                                    onClick={() => handleNav("teach_list")}
+                                    className={`ts-sub-link ${pathname.startsWith("/teacher/list") || pathname.startsWith("/teacher/detail") ? "ts-sub-link--active" : ""}`}
+                                    onClick={() => navigate("/teacher/list")}
                                 >
                                     <span className="fa fa-cube ts-sub-icon"></span>
                                     강의실 현황

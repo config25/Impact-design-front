@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import GNB from "../components/common/GNB";
+import { useGameStep } from "../contexts/GameStepContext";
 import "./ImpactReviewScreen.css";
 import { Chart, DoughnutController, ArcElement, Tooltip, Legend, LineController, LineElement, PointElement, CategoryScale, LinearScale, BarController, BarElement } from "chart.js";
 import { getFundingTeams, getFundingInvestment, saveFundingInvestment, submitFundingInvestment, getFundingPortfolio, getFundingScores, getMyResult } from "../services/fundingService";
@@ -596,7 +597,8 @@ const ResultTab = () => {
 };
 
 // ── 메인 컴포넌트 ──
-const ImpactReviewScreen = ({ onNavigate, gameStep }) => {
+const ImpactReviewScreen = () => {
+    const { gameStep } = useGameStep();
     const steps = gameStep ? gameStep.split(",").map(s => s.trim()) : [];
     const hasSubStep = (code) => !gameStep || steps.includes(code) || steps.includes("F");
     const tabAllowed = [hasSubStep("F-1"), hasSubStep("F-2"), hasSubStep("F-3")];
@@ -609,7 +611,7 @@ const ImpactReviewScreen = ({ onNavigate, gameStep }) => {
 
     return (
         <div className="ir-container">
-            <GNB activeScreen="review" onNavigate={onNavigate} gameStep={gameStep} />
+            <GNB activeScreen="review" />
 
             <div className="ir-sub-header">
                 <div className="ir-tab-bar">

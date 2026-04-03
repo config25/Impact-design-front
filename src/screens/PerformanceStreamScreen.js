@@ -10,7 +10,7 @@ import pencil2 from "../resource/quick/pencil2.png";
 import pencilIcon from "../resource/identity/pencil.png";
 import { getFlowCanvas, saveFlowCanvas, submitFlowCanvas } from "../services/flowCanvasService";
 
-const PerformanceStreamScreen = ({ onNavigate, gameStep }) => {
+const PerformanceStreamScreen = () => {
     const { dashboard } = useContext(DashboardContext);
     // Goal cards state
     const [goalCards, setGoalCards] = useState([
@@ -65,6 +65,7 @@ const PerformanceStreamScreen = ({ onNavigate, gameStep }) => {
 
     // Submit state
     const [submitted, setSubmitted] = useState(false);
+    const [dataLoaded, setDataLoaded] = useState(false);
     const [showTips, setShowTips] = useState(false);
     const [logoUrl, setLogoUrl] = useState(null);
 
@@ -102,12 +103,14 @@ const PerformanceStreamScreen = ({ onNavigate, gameStep }) => {
                 ));
 
                 setSubmitted(result.data.submitted || false);
+                setDataLoaded(true);
             }
         };
         fetchData();
     }, []);
 
     const handleSave = async () => {
+        if (!dataLoaded) return alert("데이터를 불러오는 중입니다. 잠시 후 다시 시도해주세요.");
         const result = await saveFlowCanvas(goalCards, tacticalTables, strategicTables);
         if (result.success) {
             // 저장 후 응답의 ID를 반영하여 다음 저장 시 update 되도록 함
@@ -140,6 +143,7 @@ const PerformanceStreamScreen = ({ onNavigate, gameStep }) => {
     };
 
     const handleSubmit = async () => {
+        if (!dataLoaded) return alert("데이터를 불러오는 중입니다. 잠시 후 다시 시도해주세요.");
         if (submitted) return;
         if (!window.confirm("제출완료 후에는 수정이 불가능합니다. 제출하시겠습니까?")) return;
         const result = await submitFlowCanvas(goalCards, tacticalTables, strategicTables);
@@ -206,7 +210,7 @@ const PerformanceStreamScreen = ({ onNavigate, gameStep }) => {
     return (
         <div className="stream-container">
             {/* GNB */}
-            <GNB activeScreen="performance" onNavigate={onNavigate} gameStep={gameStep} />
+            <GNB activeScreen="performance" />
 
             {/* Sub Header */}
             <div className="sub-header">

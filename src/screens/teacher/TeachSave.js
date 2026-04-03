@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { createClass } from "../../services/teachClassService";
 import "./TeachSave.css";
 
-const TeachSave = ({ onNavigate }) => {
+const TeachSave = () => {
+    const navigate = useNavigate();
     const [classType, setClassType] = useState("Basic");
     const [groupType, setGroupType] = useState("team");
     const [className, setClassName] = useState("");
@@ -30,7 +32,7 @@ const TeachSave = ({ onNavigate }) => {
 
         if (result.success) {
             alert("강의실이 생성되었습니다.");
-            onNavigate("teach_list");
+            navigate("/teacher/list");
         } else {
             alert(result.message);
         }

@@ -1,4 +1,4 @@
-import { API_BASE, authFetch } from "./apiConfig";
+import { API_BASE, apiCall, authFetch, safeParse } from "./apiConfig";
 
 /**
  * Canvas 서비스 팩토리
@@ -8,53 +8,30 @@ import { API_BASE, authFetch } from "./apiConfig";
 export const createCanvasService = (endpoint, buildBody = (data) => data) => {
     const BASE_URL = `${API_BASE}/${endpoint}`;
 
-    const get = async () => {
-        const response = await authFetch(BASE_URL);
-        const result = await response.json();
+    const get = () => apiCall(BASE_URL, {}, "조회에 실패했습니다.");
 
-        if (response.ok) {
-            return { success: true, data: result.data };
-        }
-
-        return { success: false, message: result.data?.message || "조회에 실패했습니다." };
-    };
-
-    const save = async (...args) => {
-        const body = buildBody(...args);
-
-        const response = await authFetch(BASE_URL, {
+    const save = (...args) =>
+        apiCall(BASE_URL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(body),
-        });
-        const result = await response.json();
-
-        if (response.ok) {
-            return { success: true, data: result.data };
-        }
-
-        return { success: false, message: result.data?.message || "저장에 실패했습니다." };
-    };
+            body: JSON.stringify(buildBody(...args)),
+        }, "저장에 실패했습니다.");
 
     const submit = async (...args) => {
-        const body = buildBody(...args);
+        try {
+            const response = await authFetch(`${BASE_URL}/submit`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(buildBody(...args)),
+            });
+            const result = await safeParse(response);
 
-        const response = await authFetch(`${BASE_URL}/submit`, {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(body),
-        });
-        const result = await response.json();
-
-        if (response.ok) {
-            return { success: true, data: result.data };
+            if (response.ok) return { success: true, data: result.data };
+            if (response.status === 409) return { success: false, message: "이미 제출되었습니다." };
+            return { success: false, message: result.data?.message || "제출에 실패했습니다." };
+        } catch (err) {
+            return { success: false, message: err.message };
         }
-
-        if (response.status === 409) {
-            return { success: false, message: "이미 제출되었습니다." };
-        }
-
-        return { success: false, message: result.data?.message || "제출에 실패했습니다." };
     };
 
     return { get, save, submit };

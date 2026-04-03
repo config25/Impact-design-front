@@ -1,17 +1,20 @@
 import { useState, useEffect, useCallback } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { getTeachDetail, endClass } from "../../services/teachClassService";
 import { saveStep, addTeam, addEvaluationTeam, deleteTeam } from "../../services/teachTeamService";
 import { getSubmissionList } from "../../services/teachSubmissionService";
 import { getLogoUrl } from "../../utils/logoUtil";
-import { stepConfig, missionRows, formatDate, stepArrToChecked } from "../../constants/teachDetail2Constants";
+import { stepConfig, missionRows, stepArrToChecked } from "../../constants/teachDetail2Constants";
+import formatDate from "../../utils/formatDate";
 import useTeachDetail2Modals from "../../hooks/useTeachDetail2Modals";
 import usePdfDownload from "../../hooks/usePdfDownload";
 import TeachDetail2Modals from "../../components/teacher/TeachDetail2Modals";
 import "./TeachDetail2.css";
 import "../ImpactReviewScreen.css";
 
-const TeachDetail2 = ({ onNavigate, params }) => {
-    const [gameId] = useState(params?.gameId);
+const TeachDetail2 = () => {
+    const { gameId } = useParams();
+    const navigate = useNavigate();
     const [gameInfo, setGameInfo] = useState(null);
     const [teams, setTeams] = useState([]);
     const [checkedSteps, setCheckedSteps] = useState([]);
@@ -130,7 +133,7 @@ const TeachDetail2 = ({ onNavigate, params }) => {
         const result = await endClass(gameId);
         if (result.success) {
             alert("강의실이 종료되었습니다.");
-            onNavigate("teach_list");
+            navigate("/teacher/list");
         } else {
             alert(result.message);
         }
@@ -370,7 +373,7 @@ const TeachDetail2 = ({ onNavigate, params }) => {
                         <div className="td2-panel-footer">
                             <div className="td2-team-btns">
                                 <button className="td2-btn-default" onClick={handleTeamAdd}>팀 추가</button>
-                                <button className="td2-btn-default" onClick={() => onNavigate("student_list", { gameId })}>교육생 목록</button>
+                                <button className="td2-btn-default" onClick={() => navigate(`/teacher/students/${gameId}`)}>교육생 목록</button>
                                 <button className="td2-btn-default" onClick={handleEvalTeamAdd}>평가팀 추가</button>
                                 <button className="td2-btn-warning" onClick={modals.handleShowDeleted}>삭제된 팀 보기</button>
                             </div>

@@ -37,7 +37,7 @@ const LogoImg = ({ logoUrl }) => logoUrl ? (
 ) : null;
 
 const IdentityCanvasPage = ({ data, logoUrl }) => {
-    if (!data) return null;
+    if (!data) data = {};
     return (
         <PageWrapper>
             <div style={{ padding: '24px 16px', background: '#fff', minHeight: 1080 }}>
@@ -97,8 +97,9 @@ const IdentityCanvasPage = ({ data, logoUrl }) => {
 
 /* ── Flow Canvas ── */
 const FlowCanvasPage = ({ data, logoUrl }) => {
-    if (!data?.goals || data.goals.length === 0) return null;
-    const goals = [...data.goals, ...Array(Math.max(0, 3 - data.goals.length)).fill(null)].slice(0, 3);
+    if (!data) data = {};
+    const rawGoals = data.goals || [];
+    const goals = [...rawGoals, ...Array(Math.max(0, 3 - rawGoals.length)).fill(null)].slice(0, 3);
     return (
         <PageWrapper>
             <div style={{ background: '#fff', minHeight: 1320 }}>
@@ -144,11 +145,11 @@ const FlowCanvasPage = ({ data, logoUrl }) => {
                                         <div className="metric-table-wrapper" key={ti}>
                                             <table className="metric-table"><thead><tr><th>전술적 성과 지표</th><th>목표</th></tr></thead>
                                                 <tbody>
-                                                    {(g?.tacticals || [{}, {}, {}]).slice(0, 3).map((t, ri) => (
+                                                    {(g?.tacticals && g.tacticals.length > 0 ? g.tacticals : [{}, {}, {}]).slice(0, 3).map((t, ri) => (
                                                         <tr key={ri}><td><span className="row-number">{ri + 1}.</span> <span className="metric-value">{t.tacticalMetric || ""}</span></td><td><span className="metric-value">{t.tacticalGoal || ""}</span></td></tr>
                                                     ))}
-                                                    {(g?.tacticals || []).length < 3 && Array.from({ length: 3 - (g?.tacticals || []).length }, (_, ri) => (
-                                                        <tr key={`e-${ri}`}><td className="empty-row"><span className="row-number">{(g?.tacticals || []).length + ri + 1}.</span></td><td className="empty-row"></td></tr>
+                                                    {(g?.tacticals?.length || 0) > 0 && g.tacticals.length < 3 && Array.from({ length: 3 - g.tacticals.length }, (_, ri) => (
+                                                        <tr key={`e-${ri}`}><td className="empty-row"><span className="row-number">{g.tacticals.length + ri + 1}.</span></td><td className="empty-row"></td></tr>
                                                     ))}
                                                 </tbody>
                                             </table>
@@ -167,11 +168,11 @@ const FlowCanvasPage = ({ data, logoUrl }) => {
                                         <div className="metric-table-wrapper" key={ti}>
                                             <table className="metric-table"><thead><tr><th>전략적 활동 지표</th><th>내재화 기준</th></tr></thead>
                                                 <tbody>
-                                                    {(g?.strategicActivities || [{}, {}, {}]).slice(0, 3).map((a, ri) => (
+                                                    {(g?.strategicActivities && g.strategicActivities.length > 0 ? g.strategicActivities : [{}, {}, {}]).slice(0, 3).map((a, ri) => (
                                                         <tr key={ri}><td><span className="row-number">{ri + 1}.</span> <span className="metric-value">{a.activityMetric || ""}</span></td><td><span className="metric-value">{a.interCriteria || ""}</span></td></tr>
                                                     ))}
-                                                    {(g?.strategicActivities || []).length < 3 && Array.from({ length: 3 - (g?.strategicActivities || []).length }, (_, ri) => (
-                                                        <tr key={`e-${ri}`}><td className="empty-row"><span className="row-number">{(g?.strategicActivities || []).length + ri + 1}.</span></td><td className="empty-row"></td></tr>
+                                                    {(g?.strategicActivities?.length || 0) > 0 && g.strategicActivities.length < 3 && Array.from({ length: 3 - g.strategicActivities.length }, (_, ri) => (
+                                                        <tr key={`e-${ri}`}><td className="empty-row"><span className="row-number">{g.strategicActivities.length + ri + 1}.</span></td><td className="empty-row"></td></tr>
                                                     ))}
                                                 </tbody>
                                             </table>
@@ -189,7 +190,7 @@ const FlowCanvasPage = ({ data, logoUrl }) => {
 
 /* ── Win Canvas (Quick / Build 공통) ── */
 const WinCanvasPage = ({ data, type, logoUrl }) => {
-    if (!data) return null;
+    if (!data) data = {};
     const isQuick = type === "quick";
     const containerClass = isQuick ? "quickwin-container" : "buildwin-container";
     const badgeImg = isQuick ? component1Quick : component1Build;

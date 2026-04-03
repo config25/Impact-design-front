@@ -510,17 +510,6 @@ export const missionRows = [
     },
 ];
 
-/* 날짜 포맷 */
-export const formatDate = (isoStr) => {
-    if (!isoStr) return "-";
-    const d = new Date(isoStr);
-    const yyyy = d.getFullYear();
-    const mm = String(d.getMonth() + 1).padStart(2, "0");
-    const dd = String(d.getDate()).padStart(2, "0");
-    const hh = String(d.getHours()).padStart(2, "0");
-    const min = String(d.getMinutes()).padStart(2, "0");
-    return `${yyyy}-${mm}-${dd} ${hh}시 ${min}분`;
-};
 
 /* stepArr → checkedSteps 변환
    새 포맷: ["A-1","B-1","F-1","F-2"] → 그대로 사용

@@ -1,15 +1,17 @@
 import { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import "./TeachLogin.css";
 import backgroundImage from "../resource/start/background.jpg";
 import { teacherLogin } from "../services/authService";
 import { AuthContext } from "../contexts/AuthContext";
 
-const TeachLogin = ({ onLogin }) => {
+const TeachLogin = () => {
     const [id, setId] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
     const { saveTokens } = useContext(AuthContext);
+    const navigate = useNavigate();
 
     const handleLogin = async () => {
         if (!id || !password) {
@@ -25,7 +27,7 @@ const TeachLogin = ({ onLogin }) => {
 
             if (result.success) {
                 saveTokens(result.accessToken, result.refreshToken, result.userRole);
-                if (onLogin) onLogin();
+                navigate("/teacher");
             } else {
                 setError(result.message);
             }

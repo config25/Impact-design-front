@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { getStudentList } from "../../services/teachClassService";
 import { updateTeamMember } from "../../services/teachTeamService";
 import "./StudentList.css";
 
-const StudentList = ({ onNavigate, params }) => {
-    const gameId = params?.gameId;
+const StudentList = () => {
+    const { gameId } = useParams();
+    const navigate = useNavigate();
     const [teamList, setTeamList] = useState([]);
     const [students, setStudents] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -99,7 +101,7 @@ const StudentList = ({ onNavigate, params }) => {
 
     /* 목록으로 돌아가기 */
     const handleBack = () => {
-        onNavigate("teach_detail2", { gameId });
+        navigate(`/teacher/detail2/${gameId}`);
     };
 
     return (

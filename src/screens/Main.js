@@ -1,7 +1,10 @@
+import { useNavigate } from "react-router-dom";
 import "./Main.css";
 import backgroundImage from "../resource/start/background.jpg";
 
-const Main = ({ onLogin, onRegister }) => {
+const Main = () => {
+    const navigate = useNavigate();
+
     return (
         <div
             className="login-screen"
@@ -15,10 +18,10 @@ const Main = ({ onLogin, onRegister }) => {
                     </p>
 
                     <div className="login-card">
-                        <button className="login-btn-primary" onClick={onLogin}>
+                        <button className="login-btn-primary" onClick={() => navigate("/login")}>
                             LOGIN
                         </button>
-                        <button className="login-btn-secondary" onClick={onRegister}>
+                        <button className="login-btn-secondary" onClick={() => navigate("/register")}>
                             계정등록
                         </button>
                     </div>

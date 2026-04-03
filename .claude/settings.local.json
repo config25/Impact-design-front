@@ -19,7 +19,9 @@
       "Bash(head:*)",
       "Bash(xargs wc:*)",
       "Bash(npx:*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(wc -l src/**/*.js src/**/**/*.js src/**/**/**/*.js)",
+      "Bash(npm uninstall:*)"
     ]
   }
 }

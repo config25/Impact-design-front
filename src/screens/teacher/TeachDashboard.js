@@ -1,33 +1,14 @@
-import { useState, useEffect } from "react";
+import { useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { getTeachIndex } from "../../services/teachClassService";
+import useFetchData from "../../hooks/useFetchData";
+import formatDate from "../../utils/formatDate";
 import "./TeachDashboard.css";
 
-/* 날짜 포맷: "2025-02-01T00:00:00" → "2025-02-01 00시 00분" */
-const formatDate = (isoStr) => {
-    if (!isoStr) return "-";
-    const d = new Date(isoStr);
-    const yyyy = d.getFullYear();
-    const mm = String(d.getMonth() + 1).padStart(2, "0");
-    const dd = String(d.getDate()).padStart(2, "0");
-    const hh = String(d.getHours()).padStart(2, "0");
-    const min = String(d.getMinutes()).padStart(2, "0");
-    return `${yyyy}-${mm}-${dd} ${hh}시 ${min}분`;
-};
-
-const TeachDashboard = ({ onNavigate }) => {
-    const [classrooms, setClassrooms] = useState([]);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const result = await getTeachIndex();
-            if (result.success) {
-                setClassrooms(result.data);
-            }
-            setLoading(false);
-        };
-        fetchData();
-    }, []);
+const TeachDashboard = () => {
+    const navigate = useNavigate();
+    const fetchFn = useCallback(() => getTeachIndex(), []);
+    const { data: classrooms, loading } = useFetchData(fetchFn);
 
     return (
         <div className="tdb-container">
@@ -57,7 +38,7 @@ const TeachDashboard = ({ onNavigate }) => {
                                 <tr>
                                     <td colSpan="4" className="tdb-empty">로딩 중...</td>
                                 </tr>
-                            ) : classrooms.length === 0 ? (
+                            ) : !classrooms || classrooms.length === 0 ? (
                                 <tr>
                                     <td colSpan="4" className="tdb-empty">
                                         진행중인 강의실이 없습니다.
@@ -70,7 +51,7 @@ const TeachDashboard = ({ onNavigate }) => {
                                             <span>
                                                 <button
                                                     className="tdb-btn-classroom"
-                                                    onClick={() => onNavigate("teach_detail2", { gameId: c.gameId })}
+                                                    onClick={() => navigate(`/teacher/detail2/${c.gameId}`)}
                                                 >
                                                     {c.name}
                                                 </button>

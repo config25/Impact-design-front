@@ -1,15 +1,16 @@
 import { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import "./MemberLogin.css";
 import backgroundImage from "../resource/start/background.jpg";
 import { login } from "../services/authService";
 import { AuthContext } from "../contexts/AuthContext";
 
-const MemberLogin = ({ onLogin }) => {
+const MemberLogin = () => {
     const [id, setId] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
-
+    const navigate = useNavigate();
     const { saveTokens } = useContext(AuthContext);
 
     const handleLogin = async () => {
@@ -26,7 +27,7 @@ const MemberLogin = ({ onLogin }) => {
 
             if (result.success) {
                 saveTokens(result.accessToken, result.refreshToken);
-                onLogin();
+                navigate("/start");
             } else {
                 setError(result.message);
             }
