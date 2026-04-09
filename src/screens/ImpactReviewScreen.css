@@ -13,7 +13,7 @@
 .ir-sub-header {
     width: 1920px;
     height: 140px;
-    background: #F3F5F9;
+    background: var(--color-bg-panel);
     display: flex;
     align-items: center;
     padding: 0 70px;
@@ -106,7 +106,7 @@
     font-family: 'Pretendard', sans-serif;
     font-size: 17px;
     font-weight: 700;
-    color: #353B72;
+    color: var(--color-primary-dark);
     margin-bottom: 12px;
 }
 
@@ -131,7 +131,7 @@
     font-weight: 400;
     background: transparent;
     width: 100%;
-    color: #333;
+    color: var(--color-text);
 }
 
 .ir-field-box select {
@@ -144,17 +144,17 @@
 }
 
 .ir-field-box input:read-only {
-    color: #666;
+    color: var(--color-text-placeholder);
 }
 
 .ir-field-box input::placeholder {
-    color: #999;
+    color: var(--color-text-muted);
     font-weight: 400;
 }
 
 .ir-field-box input.ir-budget-value {
     font-weight: 600;
-    color: #353B72;
+    color: var(--color-primary-dark);
     text-align: right;
 }
 
@@ -181,14 +181,14 @@
     font-family: 'Pretendard', sans-serif;
     font-size: 18px;
     font-weight: 400;
-    color: #333;
+    color: var(--color-text);
     white-space: nowrap;
     margin-left: 8px;
 }
 
 /* ── 검증 문항 영역 (회색 배경) ── */
 .ir-eval-area {
-    background: #F3F5F9;
+    background: var(--color-bg-panel);
     border-radius: 4px;
     padding: 40px 20px;
     margin-bottom: 24px;
@@ -248,7 +248,7 @@
     font-size: 15px;
     font-weight: 500;
     line-height: 160%;
-    color: #333;
+    color: var(--color-text);
     margin-left: 12px;
 }
 
@@ -306,7 +306,7 @@
     font-size: 16px;
     font-weight: 500;
     line-height: 160%;
-    color: #333;
+    color: var(--color-text);
     resize: vertical;
     min-height: 26px;
     background: transparent;
@@ -321,20 +321,20 @@
 
 .ir-btn-save {
     height: 43px;
-    border: 2px solid #353B72;
+    border: 2px solid var(--color-primary-dark);
     border-radius: 4px;
     padding: 12px 24px;
     background: #FFFFFF;
     font-family: 'Pretendard', sans-serif;
     font-size: 16px;
     font-weight: 700;
-    color: #353B72;
+    color: var(--color-primary-dark);
     cursor: pointer;
     text-align: center;
 }
 
 .ir-btn-save:hover {
-    background: #F3F5F9;
+    background: var(--color-bg-panel);
 }
 
 .ir-btn-submit {
@@ -342,7 +342,7 @@
     border: none;
     border-radius: 4px;
     padding: 12px 24px;
-    background: #353B72;
+    background: var(--color-primary-dark);
     font-family: 'Pretendard', sans-serif;
     font-size: 16px;
     font-weight: 500;
@@ -409,7 +409,7 @@
     font-family: 'Pretendard', sans-serif;
     font-size: 24px;
     font-weight: 700;
-    color: #333;
+    color: var(--color-text);
     margin-bottom: 32px;
 }
 
@@ -421,7 +421,7 @@
     font-family: 'Pretendard', sans-serif;
     font-size: 17px;
     font-weight: 700;
-    color: #333;
+    color: var(--color-text);
     margin-bottom: 8px;
 }
 
@@ -445,13 +445,13 @@
 .ir-portfolio-name {
     font-size: 18px;
     font-weight: 500;
-    color: #333;
+    color: var(--color-text);
 }
 
 .ir-portfolio-amount {
     font-size: 18px;
     font-weight: 600;
-    color: #333;
+    color: var(--color-text);
     text-align: right;
 }
 
@@ -532,7 +532,7 @@
     font-family: 'Pretendard', sans-serif;
     font-size: 24px;
     font-weight: 700;
-    color: #333333;
+    color: var(--color-text);
     margin-bottom: 24px;
 }
 
@@ -579,7 +579,7 @@
     font-family: 'Pretendard', sans-serif;
     font-size: 24px;
     font-weight: 700;
-    color: #333333;
+    color: var(--color-text);
     margin-bottom: 24px;
 }
 
@@ -599,7 +599,7 @@
     font-size: 18px;
     font-weight: 500;
     line-height: 160%;
-    color: #333333;
+    color: var(--color-text);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

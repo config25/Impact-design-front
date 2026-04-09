@@ -209,7 +209,7 @@ Impact Check(Q1~Q12) 점수 기반 **4사분면 조직 프로파일** 분류
 |------|------|
 | Frontend | React 19 (CRA) |
 | 상태관리 | Context API |
-| 스타일링 | Pure CSS (컴포넌트별 고유 프리픽스) |
+| 스타일링 | Pure CSS (컴포넌트별 고유 프리픽스 + CSS 변수) |
 | 폰트 | Pretendard (CDN) |
 | Charts | Chart.js + chartjs-plugin-datalabels |
 | PDF | jsPDF + html2canvas |
@@ -226,7 +226,8 @@ src/
 │   ├── common/          #   GNB, TipsModal
 │   ├── identity/        #   Identity Canvas 관련 (5개 컴포넌트)
 │   ├── report/          #   PDF 리포트 페이지별 컴포넌트 (13개)
-│   └── teacher/         #   강사 레이아웃 + TeachDetail2Modals
+│   ├── teacher/         #   강사 레이아웃 + 모달 (modals/ 하위 분리)
+│   └── review/          #   EvalForm, RightPanel, ResultTab
 ├── screens/             # 화면 컴포넌트
 │   ├── *Screen.js       #   A~F 단계 학생 화면
 │   ├── WinCanvasScreen  #   D/E 공용 Win Canvas 통합 화면
@@ -238,7 +239,7 @@ src/
 │   ├── teach*Service    #   강사용 (Class, Team, Submission 분리)
 │   ├── *CanvasService   #   캔버스 서비스 (팩토리 패턴)
 │   └── fundingService   #   펀딩/평가 API
-├── styles/              # 공통 CSS (버튼, 테이블 등 공유 스타일)
+├── styles/              # 공통 CSS + CSS 변수 (variables.css)
 ├── utils/               # 유틸리티 (logo, reportUtils, reportPdfUtils)
 └── resource/            # 이미지 리소스
 ```

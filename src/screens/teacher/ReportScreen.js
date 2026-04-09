@@ -19,7 +19,7 @@ import BulkCanvasPages from "../../components/report/BulkCanvasPages";
 
 const VOICE_DESC = "Strategic Identity는 조직을 둘러싼 위협적인 '외부 변화'와 이를 극복하기 위한 '내부 한계점'에 대한 구성원들의 생생한 목소리를 담고 있습니다. 우리 조직의 존재 이유와 목표를 재정의하고, 구성원들이 도출한 새로운 미션, 비전, 핵심가치를 통해 위기를 돌파할 실질적인 미래 청사진을 제안합니다.";
 
-const ReportScreen = forwardRef(({ onNavigate, gameStep, teamId, onClose, onReady, hideControls, bulkMode, bulkCanvasData, initialData }, ref) => {
+const ReportScreen = forwardRef(({ onNavigate, gameStep, teamId, onClose, onReady, hideControls, bulkMode, bulkCanvasData, bulkCanvasType, initialData }, ref) => {
     const containerRef = useRef(null);
     const [isExporting, setIsExporting] = useState(false);
     const [reportData, setReportData] = useState(null);
@@ -278,7 +278,7 @@ const ReportScreen = forwardRef(({ onNavigate, gameStep, teamId, onClose, onRead
 
             {/* Bulk Canvas Pages */}
             {bulkMode && bulkCanvasData && (
-                <BulkCanvasPages canvasData={bulkCanvasData} />
+                <BulkCanvasPages canvasData={bulkCanvasData} canvasType={bulkCanvasType} />
             )}
 
             {/* Page 19 - Back Cover */}

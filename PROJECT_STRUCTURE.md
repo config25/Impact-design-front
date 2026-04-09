@@ -9,7 +9,7 @@
 |------|------|
 | 프레임워크 | React 19 (CRA) |
 | 라우팅 | React Router 미사용, 상태 기반 네비게이션 (`currentScreen`) |
-| 스타일링 | Pure CSS (BEM-like 프리픽스 방식) |
+| 스타일링 | Pure CSS (BEM-like 프리픽스 + CSS 변수) |
 | 폰트 | Pretendard (CDN) |
 | 인증 | Token 기반 (sessionStorage), AuthContext + authFetch |
 | 차트 | Chart.js + chartjs-plugin-datalabels |
@@ -52,11 +52,25 @@ id_front/
 │   │   │   ├── ReportFooter.js          #  페이지 푸터
 │   │   │   ├── ReportSectionHeader.js   #  섹션 헤더
 │   │   │   └── ReportTopBar.js          #  상단 바
-│   │   └── teacher/           #   강사 시스템 레이아웃
-│   │       ├── TeacherLayout.js         #  사이드바 + 헤더 + 컨텐츠 레이아웃
-│   │       ├── TeacherHeader.js         #  상단 헤더 (브레드크럼)
-│   │       ├── TeacherSidebar.js        #  좌측 사이드바 (접기 토글 지원)
-│   │       └── TeachDetail2Modals.js    #  TeachDetail2 모달 모음 (분리됨)
+│   │   ├── teacher/           #   강사 시스템 레이아웃
+│   │   │   ├── TeacherLayout.js         #  사이드바 + 헤더 + 컨텐츠 레이아웃
+│   │   │   ├── TeacherHeader.js         #  상단 헤더 (브레드크럼)
+│   │   │   ├── TeacherSidebar.js        #  좌측 사이드바 (접기 토글 지원)
+│   │   │   ├── TeachDetail2Modals.js    #  TeachDetail2 모달 조합 (개별 모달 import)
+│   │   │   ├── FundingModalBody.js      #  실행과제 검증 모달 본문
+│   │   │   ├── FundingResultModalBody.js #  최종 결과 모달 본문
+│   │   │   └── modals/                  #  개별 모달 컴포넌트
+│   │   │       ├── ClickablePopover.js  #    클릭 팝오버 (ClickableTd/Div)
+│   │   │       ├── WinCanvasModalBody.js #   QuickWin/BuildWin 공용 모달 본문
+│   │   │       ├── MissionModal.js      #    ImpactCheck 열람 모달
+│   │   │       ├── IdentityModal.js     #    정체성 설계 열람 모달
+│   │   │       ├── FlowModal.js         #    성과경로 설계 열람 모달
+│   │   │       ├── TeamModal.js         #    팀/참여자 정보입력 모달
+│   │   │       └── ModifyModal.js       #    강의실 수정 모달
+│   │   └── review/            #   ImpactReview 하위 컴포넌트
+│   │       ├── EvalForm.js              #  평가 폼 (검증 대상, 문항, 예산)
+│   │       ├── RightPanel.js            #  포트폴리오 + 도넛/라인 차트
+│   │       └── ResultTab.js             #  최종 결과 (바 차트 + 의견)
 │   │
 │   ├── screens/               # 화면 (페이지) 컴포넌트
 │   │   ├── Main.js            #   랜딩 페이지 (로그인/회원가입 선택)
@@ -87,8 +101,8 @@ id_front/
 │   │   ├── useTeachDetail2Modals.js  #  TeachDetail2 모달 상태/핸들러
 │   │   └── usePdfDownload.js         #  PDF 벌크 다운로드 로직
 │   │
-│   ├── constants/             # 상수 및 공용 서브컴포넌트
-│   │   └── teachDetail2Constants.js  #  평가 문항, 차트 상수, FundingModalBody 등
+│   ├── constants/             # 상수 및 유틸
+│   │   └── teachDetail2Constants.js  #  평가 문항, 차트 상수, 점수 매핑, 단계 설정
 │   │
 │   ├── contexts/              # React Context
 │   │   ├── AuthContext.js           #   인증 상태 관리 (토큰, 로그인/로그아웃)
@@ -114,6 +128,7 @@ id_front/
 │   │   └── teacherService.js        #   (레거시 - 위 3개로 분리됨)
 │   │
 │   ├── styles/                # 공통 CSS
+│   │   ├── variables.css      #   CSS 변수 (색상, radius, font-size)
 │   │   └── common.css         #   공유 버튼 스타일 (tips, save, submit)
 │   │
 │   ├── utils/                 # 유틸리티

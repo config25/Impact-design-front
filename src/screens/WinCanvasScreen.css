@@ -12,7 +12,7 @@
 .win-canvas .sub-header {
     width: 1920px;
     height: 140px;
-    background: #F3F5F9;
+    background: var(--color-bg-panel);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -26,7 +26,7 @@
     font-size: 32px;
     line-height: 100%;
     letter-spacing: 0;
-    color: #353B72;
+    color: var(--color-primary-dark);
 }
 
 .win-canvas .sub-header-actions {
@@ -212,9 +212,9 @@
     font-size: 20px;
     line-height: 100%;
     letter-spacing: 0;
-    color: #333333;
+    color: var(--color-text);
     background: #FFFFFF;
-    border: 1px solid #E6E6E6;
+    border: 1px solid var(--color-bg-gray);
     border-left: none;
     border-bottom: none;
     border-top-right-radius: 4px;
@@ -312,9 +312,9 @@
     font-size: 18px;
     line-height: 160%;
     letter-spacing: 0;
-    color: #333333;
+    color: var(--color-text);
     background: #FFFFFF;
-    border: 1px solid #E6E6E6;
+    border: 1px solid var(--color-bg-gray);
     border-left: none;
     border-bottom: none;
     box-sizing: border-box;
@@ -336,7 +336,7 @@
 
 .win-canvas .task-content.main-content {
     height: 80px;
-    border-bottom: 1px solid #E6E6E6;
+    border-bottom: 1px solid var(--color-bg-gray);
     border-bottom-right-radius: 4px;
 }
 
@@ -359,7 +359,7 @@
 
 .win-canvas .main-table th,
 .win-canvas .main-table td {
-    border: 1px solid #E6E6E6;
+    border: 1px solid var(--color-bg-gray);
     padding: 6px 16px;
     text-align: center;
     vertical-align: middle;
@@ -413,14 +413,14 @@
     height: 46px;
     padding: 10px 16px;
     background: #EFF0F2;
-    border: 1px solid #E6E6E6;
+    border: 1px solid var(--color-bg-gray);
     font-family: 'Pretendard', sans-serif;
     font-weight: 500;
     font-size: 18px;
     line-height: 100%;
     letter-spacing: 0;
     text-align: center;
-    color: #111111;
+    color: var(--color-black);
     box-sizing: border-box;
     white-space: nowrap;
 }
@@ -462,7 +462,7 @@
     background: #FFFFFF;
     height: 46px;
     padding: 6px 16px;
-    border: 1px solid #E6E6E6;
+    border: 1px solid var(--color-bg-gray);
 }
 
 /* 입력 셀 */
@@ -493,9 +493,9 @@
     padding: 0;
     vertical-align: middle;
     border-top: none;
-    border-right: 1px solid #E6E6E6;
-    border-bottom: 1px solid #E6E6E6;
-    border-left: 1px solid #E6E6E6;
+    border-right: 1px solid var(--color-bg-gray);
+    border-bottom: 1px solid var(--color-bg-gray);
+    border-left: 1px solid var(--color-bg-gray);
 }
 
 .win-canvas .main-table .crisis-cell > * {
@@ -522,7 +522,7 @@
     font-size: 18px;
     line-height: 100%;
     letter-spacing: 0;
-    color: #111111;
+    color: var(--color-black);
     text-align: center;
     padding: 10px 16px;
 }
@@ -564,7 +564,7 @@
     font-size: 18px;
     line-height: 160%;
     letter-spacing: 0;
-    color: #333333;
+    color: var(--color-text);
     vertical-align: middle;
 }
 
@@ -594,7 +594,7 @@
     font-size: 18px;
     line-height: 160%;
     letter-spacing: 0;
-    color: #333333;
+    color: var(--color-text);
     vertical-align: middle;
 }
 
@@ -619,7 +619,7 @@
     line-height: 130%;
     letter-spacing: 0;
     text-align: center;
-    color: #333333;
+    color: var(--color-text);
     margin-bottom: 8px;
 }
 
@@ -630,7 +630,7 @@
     line-height: 130%;
     letter-spacing: 0;
     text-align: center;
-    color: #333333;
+    color: var(--color-text);
 }
 
 /* Outcomes Section */
@@ -676,9 +676,9 @@
     font-size: 18px;
     line-height: 100%;
     letter-spacing: 0;
-    color: #333333;
+    color: var(--color-text);
     background: #FFFFFF;
-    border: 1px solid #E6E6E6;
+    border: 1px solid var(--color-bg-gray);
     border-top: none;
     box-sizing: border-box;
     overflow: hidden;
@@ -706,7 +706,7 @@
 }
 
 .win-canvas .outcomes-cell.last {
-    border-bottom: 1px solid #E6E6E6;
+    border-bottom: 1px solid var(--color-bg-gray);
 }
 
 .win-canvas .outcomes-cell.left.last {
@@ -726,9 +726,9 @@
     line-height: 100%;
     letter-spacing: 0;
     text-align: center;
-    color: #111111;
+    color: var(--color-black);
     justify-content: center;
-    border-top: 1px solid #E6E6E6;
+    border-top: 1px solid var(--color-bg-gray);
 }
 
 .win-canvas .item-number {
@@ -736,7 +736,7 @@
     font-weight: 400;
     font-size: 18px;
     line-height: 100%;
-    color: #333333;
+    color: var(--color-text);
 }
 
 /* Editable input styles */
@@ -748,12 +748,12 @@
     font-weight: 400;
     font-size: 18px;
     line-height: 100%;
-    color: #333333;
+    color: var(--color-text);
     outline: none;
 }
 
 .win-canvas .editable-input::placeholder {
-    color: #999999;
+    color: var(--color-text-muted);
 }
 
 .win-canvas .editable-input.highlight-input {
@@ -773,7 +773,7 @@
     font-weight: 400;
     font-size: 18px;
     line-height: 130%;
-    color: #333333;
+    color: var(--color-text);
     outline: none;
     resize: none;
     text-align: center;
@@ -783,7 +783,7 @@
 }
 
 .win-canvas .editable-textarea::placeholder {
-    color: #999999;
+    color: var(--color-text-muted);
 }
 
 .win-canvas .cell-input {
@@ -793,7 +793,7 @@
     font-family: 'Pretendard', sans-serif;
     font-weight: 400;
     font-size: 18px;
-    color: #333333;
+    color: var(--color-text);
     outline: none;
     text-align: center;
 }
@@ -806,16 +806,16 @@
     font-weight: 400;
     font-size: 18px;
     line-height: 100%;
-    color: #333333;
+    color: var(--color-text);
     outline: none;
 }
 
 .win-canvas .outcome-input::placeholder {
-    color: #999999;
+    color: var(--color-text-muted);
 }
 
 .win-canvas .help-text {
-    color: #333333;
+    color: var(--color-text);
 }
 
 .win-canvas .cell-content {
@@ -823,7 +823,7 @@
     font-weight: 400;
     font-size: 18px;
     line-height: 130%;
-    color: #333333;
+    color: var(--color-text);
     white-space: pre-wrap;
 }
 
@@ -842,7 +842,7 @@
 /* Task content with content - remove highlight background */
 .win-canvas .task-content.highlight.has-content {
     background: #FFFFFF;
-    color: #333333;
+    color: var(--color-text);
 }
 
 /* Cell pencil icon positioning */
@@ -893,6 +893,6 @@
     .win-canvas .section-content,
     .win-canvas .task-content {
         border-left: none;
-        border-top: 1px solid #e0e0e0;
+        border-top: 1px solid var(--color-border-light);
     }
 }

@@ -21,7 +21,7 @@
 }
 
 .tips-modal-header {
-  background: #333;
+  background: var(--color-text);
   color: #fff;
   display: flex;
   align-items: center;
@@ -83,7 +83,7 @@
 }
 
 .tips-modal-section.method .tips-modal-section-title {
-  color: #555;
+  color: var(--color-text-light);
 }
 
 .tips-modal-section-body {

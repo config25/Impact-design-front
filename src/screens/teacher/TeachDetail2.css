@@ -16,13 +16,13 @@
 .td2-topbar-label {
     font-size: 14px;
     font-weight: 400;
-    color: #666;
+    color: var(--color-text-placeholder);
 }
 
 .td2-topbar-name {
     font-size: 14px;
     font-weight: 600;
-    color: #337ab7;
+    color: var(--color-primary);
 }
 
 .td2-select {
@@ -31,7 +31,7 @@
     border-radius: 3px;
     font-size: 13px;
     font-family: 'Pretendard', sans-serif;
-    background: #337ab7;
+    background: var(--color-primary);
     color: #fff;
     cursor: pointer;
 }
@@ -70,7 +70,7 @@
 /* 패널 공통 */
 .td2-panel {
     background: #fff;
-    border: 1px solid #ddd;
+    border: 1px solid var(--color-border);
     border-radius: 3px;
     margin-bottom: 15px;
     box-shadow: 0 1px 1px rgba(0,0,0,0.05);
@@ -81,10 +81,10 @@
     height: 40px;
     line-height: 36px;
     padding: 0 15px;
-    background: #f9f9f9;
-    color: #666;
+    background: var(--color-bg-light);
+    color: var(--color-text-placeholder);
     font-size: 14px;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid var(--color-border);
     border-radius: 3px 3px 0 0;
     display: flex;
     align-items: center;
@@ -94,7 +94,7 @@
 .td2-panel-title {
     font-size: 14px;
     font-weight: 600;
-    color: #666;
+    color: var(--color-text-placeholder);
 }
 
 .td2-panel-body {
@@ -104,8 +104,8 @@
 .td2-panel-footer {
     padding: 10px 15px;
     text-align: center;
-    border-top: 1px solid #ddd;
-    background: #f9f9f9;
+    border-top: 1px solid var(--color-border);
+    background: var(--color-bg-light);
 }
 
 /* 기본정보 테이블 */
@@ -119,12 +119,12 @@
 .td2-info-table th,
 .td2-info-table td {
     padding: 8px 12px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--color-border);
     vertical-align: middle;
 }
 
 .td2-info-table th {
-    background: #337ab7;
+    background: var(--color-primary);
     color: #fff;
     font-weight: 600;
     width: 20%;
@@ -133,7 +133,7 @@
 }
 
 .td2-info-table td {
-    color: #555;
+    color: var(--color-text-light);
     width: 80%;
 }
 
@@ -155,7 +155,7 @@
 .td2-progress-table th,
 .td2-progress-table td {
     padding: 8px 6px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--color-border);
     vertical-align: middle;
 }
 
@@ -168,15 +168,15 @@
     color: #fff;
     font-weight: 600;
     font-size: 12px;
-    border-color: #555;
+    border-color: var(--color-text-light);
 }
 
 .td2-progress-table tbody tr:hover {
-    background: #f9f9f9;
+    background: var(--color-bg-light);
 }
 
 .td2-team-link {
-    color: #337ab7;
+    color: var(--color-primary);
     text-decoration: underline;
     cursor: pointer;
     background: none;
@@ -249,7 +249,7 @@
 
 .td2-btn-pdf-all {
     padding: 4px 12px;
-    background: #337ab7;
+    background: var(--color-primary);
     color: #fff;
     border: none;
     border-radius: 3px;
@@ -301,7 +301,7 @@
 .td2-btn-default {
     padding: 5px 14px;
     background: #fff;
-    color: #333;
+    color: var(--color-text);
     border: 1px solid #ccc;
     border-radius: 3px;
     font-size: 13px;
@@ -310,7 +310,7 @@
 }
 
 .td2-btn-default:hover {
-    background: #e6e6e6;
+    background: var(--color-bg-gray);
 }
 
 .td2-btn-warning {
@@ -343,7 +343,7 @@
 .td2-deadline-label {
     font-size: 13px;
     font-weight: 600;
-    color: #666;
+    color: var(--color-text-placeholder);
     width: 80px;
 }
 
@@ -357,12 +357,12 @@
 
 .td2-deadline-unit {
     font-size: 13px;
-    color: #555;
+    color: var(--color-text-light);
 }
 
 .td2-btn-primary {
     padding: 5px 14px;
-    background: #337ab7;
+    background: var(--color-primary);
     color: #fff;
     border: none;
     border-radius: 3px;
@@ -378,7 +378,7 @@
 /* 다음 단계 설정 */
 .td2-step-group {
     padding: 10px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--color-border);
     border-radius: 5px;
     min-width: 200px;
 }
@@ -407,7 +407,7 @@
     align-items: center;
     cursor: pointer;
     font-size: 13px;
-    color: #333;
+    color: var(--color-text);
     gap: 5px;
 }
 
@@ -415,7 +415,7 @@
     width: 16px;
     height: 16px;
     cursor: pointer;
-    accent-color: #337ab7;
+    accent-color: var(--color-primary);
 }
 
 .td2-step-heading {
@@ -446,7 +446,7 @@
 .td2-mission-title {
     font-size: 20px;
     font-weight: 700;
-    color: #333;
+    color: var(--color-text);
     margin: 0 0 5px 0;
 }
 
@@ -637,28 +637,28 @@
     align-items: center;
     justify-content: space-between;
     padding: 12px 20px;
-    background: #f9f9f9;
-    border-bottom: 1px solid #ddd;
+    background: var(--color-bg-light);
+    border-bottom: 1px solid var(--color-border);
 }
 
 .td2-modify-title {
     font-size: 14px;
     font-weight: 600;
-    color: #666;
+    color: var(--color-text-placeholder);
 }
 
 .td2-modify-close {
     background: none;
     border: none;
     font-size: 22px;
-    color: #999;
+    color: var(--color-text-muted);
     cursor: pointer;
     line-height: 1;
     padding: 0;
 }
 
 .td2-modify-close:hover {
-    color: #333;
+    color: var(--color-text);
 }
 
 .td2-modify-body {
@@ -676,7 +676,7 @@
     flex-shrink: 0;
     font-size: 13px;
     font-weight: 600;
-    color: #555;
+    color: var(--color-text-light);
     padding-top: 6px;
     text-align: right;
     padding-right: 15px;
@@ -698,7 +698,7 @@
 
 .td2-modify-input:focus {
     outline: none;
-    border-color: #337ab7;
+    border-color: var(--color-primary);
 }
 
 .td2-modify-static {
@@ -729,15 +729,15 @@
     align-items: center;
     justify-content: space-between;
     padding: 12px 20px;
-    background: #f9f9f9;
-    border-bottom: 1px solid #ddd;
+    background: var(--color-bg-light);
+    border-bottom: 1px solid var(--color-border);
     border-radius: 6px 6px 0 0;
 }
 
 .td2-team-modal-title {
     font-size: 14px;
     font-weight: 600;
-    color: #666;
+    color: var(--color-text-placeholder);
 }
 
 .td2-team-modal-body {
@@ -754,12 +754,12 @@
 .td2-team-modal-info th,
 .td2-team-modal-info td {
     padding: 8px 12px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--color-border);
     vertical-align: middle;
 }
 
 .td2-team-modal-info th {
-    background: #337ab7;
+    background: var(--color-primary);
     color: #fff;
     font-weight: 600;
     width: 100px;
@@ -776,7 +776,7 @@
 .td2-member-table th,
 .td2-member-table td {
     padding: 8px 10px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--color-border);
     vertical-align: middle;
 }
 
@@ -789,15 +789,15 @@
     color: #fff;
     font-weight: 600;
     font-size: 12px;
-    border-color: #555;
+    border-color: var(--color-text-light);
 }
 
 .td2-member-table tbody tr:hover {
-    background: #f9f9f9;
+    background: var(--color-bg-light);
 }
 
 .td2-member-editable {
-    color: #337ab7;
+    color: var(--color-primary);
     cursor: pointer;
 }
 
@@ -808,7 +808,7 @@
 .td2-team-modal-subtitle {
     font-size: 16px;
     font-weight: 600;
-    color: #333;
+    color: var(--color-text);
     margin: 0 0 12px 0;
 }
 
@@ -823,7 +823,7 @@
 
 .td2-team-modal-input:focus {
     outline: none;
-    border-color: #337ab7;
+    border-color: var(--color-primary);
 }
 
 .td2-team-modal-actions {
@@ -843,7 +843,7 @@
 .td2-modal-btn-gray {
     padding: 5px 12px;
     background: #fff;
-    color: #333;
+    color: var(--color-text);
     border: 1px solid #ccc;
     border-radius: 3px;
     font-size: 12px;
@@ -852,12 +852,12 @@
 }
 
 .td2-modal-btn-gray:hover {
-    background: #e6e6e6;
+    background: var(--color-bg-gray);
 }
 
 .td2-modal-btn-blue {
     padding: 5px 12px;
-    background: #337ab7;
+    background: var(--color-primary);
     color: #fff;
     border: none;
     border-radius: 3px;
@@ -905,7 +905,7 @@
 .td2-mission-team-label {
     font-size: 13px;
     font-weight: 600;
-    color: #666;
+    color: var(--color-text-placeholder);
     white-space: nowrap;
 }
 
@@ -940,7 +940,7 @@
 }
 
 .td2-impact-modal-header .td2-modify-close:hover {
-    color: #ddd;
+    color: var(--color-border);
 }
 
 .td2-impact-modal-body {
@@ -979,27 +979,27 @@
     border-collapse: collapse;
     table-layout: fixed;
     border-top: 4px solid #3F51B5;
-    border-left: 1px solid #CACACA;
-    border-right: 1px solid #CACACA;
-    border-bottom: 1px solid #CACACA;
+    border-left: 1px solid var(--color-divider);
+    border-right: 1px solid var(--color-divider);
+    border-bottom: 1px solid var(--color-divider);
 }
 
 .td2-impact-table th {
-    background: #F3F5F9;
+    background: var(--color-bg-panel);
     padding: 0;
     height: 44px;
     font-family: 'Pretendard', sans-serif;
     font-weight: 700;
     font-size: 14px;
-    color: #353B72;
-    border-bottom: 1px solid #CACACA;
+    color: var(--color-primary-dark);
+    border-bottom: 1px solid var(--color-divider);
     text-align: center;
     vertical-align: middle;
 }
 
 .td2-impact-no {
     width: 4%;
-    border-right: 1px solid #CACACA;
+    border-right: 1px solid var(--color-divider);
 }
 
 .td2-impact-q {
@@ -1011,7 +1011,7 @@
 }
 
 .td2-impact-table tbody tr {
-    border-bottom: 1px solid #CACACA;
+    border-bottom: 1px solid var(--color-divider);
 }
 
 .td2-impact-table tbody tr:hover {
@@ -1023,11 +1023,11 @@
     font-family: 'Pretendard', sans-serif;
     font-weight: 500;
     font-size: 14px;
-    color: #333;
+    color: var(--color-text);
     padding: 0 8px;
     height: 44px;
-    border-right: 1px solid #CACACA;
-    border-bottom: 1px solid #CACACA;
+    border-right: 1px solid var(--color-divider);
+    border-bottom: 1px solid var(--color-divider);
     vertical-align: middle;
 }
 
@@ -1036,12 +1036,12 @@
     font-family: 'Pretendard', sans-serif;
     font-weight: 400;
     font-size: 14px;
-    color: #333;
+    color: var(--color-text);
     padding: 0 16px;
     height: 44px;
     line-height: 1.8;
-    border-right: 1px solid #CACACA;
-    border-bottom: 1px solid #CACACA;
+    border-right: 1px solid var(--color-divider);
+    border-bottom: 1px solid var(--color-divider);
     vertical-align: middle;
     white-space: nowrap;
     overflow: hidden;
@@ -1052,8 +1052,8 @@
     text-align: center;
     padding: 0;
     height: 44px;
-    border-left: 1px solid #CACACA;
-    border-bottom: 1px solid #CACACA;
+    border-left: 1px solid var(--color-divider);
+    border-bottom: 1px solid var(--color-divider);
     vertical-align: middle;
 }
 
@@ -1067,7 +1067,7 @@
     font-family: 'Pretendard', sans-serif;
     font-weight: 500;
     font-size: 14px;
-    color: #333;
+    color: var(--color-text);
     background: #fff;
     border: none;
     cursor: default;
@@ -1088,8 +1088,8 @@
     height: 44px;
     font-family: 'Pretendard', sans-serif;
     font-size: 13px;
-    color: #333;
-    border-bottom: 1px solid #CACACA;
+    color: var(--color-text);
+    border-bottom: 1px solid var(--color-divider);
     vertical-align: middle;
     white-space: nowrap;
     overflow: hidden;
@@ -1123,14 +1123,14 @@
     font-family: 'Pretendard', sans-serif;
     font-size: 28px;
     font-weight: 700;
-    color: #353B72;
+    color: var(--color-primary-dark);
     margin: 0 0 8px 0;
 }
 
 .td2-id-header-desc {
     font-family: 'Pretendard', sans-serif;
     font-size: 14px;
-    color: #555;
+    color: var(--color-text-light);
     margin: 0;
     line-height: 1.6;
 }
@@ -1187,7 +1187,7 @@
 
 /* 카드 (Legacy / New Identity) */
 .td2-id-card {
-    border: 1px solid #e0e0e0;
+    border: 1px solid var(--color-border-light);
     border-radius: 4px;
     overflow: hidden;
 }
@@ -1199,8 +1199,8 @@
     font-size: 14px;
     font-weight: 500;
     text-align: center;
-    color: #111;
-    border-bottom: 1px solid #e0e0e0;
+    color: var(--color-black);
+    border-bottom: 1px solid var(--color-border-light);
 }
 
 .td2-id-card-title-bold {
@@ -1222,14 +1222,14 @@
 .td2-id-card-subtitle {
     font-family: 'Pretendard', sans-serif;
     font-size: 12px;
-    color: #999;
+    color: var(--color-text-muted);
     text-align: center;
 }
 
 .td2-id-card-value {
     font-family: 'Pretendard', sans-serif;
     font-size: 13px;
-    color: #333;
+    color: var(--color-text);
     text-align: center;
     line-height: 1.6;
     white-space: pre-wrap;
@@ -1288,16 +1288,16 @@
     font-size: 12px;
     font-weight: 500;
     text-align: center;
-    color: #333;
+    color: var(--color-text);
     line-height: 1.4;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid var(--color-border-light);
 }
 
 .td2-id-mini-body {
     padding: 10px 8px;
     font-family: 'Pretendard', sans-serif;
     font-size: 12px;
-    color: #333;
+    color: var(--color-text);
     line-height: 1.5;
     height: 120px;
     white-space: pre-wrap;
@@ -1429,14 +1429,14 @@
     font-family: 'Pretendard', sans-serif;
     font-size: 13px;
     font-weight: 600;
-    color: #333;
+    color: var(--color-text);
     line-height: 1.6;
     margin: 0 0 10px 0;
 }
 
 .td2-flow-desc-example {
     font-weight: 600;
-    color: #999;
+    color: var(--color-text-muted);
 }
 
 /* 전략목표 카드 */
@@ -1447,7 +1447,7 @@
 
 .td2-flow-goal-card {
     flex: 1;
-    border: 1px solid #E6E6E6;
+    border: 1px solid var(--color-bg-gray);
     border-radius: 4px;
     overflow: hidden;
 }
@@ -1458,20 +1458,20 @@
     font-family: 'Pretendard', sans-serif;
     font-size: 14px;
     font-weight: 700;
-    color: #999;
+    color: var(--color-text-muted);
     text-align: center;
-    border-bottom: 1px solid #E6E6E6;
+    border-bottom: 1px solid var(--color-bg-gray);
 }
 
 .td2-flow-goal-title.has-content {
-    color: #333;
+    color: var(--color-text);
 }
 
 .td2-flow-goal-desc {
     padding: 10px 14px;
     font-family: 'Pretendard', sans-serif;
     font-size: 13px;
-    color: #333;
+    color: var(--color-text);
     line-height: 1.6;
     height: 80px;
     white-space: pre-wrap;
@@ -1505,7 +1505,7 @@
     font-family: 'Pretendard', sans-serif;
     font-weight: 700;
     font-size: 13px;
-    color: #111;
+    color: var(--color-black);
     text-align: center;
     border: none;
 }
@@ -1527,9 +1527,9 @@
     padding: 6px 12px;
     font-family: 'Pretendard', sans-serif;
     font-size: 13px;
-    color: #333;
+    color: var(--color-text);
     background: #fff;
-    border: 1px solid #E6E6E6;
+    border: 1px solid var(--color-bg-gray);
     border-top: none;
     line-height: 1.6;
     white-space: nowrap;
@@ -1546,7 +1546,7 @@
 }
 
 .td2-flow-row-num {
-    color: #999;
+    color: var(--color-text-muted);
     margin-right: 4px;
 }
 
@@ -1588,7 +1588,7 @@
 .td2-popover-body {
     font-family: 'Pretendard', sans-serif;
     font-size: 14px;
-    color: #333;
+    color: var(--color-text);
     line-height: 1.8;
     white-space: pre-wrap;
     word-break: break-word;
@@ -1598,7 +1598,7 @@
     display: block;
     margin: 16px auto 0;
     padding: 6px 24px;
-    background: #337ab7;
+    background: var(--color-primary);
     color: #fff;
     border: none;
     border-radius: 4px;
@@ -1612,7 +1612,7 @@
 
 .td2-flow-empty {
     text-align: center;
-    color: #999;
+    color: var(--color-text-muted);
     padding: 12px !important;
 }
 
@@ -1730,9 +1730,9 @@
     padding: 10px 16px;
     font-family: 'Pretendard', sans-serif;
     font-size: 14px;
-    color: #333;
+    color: var(--color-text);
     background: #fff;
-    border: 1px solid #E6E6E6;
+    border: 1px solid var(--color-bg-gray);
     border-left: none;
     border-top-right-radius: 4px;
     display: flex;
@@ -1793,8 +1793,8 @@
     font-family: 'Pretendard', sans-serif;
     font-size: 14px;
     font-weight: 600;
-    border-right: 1px solid #E6E6E6;
-    border-bottom: 1px solid #E6E6E6;
+    border-right: 1px solid var(--color-bg-gray);
+    border-bottom: 1px solid var(--color-bg-gray);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -1810,9 +1810,9 @@
     background: #fff;
     font-family: 'Pretendard', sans-serif;
     font-size: 14px;
-    color: #333;
-    border-right: 1px solid #E6E6E6;
-    border-bottom: 1px solid #E6E6E6;
+    color: var(--color-text);
+    border-right: 1px solid var(--color-bg-gray);
+    border-bottom: 1px solid var(--color-bg-gray);
     border-bottom-right-radius: 4px;
     white-space: nowrap;
     overflow: hidden;
@@ -1865,19 +1865,19 @@
 .td2-qw-subheader-row th {
     padding: 8px 10px;
     background: #EFF0F2;
-    border: 1px solid #E6E6E6;
+    border: 1px solid var(--color-bg-gray);
     font-family: 'Pretendard', sans-serif;
     font-weight: 500;
     font-size: 13px;
     text-align: center;
-    color: #111;
+    color: var(--color-black);
 }
 
 /* 데이터 셀 */
 .td2-qw-table td {
     padding: 8px 10px;
-    border: 1px solid #E6E6E6;
-    color: #333;
+    border: 1px solid var(--color-bg-gray);
+    color: var(--color-text);
     font-size: 13px;
     line-height: 1.6;
     vertical-align: middle;
@@ -1909,7 +1909,7 @@
     font-family: 'Pretendard', sans-serif;
     font-weight: 600;
     font-size: 13px;
-    color: #111;
+    color: var(--color-black);
     text-align: center;
     padding: 8px 10px;
 }
@@ -1982,9 +1982,9 @@
     font-family: 'Pretendard', sans-serif;
     font-weight: 500;
     font-size: 13px;
-    color: #111;
+    color: var(--color-black);
     text-align: center;
-    border: 1px solid #E6E6E6;
+    border: 1px solid var(--color-bg-gray);
     border-top: none;
     box-sizing: border-box;
 }
@@ -2002,9 +2002,9 @@
     padding: 8px 14px;
     font-family: 'Pretendard', sans-serif;
     font-size: 13px;
-    color: #333;
+    color: var(--color-text);
     background: #fff;
-    border: 1px solid #E6E6E6;
+    border: 1px solid var(--color-bg-gray);
     border-top: none;
     display: flex;
     align-items: center;
@@ -2027,7 +2027,7 @@
 }
 
 .td2-qw-outcomes-num {
-    color: #999;
+    color: var(--color-text-muted);
     flex-shrink: 0;
 }
 
@@ -2151,7 +2151,7 @@
 
 .td2-pdf-all-desc {
     font-size: 14px;
-    color: #333;
+    color: var(--color-text);
     margin-bottom: 12px;
     text-align: center;
 }
@@ -2159,7 +2159,7 @@
 .td2-pdf-all-list {
     max-height: 200px;
     overflow-y: auto;
-    border: 1px solid #e0e0e0;
+    border: 1px solid var(--color-border-light);
     border-radius: 4px;
     padding: 8px 12px;
     margin-bottom: 8px;
@@ -2168,7 +2168,7 @@
 .td2-pdf-all-item {
     padding: 6px 0;
     font-size: 13px;
-    color: #555;
+    color: var(--color-text-light);
     border-bottom: 1px solid #f0f0f0;
 }
 
@@ -2183,14 +2183,14 @@
 
 .td2-pdf-all-status {
     font-size: 14px;
-    color: #337ab7;
+    color: var(--color-primary);
     font-weight: 600;
     margin-bottom: 8px;
 }
 
 .td2-pdf-all-team {
     font-size: 13px;
-    color: #666;
+    color: var(--color-text-placeholder);
     margin-bottom: 16px;
 }
 
@@ -2204,7 +2204,7 @@
 
 .td2-pdf-all-bar-fill {
     height: 100%;
-    background: #337ab7;
+    background: var(--color-primary);
     border-radius: 4px;
     transition: width 0.3s ease;
 }
@@ -2228,30 +2228,30 @@
     gap: 6px;
     padding: 10px 20px;
     background: #f5f6f8;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid var(--color-border-light);
 }
 
 .td2-modal-team-btn {
     padding: 6px 14px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--color-border);
     border-radius: 4px;
     background: #fff;
     cursor: pointer;
     font-family: 'Pretendard', sans-serif;
     font-size: 12px;
-    color: #333;
+    color: var(--color-text);
     transition: all 0.15s;
 }
 
 .td2-modal-team-btn:hover {
-    border-color: #337ab7;
-    color: #337ab7;
+    border-color: var(--color-primary);
+    color: var(--color-primary);
 }
 
 .td2-modal-team-btn.active {
-    background: #337ab7;
+    background: var(--color-primary);
     color: #fff;
-    border-color: #337ab7;
+    border-color: var(--color-primary);
 }
 
 /* 팀 선택 모달 (미사용) */
@@ -2274,7 +2274,7 @@
 .td2-team-select-modal-title {
     font-size: 16px;
     font-weight: 700;
-    color: #333;
+    color: var(--color-text);
 }
 
 .td2-team-select-modal-body {
@@ -2283,7 +2283,7 @@
 
 .td2-team-select-desc {
     font-size: 13px;
-    color: #666;
+    color: var(--color-text-placeholder);
     margin: 0 0 15px 0;
 }
 
@@ -2295,24 +2295,24 @@
 
 .td2-team-select-btn {
     padding: 8px 16px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--color-border);
     border-radius: 4px;
     background: #fff;
     cursor: pointer;
     font-size: 13px;
-    color: #333;
+    color: var(--color-text);
     transition: all 0.15s;
 }
 
 .td2-team-select-btn:hover {
-    border-color: #337ab7;
-    color: #337ab7;
+    border-color: var(--color-primary);
+    color: var(--color-primary);
 }
 
 .td2-team-select-btn.active {
-    background: #337ab7;
+    background: var(--color-primary);
     color: #fff;
-    border-color: #337ab7;
+    border-color: var(--color-primary);
 }
 
 .td2-team-select-modal-footer {

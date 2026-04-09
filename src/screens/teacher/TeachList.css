@@ -14,7 +14,7 @@
 .tls-title-heading h2 {
     font-size: 24px;
     font-weight: 300;
-    color: #666;
+    color: var(--color-text-placeholder);
     margin: 0 0 5px 0;
 }
 
@@ -43,7 +43,7 @@
 /* 패널 */
 .tls-panel {
     background: #fff;
-    border: 1px solid #ddd;
+    border: 1px solid var(--color-border);
     border-radius: 3px;
     margin-bottom: 20px;
     box-shadow: 0 1px 1px rgba(0,0,0,0.05);
@@ -53,17 +53,17 @@
     height: 40px;
     line-height: 36px;
     padding: 0 15px;
-    background: #f9f9f9;
-    color: #666;
+    background: var(--color-bg-light);
+    color: var(--color-text-placeholder);
     font-size: 14px;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid var(--color-border);
     border-radius: 3px 3px 0 0;
 }
 
 .tls-panel-title {
     font-size: 14px;
     font-weight: 600;
-    color: #666;
+    color: var(--color-text-placeholder);
 }
 
 .tls-panel-body {
@@ -93,7 +93,7 @@
 .tls-table th,
 .tls-table td {
     padding: 8px 10px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--color-border);
     vertical-align: middle;
 }
 
@@ -103,11 +103,11 @@
 }
 
 .tls-table tbody tr:hover {
-    background: #f9f9f9;
+    background: var(--color-bg-light);
 }
 
 .tls-table tbody td {
-    color: #555;
+    color: var(--color-text-light);
 }
 
 /* 진행중 강의실 헤더 (어두운색) */
@@ -118,7 +118,7 @@
 
 .tls-table.tls-primary thead th {
     color: #fff;
-    border-color: #555;
+    border-color: var(--color-text-light);
 }
 
 /* 설정중 강의실 헤더 (빨간색/분홍색) */
@@ -134,7 +134,7 @@
 
 /* 종료된 강의실 헤더 (회색) */
 .tls-table.tls-dark thead tr {
-    background-color: #555;
+    background-color: var(--color-text-light);
     color: #fff;
 }
 
@@ -197,8 +197,8 @@
 .tls-btn-default {
     display: block;
     width: 100%;
-    background-color: #e0e0e0;
-    color: #333;
+    background-color: var(--color-border-light);
+    color: var(--color-text);
     border: none;
     border-radius: 20px;
     padding: 4px 12px;
@@ -221,7 +221,7 @@
 /* 빈 상태 */
 .tls-empty {
     padding: 30px 10px !important;
-    color: #999;
+    color: var(--color-text-muted);
 }
 
 @media (max-width: 1200px) {

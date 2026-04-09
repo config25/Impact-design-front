@@ -88,7 +88,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background: #353B72;
+    background: var(--color-primary-dark);
     width: 100%;
     height: 100px;
     padding: 0 20px;
@@ -124,9 +124,9 @@
     background: rgba(255, 255, 255, 0.1);
 }
 
-/* 선택된 상태: #F3F5F9 배경 */
+/* 선택된 상태: var(--color-bg-panel) 배경 */
 .gnb-item.active {
-    background: #F3F5F9;
+    background: var(--color-bg-panel);
 }
 
 /* 기본 상태 (선택 안됨): 흰색 텍스트, Regular */
@@ -159,13 +159,13 @@
 /* 영문 타이틀 - 18px, Bold */
 .gnb-item.active .gnb-title {
     font-weight: 700;
-    color: #353B72;
+    color: var(--color-primary-dark);
 }
 
 /* 한글 서브타이틀 - 24px, Bold */
 .gnb-item.active .gnb-subtitle {
     font-weight: 700;
-    color: #353B72;
+    color: var(--color-primary-dark);
 }
 
 /* 비활성화 (step 미포함) */

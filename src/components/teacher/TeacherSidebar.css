@@ -11,7 +11,7 @@
     padding-top: 60px;
     padding-bottom: 40px;
     background: #20252b;
-    color: #ddd;
+    color: var(--color-border);
     font-size: 13px;
     z-index: 1029;
     display: flex;
@@ -74,7 +74,7 @@
     background: none;
     border: none;
     cursor: pointer;
-    color: #ddd;
+    color: var(--color-border);
     font-family: 'Pretendard', sans-serif;
     font-size: 13px;
     font-weight: 400;
@@ -151,7 +151,7 @@
     background: none;
     border: none;
     cursor: pointer;
-    color: #ddd;
+    color: var(--color-border);
     font-family: 'Pretendard', sans-serif;
     font-size: 13px;
     text-align: left;

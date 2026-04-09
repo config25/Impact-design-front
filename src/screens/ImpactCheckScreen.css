@@ -10,7 +10,7 @@
 
 /* 헤더 영역 - 1920 x 140 */
 .impact-header {
-    background: #F3F5F9;
+    background: var(--color-bg-panel);
     width: 100%;
     height: 140px;
     padding: 0 44px;
@@ -47,8 +47,8 @@
     height: 56px;
     padding: 0 24px;
     background: #FFFFFF;
-    color: #353B72;
-    border: 2px solid #353B72;
+    color: var(--color-primary-dark);
+    border: 2px solid var(--color-primary-dark);
     border-radius: 8px;
     font-size: 16px;
     font-weight: 600;
@@ -57,7 +57,7 @@
 }
 
 .save-btn:hover {
-    background: #F3F5F9;
+    background: var(--color-bg-panel);
 }
 
 .save-btn:disabled {
@@ -70,7 +70,7 @@
     min-width: 134px;
     height: 56px;
     padding: 0 24px;
-    background: #353B72;
+    background: var(--color-primary-dark);
     color: white;
     border: none;
     border-radius: 8px;
@@ -141,7 +141,7 @@
     width: 349px;
     height: 47px;
     padding: 0 16px;
-    border: 1px solid #CACACA;
+    border: 1px solid var(--color-divider);
     border-radius: 4px;
     background: #FFFFFF;
     font-size: 14px;
@@ -165,9 +165,9 @@
     border-collapse: collapse;
     table-layout: fixed;
     border-top: 4px solid #3F51B5;
-    border-left: 1px solid #CACACA;
-    border-right: 1px solid #CACACA;
-    border-bottom: 1px solid #CACACA;
+    border-left: 1px solid var(--color-divider);
+    border-right: 1px solid var(--color-divider);
+    border-bottom: 1px solid var(--color-divider);
 }
 
 /* 테이블 헤더 - 높이 54px (hug)
@@ -176,7 +176,7 @@
    매우부정~매우긍정: 436px (5칸으로 나눔 = 각 87.2px)
 */
 .questionnaire-table th {
-    background: #F3F5F9;
+    background: var(--color-bg-panel);
     padding: 0;
     height: 54px;
     font-family: 'Pretendard', sans-serif;
@@ -184,8 +184,8 @@
     font-size: 20px;
     line-height: 200%;
     letter-spacing: 0;
-    color: #353B72;
-    border-bottom: 1px solid #CACACA;
+    color: var(--color-primary-dark);
+    border-bottom: 1px solid var(--color-divider);
     text-align: center;
     vertical-align: middle;
 }
@@ -193,7 +193,7 @@
 /* No 박스 - 88 x 54 */
 .questionnaire-table th.no-col {
     width: 88px;
-    border-right: 1px solid #CACACA;
+    border-right: 1px solid var(--color-divider);
 }
 
 /* Questionnaires 박스 - 두 개로 나눔 (962 + 348 = 1310) */
@@ -205,7 +205,7 @@
 
 .questionnaire-table th.question-col-2 {
     width: 348px;
-    border-right: 1px solid #CACACA;
+    border-right: 1px solid var(--color-divider);
 }
 
 /* 매우부정 매우긍정 박스 - 434 x 54 (5칸 = 각 86.8px) */
@@ -219,39 +219,39 @@
     height: 50px;
     font-family: 'Pretendard', sans-serif;
     font-size: 18px;
-    color: #333333;
-    border-bottom: 1px solid #CACACA;
+    color: var(--color-text);
+    border-bottom: 1px solid var(--color-divider);
     text-align: center;
     vertical-align: middle;
 }
 
 .questionnaire-table td.no-cell {
     width: 88px;
-    border-right: 1px solid #CACACA;
+    border-right: 1px solid var(--color-divider);
     font-family: 'Pretendard', sans-serif;
     font-weight: 500;
     font-size: 18px;
     line-height: 200%;
     letter-spacing: 0;
-    color: #333333;
+    color: var(--color-text);
 }
 
 /* 1-12번 질문 셀 (colSpan=2로 합쳐짐) */
 .questionnaire-table td.question-cell {
     text-align: left;
-    border-right: 1px solid #CACACA;
+    border-right: 1px solid var(--color-divider);
     padding-left: 16px;
     font-family: 'Pretendard', sans-serif;
     font-weight: 400;
     font-size: 18px;
     line-height: 200%;
     letter-spacing: 0;
-    color: #333333;
+    color: var(--color-text);
 }
 
 .questionnaire-table td.rating-cell {
     width: 86.8px;
-    border-left: 1px solid #CACACA;
+    border-left: 1px solid var(--color-divider);
     padding: 0;
 }
 
@@ -271,7 +271,7 @@
     font-size: 18px;
     line-height: 200%;
     letter-spacing: 0;
-    color: #333333;
+    color: var(--color-text);
     cursor: pointer;
     transition: all 0.2s ease;
     display: inline-flex;
@@ -296,14 +296,14 @@
     height: 50px;
     text-align: left;
     padding: 7px 20px;
-    border-right: 1px solid #CACACA;
+    border-right: 1px solid var(--color-divider);
     box-sizing: border-box;
     font-family: 'Pretendard', sans-serif;
     font-weight: 400;
     font-size: 18px;
     line-height: 200%;
     letter-spacing: 0;
-    color: #333333;
+    color: var(--color-text);
 }
 
 /* 주관식 입력 셀 - 782 x 50 (colSpan=6: 348 + 86.8*5 = 782) */
@@ -340,7 +340,7 @@
 }
 
 .text-input:focus {
-    border-bottom: 1px solid #353B72;
+    border-bottom: 1px solid var(--color-primary-dark);
 }
 
 .text-input::placeholder {

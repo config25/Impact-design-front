@@ -16,7 +16,7 @@
 .tdt-title {
     font-size: 24px;
     font-weight: 300;
-    color: #666;
+    color: var(--color-text-placeholder);
     margin: 0;
 }
 
@@ -26,7 +26,7 @@
 }
 
 .tdt-btn-end {
-    background-color: #337ab7;
+    background-color: var(--color-primary);
     color: #fff;
     border: none;
     border-radius: 3px;
@@ -75,7 +75,7 @@
 /* 패널 공통 */
 .tdt-panel {
     background: #fff;
-    border: 1px solid #ddd;
+    border: 1px solid var(--color-border);
     border-radius: 3px;
     margin-bottom: 20px;
     box-shadow: 0 1px 1px rgba(0,0,0,0.05);
@@ -85,17 +85,17 @@
     height: 40px;
     line-height: 36px;
     padding: 0 15px;
-    background: #f9f9f9;
-    color: #666;
+    background: var(--color-bg-light);
+    color: var(--color-text-placeholder);
     font-size: 14px;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid var(--color-border);
     border-radius: 3px 3px 0 0;
 }
 
 .tdt-panel-title {
     font-size: 14px;
     font-weight: 600;
-    color: #333;
+    color: var(--color-text);
 }
 
 .tdt-panel-body {
@@ -104,8 +104,8 @@
 
 .tdt-panel-footer {
     padding: 10px 15px;
-    border-top: 1px solid #ddd;
-    background: #f9f9f9;
+    border-top: 1px solid var(--color-border);
+    background: var(--color-bg-light);
     display: flex;
     gap: 6px;
     justify-content: flex-end;
@@ -166,7 +166,7 @@
 .tdt-info-table th,
 .tdt-info-table td {
     padding: 10px 15px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--color-border);
     vertical-align: middle;
 }
 
@@ -180,7 +180,7 @@
 }
 
 .tdt-info-table td {
-    color: #555;
+    color: var(--color-text-light);
 }
 
 .tdt-logo-img {
@@ -199,22 +199,22 @@
 .tdt-team-table th,
 .tdt-team-table td {
     padding: 8px 10px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--color-border);
     vertical-align: middle;
 }
 
 .tdt-team-table thead th {
     background-color: #f5f5f5;
     font-weight: 600;
-    color: #333;
+    color: var(--color-text);
 }
 
 .tdt-team-table tbody tr:hover {
-    background: #f9f9f9;
+    background: var(--color-bg-light);
 }
 
 .tdt-team-table tbody td {
-    color: #555;
+    color: var(--color-text-light);
 }
 
 /* 팀/참여자 정보입력 버튼 */
@@ -237,7 +237,7 @@
 /* 하단 버튼들 */
 .tdt-btn-default {
     background-color: #fff;
-    color: #333;
+    color: var(--color-text);
     border: 1px solid #ccc;
     border-radius: 3px;
     padding: 5px 14px;
@@ -247,7 +247,7 @@
 }
 
 .tdt-btn-default:hover {
-    background-color: #e6e6e6;
+    background-color: var(--color-bg-gray);
 }
 
 /* 제출 기한 설정 */
@@ -265,7 +265,7 @@
 .tdt-deadline-label {
     font-size: 13px;
     font-weight: 600;
-    color: #333;
+    color: var(--color-text);
     margin-right: 10px;
 }
 
@@ -275,17 +275,17 @@
     border-radius: 3px;
     font-family: 'Pretendard', sans-serif;
     font-size: 13px;
-    color: #555;
+    color: var(--color-text-light);
 }
 
 .tdt-deadline-unit {
     font-size: 13px;
-    color: #555;
+    color: var(--color-text-light);
 }
 
 /* 교육 시작하기 버튼 */
 .tdt-btn-start {
-    background-color: #337ab7;
+    background-color: var(--color-primary);
     color: #fff;
     border: none;
     border-radius: 3px;
@@ -303,7 +303,7 @@
 /* 빈 상태 */
 .tdt-empty {
     padding: 30px 10px !important;
-    color: #999;
+    color: var(--color-text-muted);
     text-align: center;
 }
 
@@ -333,14 +333,14 @@
 
 .tdt-team-modal-header {
     padding: 12px 20px;
-    border-bottom: 1px solid #ddd;
-    background: #f9f9f9;
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-bg-light);
 }
 
 .tdt-team-modal-title {
     font-size: 14px;
     font-weight: 600;
-    color: #333;
+    color: var(--color-text);
 }
 
 .tdt-team-modal-body {
@@ -350,7 +350,7 @@
 .tdt-team-modal-subtitle {
     font-size: 14px;
     font-weight: 600;
-    color: #333;
+    color: var(--color-text);
     margin: 0 0 12px 0;
 }
 
@@ -365,7 +365,7 @@
 .tdt-team-modal-info th,
 .tdt-team-modal-info td {
     padding: 8px 12px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--color-border);
     vertical-align: middle;
 }
 
@@ -378,7 +378,7 @@
 }
 
 .tdt-team-modal-info td {
-    color: #555;
+    color: var(--color-text-light);
 }
 
 .tdt-team-modal-input {
@@ -402,7 +402,7 @@
 .tdt-member-table th,
 .tdt-member-table td {
     padding: 7px 8px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--color-border);
     vertical-align: middle;
 }
 
@@ -414,15 +414,15 @@
 }
 
 .tdt-member-table tbody tr:hover {
-    background: #f9f9f9;
+    background: var(--color-bg-light);
 }
 
 .tdt-member-table tbody td {
-    color: #555;
+    color: var(--color-text-light);
 }
 
 .tdt-member-link {
-    color: #337ab7;
+    color: var(--color-primary);
 }
 
 /* 모달 - 하단 액션 */
@@ -441,8 +441,8 @@
 }
 
 .tdt-modal-btn-gray {
-    background-color: #e0e0e0;
-    color: #333;
+    background-color: var(--color-border-light);
+    color: var(--color-text);
     border: none;
     border-radius: 3px;
     padding: 5px 12px;
@@ -456,7 +456,7 @@
 }
 
 .tdt-modal-btn-blue {
-    background-color: #337ab7;
+    background-color: var(--color-primary);
     color: #fff;
     border: none;
     border-radius: 3px;
@@ -471,7 +471,7 @@
 }
 
 .tdt-modal-btn-dark {
-    background-color: #333;
+    background-color: var(--color-text);
     color: #fff;
     border: none;
     border-radius: 3px;

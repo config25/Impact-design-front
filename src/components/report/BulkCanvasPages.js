@@ -311,8 +311,11 @@ const WinCanvasPage = ({ data, type, logoUrl }) => {
     );
 };
 
-/* ── 전체 팀 캔버스 페이지 모음 ── */
-const BulkCanvasPages = ({ canvasData }) => {
+/* ── 전체 팀 캔버스 페이지 모음 ──
+ * canvasType 미지정: 팀별로 4종 캔버스 모두 렌더 (기본)
+ * canvasType 지정 ("identity" | "flow" | "quick" | "build"): 해당 캔버스 1종만 팀 순서대로 렌더
+ */
+const BulkCanvasPages = ({ canvasData, canvasType }) => {
     if (!canvasData || canvasData.length === 0) return null;
     return (
         <>
@@ -320,10 +323,10 @@ const BulkCanvasPages = ({ canvasData }) => {
                 const logoUrl = team.imageUrl ? getImageUrl(team.imageUrl) : null;
                 return (
                     <div key={team.teamId}>
-                        <IdentityCanvasPage data={team.identityCanvas} logoUrl={logoUrl} />
-                        <FlowCanvasPage data={team.flowCanvas} logoUrl={logoUrl} />
-                        <WinCanvasPage data={team.quickWinCanvas} type="quick" logoUrl={logoUrl} />
-                        <WinCanvasPage data={team.buildWinCanvas} type="build" logoUrl={logoUrl} />
+                        {(!canvasType || canvasType === "identity") && <IdentityCanvasPage data={team.identityCanvas} logoUrl={logoUrl} />}
+                        {(!canvasType || canvasType === "flow") && <FlowCanvasPage data={team.flowCanvas} logoUrl={logoUrl} />}
+                        {(!canvasType || canvasType === "quick") && <WinCanvasPage data={team.quickWinCanvas} type="quick" logoUrl={logoUrl} />}
+                        {(!canvasType || canvasType === "build") && <WinCanvasPage data={team.buildWinCanvas} type="build" logoUrl={logoUrl} />}
                     </div>
                 );
             })}

@@ -116,7 +116,7 @@
     font-size: 16px;
     line-height: 170%;
     letter-spacing: 0;
-    color: #111111;
+    color: var(--color-black);
     outline: none;
 }
 

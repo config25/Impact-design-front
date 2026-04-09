@@ -118,7 +118,7 @@
 .canvas-item-wrapper:nth-child(4) .canvas-item,
 .canvas-item-wrapper:nth-child(5) .canvas-item {
     background: #131A5BB2;
-    border: 1px solid #353B72;
+    border: 1px solid var(--color-primary-dark);
 }
 
 .canvas-item-wrapper:nth-child(2) .canvas-item:hover,

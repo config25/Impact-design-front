@@ -21,7 +21,15 @@
       "Bash(npx:*)",
       "Bash(ls:*)",
       "Bash(wc -l src/**/*.js src/**/**/*.js src/**/**/**/*.js)",
-      "Bash(npm uninstall:*)"
+      "Bash(npm uninstall:*)",
+      "Bash(xargs -I{} wc -l \"{}\")",
+      "Bash(chmod +x /tmp/css_replace.sh)",
+      "Bash(bash /tmp/css_replace.sh \"src/components/identity/identity.css\")",
+      "Bash(bash /tmp/css_replace.sh \"src/screens/PerformanceStreamScreen.css\")",
+      "Bash(bash /tmp/css_replace.sh \"src/screens/ImpactReviewScreen.css\")",
+      "Bash(bash /tmp/css_replace.sh \"src/screens/teacher/TeachDetail.css\")",
+      "Bash(bash /tmp/css_replace.sh \"src/screens/ImpactCheckScreen.css\")",
+      "Bash(xargs -I {} sh -c 'echo \"=== {} ===\" && head -20 {}')"
     ]
   }
 }

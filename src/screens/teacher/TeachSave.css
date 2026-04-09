@@ -11,7 +11,7 @@
 /* 패널 */
 .tsv-panel {
     background: #fff;
-    border: 1px solid #ddd;
+    border: 1px solid var(--color-border);
     border-radius: 3px;
     width: 700px;
     max-width: 100%;
@@ -20,15 +20,15 @@
 
 .tsv-panel-heading {
     padding: 12px 20px;
-    background: #f9f9f9;
-    border-bottom: 1px solid #ddd;
+    background: var(--color-bg-light);
+    border-bottom: 1px solid var(--color-border);
     border-radius: 3px 3px 0 0;
 }
 
 .tsv-panel-title {
     font-size: 15px;
     font-weight: 600;
-    color: #333;
+    color: var(--color-text);
 }
 
 .tsv-panel-body {
@@ -37,8 +37,8 @@
 
 .tsv-panel-footer {
     padding: 12px 20px;
-    border-top: 1px solid #ddd;
-    background: #f9f9f9;
+    border-top: 1px solid var(--color-border);
+    background: var(--color-bg-light);
     text-align: center;
     border-radius: 0 0 3px 3px;
 }
@@ -60,19 +60,19 @@
     width: 120px;
     text-align: right;
     padding-right: 20px;
-    color: #555;
+    color: var(--color-text-light);
     font-weight: 500;
     white-space: nowrap;
 }
 
 .tsv-form-table td {
-    color: #333;
+    color: var(--color-text);
 }
 
 /* 강의실 유형 셀렉트 (Basic 드롭다운) */
 .tsv-select-type {
     padding: 6px 16px;
-    background-color: #337ab7;
+    background-color: var(--color-primary);
     color: #fff;
     border: none;
     border-radius: 3px;
@@ -84,13 +84,13 @@
 
 .tsv-select-type option {
     background: #fff;
-    color: #333;
+    color: var(--color-text);
 }
 
 /* 라디오 */
 .tsv-radio {
     font-size: 13px;
-    color: #555;
+    color: var(--color-text-light);
     margin-right: 15px;
     cursor: pointer;
     display: inline-flex;
@@ -107,7 +107,7 @@
     border-radius: 3px;
     font-family: 'Pretendard', sans-serif;
     font-size: 13px;
-    color: #333;
+    color: var(--color-text);
 }
 
 .tsv-input-name:focus,
@@ -123,13 +123,13 @@
     border-radius: 3px;
     font-family: 'Pretendard', sans-serif;
     font-size: 13px;
-    color: #333;
+    color: var(--color-text);
 }
 
 /* 팀수 / 팀원수 셀렉트 */
 .tsv-select-num {
     padding: 5px 10px;
-    background-color: #337ab7;
+    background-color: var(--color-primary);
     color: #fff;
     border: none;
     border-radius: 3px;
@@ -141,12 +141,12 @@
 
 .tsv-select-num option {
     background: #fff;
-    color: #333;
+    color: var(--color-text);
 }
 
 .tsv-unit {
     font-size: 13px;
-    color: #555;
+    color: var(--color-text-light);
     margin-left: 6px;
 }
 
@@ -174,7 +174,7 @@
     border: 1px solid #ccc;
     border-radius: 3px;
     font-size: 12px;
-    color: #555;
+    color: var(--color-text-light);
     background: #fff;
     cursor: pointer;
 }
@@ -185,12 +185,12 @@
 
 .tsv-file-name {
     font-size: 12px;
-    color: #999;
+    color: var(--color-text-muted);
 }
 
 /* 강의실 생성 버튼 */
 .tsv-btn-submit {
-    background-color: #337ab7;
+    background-color: var(--color-primary);
     color: #fff;
     border: none;
     border-radius: 3px;

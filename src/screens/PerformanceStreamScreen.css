@@ -11,7 +11,7 @@
 .sub-header {
     width: 1920px;
     height: 140px;
-    background: #F3F5F9;
+    background: var(--color-bg-panel);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -25,7 +25,7 @@
     font-size: 32px;
     line-height: 100%;
     letter-spacing: 0%;
-    color: #353B72;
+    color: var(--color-primary-dark);
 }
 
 .sub-header-actions {
@@ -251,7 +251,7 @@
     font-size: 18px;
     line-height: 160%;
     letter-spacing: 0;
-    color: #333333;
+    color: var(--color-text);
     margin: 0 0 16px 0;
 }
 
@@ -262,7 +262,7 @@
 .row-desc .example {
     font-weight: 600;
     text-decoration: none;
-    color: #999999;
+    color: var(--color-text-muted);
 }
 
 /* Goal Cards (전략목표) */
@@ -290,7 +290,7 @@
     font-size: 18px;
     line-height: 100%;
     letter-spacing: 0;
-    color: #333333;
+    color: var(--color-text);
     text-align: center;
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
@@ -309,13 +309,13 @@
     font-weight: 400;
     line-height: 160%;
     letter-spacing: 0;
-    color: #333333;
+    color: var(--color-text);
     text-align: center;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    border: 1px solid #E6E6E6;
+    border: 1px solid var(--color-bg-gray);
     border-top: none;
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
@@ -362,19 +362,19 @@
     line-height: 100%;
     letter-spacing: 0;
     text-align: center;
-    color: #999999;
+    color: var(--color-text-muted);
 }
 
 /* 빈 카드 타이틀 스타일 - 기본은 회색 */
 .goal-card .goal-card-title {
     font-weight: 700;
     font-size: 18px;
-    color: #999999;
+    color: var(--color-text-muted);
 }
 
 /* 타이틀에 내용이 있을 때만 검은색 */
 .goal-card .goal-card-title.has-content {
-    color: #333333;
+    color: var(--color-text);
 }
 
 /* Goal card 편집 입력 스타일 */
@@ -387,13 +387,13 @@
     font-weight: 700;
     font-size: 18px;
     line-height: 100%;
-    color: #333333;
+    color: var(--color-text);
     text-align: center;
     outline: none;
 }
 
 .goal-title-input::placeholder {
-    color: #999999;
+    color: var(--color-text-muted);
 }
 
 .goal-content-input {
@@ -405,7 +405,7 @@
     font-size: 18px;
     font-weight: 400;
     line-height: 160%;
-    color: #333333;
+    color: var(--color-text);
     text-align: center;
     outline: none;
     resize: none;
@@ -415,7 +415,7 @@
 }
 
 .goal-content-input::placeholder {
-    color: #999999;
+    color: var(--color-text-muted);
 }
 
 .goal-card-title,
@@ -458,7 +458,7 @@
     font-size: 18px;
     line-height: 100%;
     letter-spacing: 0;
-    color: #111111;
+    color: var(--color-black);
     text-align: center;
 }
 
@@ -483,15 +483,15 @@
     font-weight: 400;
     line-height: 160%;
     letter-spacing: 0;
-    color: #333333;
+    color: var(--color-text);
     background: #FFFFFF;
-    border: 1px solid #E6E6E6;
+    border: 1px solid var(--color-bg-gray);
     border-top: none;
 }
 
 /* 빈 행 (2., 3.) 스타일 */
 .metric-table td.empty-row {
-    color: #999999;
+    color: var(--color-text-muted);
 }
 
 .metric-table td:first-child {
@@ -503,7 +503,7 @@
 }
 
 .metric-table tr:first-child td {
-    border-top: 1px solid #E6E6E6;
+    border-top: 1px solid var(--color-bg-gray);
 }
 
 /* 테이블 하단 꺾쇠 */
@@ -532,13 +532,13 @@
 
 /* Row number (1. 2. 3.) */
 .row-number {
-    color: #999999;
+    color: var(--color-text-muted);
     margin-right: 4px;
 }
 
 /* 내용이 있을 때 row number도 검은색 */
 .metric-table td:not(.empty-row) .row-number {
-    color: #333333;
+    color: var(--color-text);
 }
 
 /* Metric input 스타일 */
@@ -549,18 +549,18 @@
     font-size: 18px;
     font-weight: 400;
     line-height: 160%;
-    color: #333333;
+    color: var(--color-text);
     outline: none;
     width: calc(100% - 24px);
 }
 
 .metric-input::placeholder {
-    color: #999999;
+    color: var(--color-text-muted);
 }
 
 /* 내용이 있는 셀의 값 */
 .metric-value {
-    color: #333333;
+    color: var(--color-text);
 }
 
 /* 반응형 */

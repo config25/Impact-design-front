@@ -11,15 +11,16 @@ const ReportVoicePage = ({
     boxTitle,
     boxSubtitle,
     data,
-    dataMaxWidth,
-    fallbackWidth,
-    fallbackWidthLast,
 }) => {
     const aiSummary = data?.aiSummary;
-    const top4 = data?.top4;
+    const top12 = data?.top12;
     const keywords = data?.keywords;
     const totalCount = data?.totalCount;
     const truncate = (text, max = 55) => text && text.length > max ? text.substring(0, max) + "..." : text;
+
+    // 항목 수에 따라 표시 슬롯 결정: 12+ → 12, 8~11 → 8, 그 외 → 4
+    const voiceCount = top12?.length || 0;
+    const slotCount = voiceCount >= 12 ? 12 : voiceCount >= 8 ? 8 : 4;
 
     return (
         <div className={`report-page report-page-${pageNumber}`}>
@@ -54,19 +55,15 @@ const ReportVoicePage = ({
 
             <div className="p6-voice-section">
                 <h3 className="p6-voice-title">Voice of Employee {totalCount != null && <span className="p6-voice-count">({totalCount}개)</span>}</h3>
-                <div className="p6-voice-bubbles">
-                    {top4?.slice(0, 4).map((item, idx) => (
-                        <div className="p6-voice-bubble" key={idx} style={{ width: 'auto', maxWidth: dataMaxWidth }}>
-                            <p className="p6-voice-text">"{truncate(item.content)}"</p>
-                        </div>
-                    )) || (
-                        <>
-                            {Array.from({ length: 3 }, (_, i) => (
-                                <div className="p6-voice-bubble" key={i} style={{ width: fallbackWidth }}><p className="p6-voice-text">-</p></div>
-                            ))}
-                            <div className="p6-voice-bubble" style={{ width: fallbackWidthLast || fallbackWidth }}><p className="p6-voice-text">-</p></div>
-                        </>
-                    )}
+                <div className={`p6-voice-bubbles p6-voice-bubbles-grid p6-voice-bubbles-cols-${slotCount / 4}`}>
+                    {Array.from({ length: slotCount }, (_, idx) => {
+                        const item = top12?.[idx];
+                        return (
+                            <div className="p6-voice-bubble" key={idx}>
+                                <p className="p6-voice-text">{item?.content ? `"${item.content}"` : "-"}</p>
+                            </div>
+                        );
+                    })}
                 </div>
             </div>
 
