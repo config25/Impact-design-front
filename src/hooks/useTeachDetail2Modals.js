@@ -1,7 +1,18 @@
 import { useState } from "react";
 import { updateClass } from "../services/teachClassService";
 import { getTeamInfo, updateTeamInfo, deleteTeamMembers, setTeamWriter, addTeamMember, getDeletedTeams, restoreTeam } from "../services/teachTeamService";
-import { getImpactCheckByTeam, getIdentityCanvasByTeam, getFlowCanvasByTeam, getQuickWinByTeam, getBuildWinByTeam, getFundingByTeam, getFundingResultByTeam } from "../services/teachSubmissionService";
+import { getImpactCheckByTeam, getIdentityCanvasByTeam, getFlowCanvasByTeam, getQuickWinByTeam, getBuildWinByTeam, getFundingByTeam, getFundingResultByTeam, rollbackMission } from "../services/teachSubmissionService";
+
+/* 미션 코드 → rollback stage */
+const ROLLBACK_STAGE_MAP = {
+    "A-1": "A",
+    "B-1": "B",
+    "C-1": "C",
+    "D-1": "D",
+    "E-1": "E",
+    "F-1": "F_QUICK",
+    "F-2": "F_BUILD",
+};
 
 const useTeachDetail2Modals = ({ gameId, gameInfo, refreshTeams, onGameInfoUpdate }) => {
     /* 현재 열린 미션 코드 + 선택된 팀 ID (모달 내 팀 전환용) */
@@ -332,10 +343,39 @@ const useTeachDetail2Modals = ({ gameId, gameInfo, refreshTeams, onGameInfoUpdat
         }
     };
 
+    /* 미션 Rollback (반려) */
+    const handleRollback = async () => {
+        if (!activeTeamId || !activeMissionCode) return;
+        const stage = ROLLBACK_STAGE_MAP[activeMissionCode];
+        if (!stage) {
+            alert("반려할 수 없는 미션입니다.");
+            return;
+        }
+        if (!window.confirm("미션을 반려하시겠습니까?")) return;
+
+        const result = await rollbackMission(activeTeamId, stage);
+        if (!result.success) {
+            alert(result.message);
+            return;
+        }
+
+        alert("미션이 반려되었습니다.");
+        setShowMissionModal(false);
+        setShowIdentityModal(false);
+        setShowFlowModal(false);
+        setShowQuickWinModal(false);
+        setShowBuildWinModal(false);
+        setShowFundingModal(false);
+        await refreshTeams();
+    };
+
     return {
         /* 미션 섹션 (TeachDetail2 JSX에서 직접 사용) */
         handleMissionItemClick,
         activeTeamId, handleModalTeamChange,
+
+        /* 미션 Rollback */
+        handleRollback,
 
         /* 팀 모달 열기 (TeachDetail2 JSX에서 직접 사용) */
         handleOpenTeamModal,

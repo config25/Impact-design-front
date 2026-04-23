@@ -176,6 +176,7 @@ Impact Check(Q1~Q12) 점수 기반 **4사분면 조직 프로파일** 분류
 | 팀 현황 테이블 | 팀별 × 단계별 제출 현황, 셀 클릭으로 제출물 조회 |
 | 팀 관리 | 팀 추가 · 삭제 · 복원, 팀원 CRUD, 대표작성자 지정 |
 | 제출 기한 | 마감일시 설정 · 수정 |
+| **미션 반려 (Rollback)** | 제출된 미션(A~E, F-1, F-2)을 열람 모달에서 ↶ Rollback 클릭 → 데이터는 유지한 채 제출 상태만 해제하여 학생이 재수정 가능하도록 되돌림 |
 | 보고서 출력 | 팀별 개별 PDF + 전체 일괄 ZIP 다운로드 |
 
 ---
@@ -196,7 +197,7 @@ Impact Check(Q1~Q12) 점수 기반 **4사분면 조직 프로파일** 분류
 ## 공통 기능
 
 - **GNB (상단 네비게이션)**: 강의실명 · 팀명 · 사용자명 표시 + 6단계 탭 (비활성 단계는 회색 처리)
-- **저장/제출 패턴**: 모든 캔버스에서 임시저장(수정 가능) / 제출완료(수정 불가) 분리
+- **저장/제출 패턴**: 모든 캔버스에서 임시저장(수정 가능) / 제출완료(수정 불가) 분리, 강사 Rollback 시 다시 수정 가능 상태로 복귀
 - **단계 접근 제어**: 강사가 설정한 단계만 학생이 접근 가능
 - **작성 Tips 모달**: 각 캔버스마다 작성 가이드 제공
 - **평가팀**: 일반 팀과 별도로, IMPACT Review(F단계) 평가에만 참여하는 팀
@@ -208,13 +209,14 @@ Impact Check(Q1~Q12) 점수 기반 **4사분면 조직 프로파일** 분류
 | 분류 | 기술 |
 |------|------|
 | Frontend | React 19 (CRA) |
-| 상태관리 | Context API |
+| 라우팅 | React Router 7 · 화면별 `React.lazy` + `Suspense` 코드 스플리팅 |
+| 상태관리 | Context API (Auth · Dashboard · GameStep · IdentityCanvas) |
 | 스타일링 | Pure CSS (컴포넌트별 고유 프리픽스 + CSS 변수) |
 | 폰트 | Pretendard (CDN) |
 | Charts | Chart.js + chartjs-plugin-datalabels |
 | PDF | jsPDF + html2canvas |
 | 파일 처리 | JSZip + file-saver |
-| 인증 | Token 기반 (Access / Refresh) |
+| 인증 | Token 기반 (Access / Refresh) · `AuthGuard` 라우트 보호 · `ErrorBoundary` |
 
 ---
 
@@ -223,24 +225,25 @@ Impact Check(Q1~Q12) 점수 기반 **4사분면 조직 프로파일** 분류
 ```
 src/
 ├── components/          # 재사용 컴포넌트
-│   ├── common/          #   GNB, TipsModal
+│   ├── common/          #   GNB · TipsModal · AuthGuard · ErrorBoundary
 │   ├── identity/        #   Identity Canvas 관련 (5개 컴포넌트)
 │   ├── report/          #   PDF 리포트 페이지별 컴포넌트 (13개)
 │   ├── teacher/         #   강사 레이아웃 + 모달 (modals/ 하위 분리)
-│   └── review/          #   EvalForm, RightPanel, ResultTab
-├── screens/             # 화면 컴포넌트
+│   └── review/          #   EvalForm · RightPanel · ResultTab
+├── screens/             # 화면 컴포넌트 (App.js에서 React.lazy로 지연 로드)
 │   ├── *Screen.js       #   A~F 단계 학생 화면
 │   ├── WinCanvasScreen  #   D/E 공용 Win Canvas 통합 화면
-│   └── teacher/         #   강사 화면 (Dashboard, List, Detail2 등)
-├── hooks/               # 커스텀 훅 (useTeachDetail2Modals, usePdfDownload)
+│   └── teacher/         #   강사 화면 (Dashboard · List · Detail · Detail2 · Save · StudentList · ReportScreen)
+├── hooks/               # 커스텀 훅 (useFetchData · useTeachDetail2Modals · usePdfDownload)
 ├── constants/           # 공용 상수 (평가 문항, 차트 설정 등)
-├── contexts/            # React Context (Auth, Dashboard, IdentityCanvas)
+├── contexts/            # React Context (Auth · Dashboard · GameStep · IdentityCanvas)
 ├── services/            # API 서비스 모듈
-│   ├── teach*Service    #   강사용 (Class, Team, Submission 분리)
+│   ├── apiConfig        #   authFetch · apiCall 공통 래퍼 (401 → 전역 로그아웃)
+│   ├── teach*Service    #   강사용 (Class · Team · Submission 분리, Submission에 Rollback 포함)
 │   ├── *CanvasService   #   캔버스 서비스 (팩토리 패턴)
 │   └── fundingService   #   펀딩/평가 API
 ├── styles/              # 공통 CSS + CSS 변수 (variables.css)
-├── utils/               # 유틸리티 (logo, reportUtils, reportPdfUtils)
+├── utils/               # 유틸리티 (formatDate · logoUtil · reportUtils · reportPdfUtils)
 └── resource/            # 이미지 리소스
 ```
 

@@ -29,7 +29,12 @@
       "Bash(bash /tmp/css_replace.sh \"src/screens/ImpactReviewScreen.css\")",
       "Bash(bash /tmp/css_replace.sh \"src/screens/teacher/TeachDetail.css\")",
       "Bash(bash /tmp/css_replace.sh \"src/screens/ImpactCheckScreen.css\")",
-      "Bash(xargs -I {} sh -c 'echo \"=== {} ===\" && head -20 {}')"
+      "Bash(xargs -I {} sh -c 'echo \"=== {} ===\" && head -20 {}')",
+      "Bash(echo \"components/ \\($\\(find \"/c/Users/김영호/Desktop/impact_design/id_front/src/components\" -type f \\\\\\( -name \"*.js\" -o -name \"*.jsx\" \\\\\\))",
+      "Bash(awk '{print \"  평균 LOC:\", int\\($1/NR\\)}')",
+      "Bash(echo \"services/ \\($\\(find \"/c/Users/김영호/Desktop/impact_design/id_front/src/services\" -type f \\\\\\( -name \"*.js\" -o -name \"*.jsx\" \\\\\\))",
+      "Bash(echo \"hooks/ \\($\\(find \"/c/Users/김영호/Desktop/impact_design/id_front/src/hooks\" -type f \\\\\\( -name \"*.js\" -o -name \"*.jsx\" \\\\\\))",
+      "Bash(echo \"utils/ \\($\\(find \"/c/Users/김영호/Desktop/impact_design/id_front/src/utils\" -type f \\\\\\( -name \"*.js\" -o -name \"*.jsx\" \\\\\\))"
     ]
   }
 }

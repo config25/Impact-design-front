@@ -1,6 +1,6 @@
 import { ClickableTd } from "./ClickablePopover";
 
-const FlowModal = ({ show, onClose, title, data, TeamSelectBar }) => {
+const FlowModal = ({ show, onClose, title, data, TeamSelectBar, onRollback }) => {
     if (!show || !data) return null;
 
     return (
@@ -8,7 +8,14 @@ const FlowModal = ({ show, onClose, title, data, TeamSelectBar }) => {
             <div className="td2-flow-modal" onClick={e => e.stopPropagation()}>
                 <div className="td2-impact-modal-header">
                     <span className="td2-impact-modal-title">{title}</span>
-                    <button className="td2-modify-close" onClick={onClose}>&times;</button>
+                    <div className="td2-modal-header-actions">
+                        {onRollback && (
+                            <button className="td2-rollback-btn" type="button" onClick={onRollback}>
+                                <span className="td2-rollback-btn-icon">↶</span> Rollback
+                            </button>
+                        )}
+                        <button className="td2-modify-close" onClick={onClose}>&times;</button>
+                    </div>
                 </div>
                 <TeamSelectBar />
                 <div className="td2-flow-modal-body">

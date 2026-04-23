@@ -943,6 +943,36 @@
     color: var(--color-border);
 }
 
+.td2-modal-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.td2-rollback-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #333;
+    background: #f5f5f5;
+    border: 1px solid #d0d0d0;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+
+.td2-rollback-btn:hover {
+    background: #e8e8e8;
+}
+
+.td2-rollback-btn-icon {
+    font-size: 13px;
+    line-height: 1;
+}
+
 .td2-impact-modal-body {
     padding: 20px 24px 24px;
 }

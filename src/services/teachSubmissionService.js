@@ -25,3 +25,10 @@ export const getFundingByTeam = (canvasType, teamId) =>
 
 export const getFundingResultByTeam = (teamId) =>
     apiCall(`${BASE_URL}/submission/funding/result?teamId=${encodeURIComponent(teamId)}`, {}, "최종 결과 데이터를 불러오는데 실패했습니다.");
+
+export const rollbackMission = (teamId, stage) =>
+    apiCall(`${BASE_URL}/submission/rollback`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ teamId, stage }),
+    }, "미션 반려에 실패했습니다.");

@@ -41,6 +41,8 @@ const TeachDetail2Modals = ({
     /* 모달 내 팀 선택 */
     activeTeamId, handleModalTeamChange,
     teams,
+    /* 미션 Rollback */
+    handleRollback,
 }) => {
     /* 모달 안 팀 선택 바 */
     const TeamSelectBar = () => (
@@ -62,16 +64,19 @@ const TeachDetail2Modals = ({
             <MissionModal
                 show={showMissionModal} onClose={() => setShowMissionModal(false)}
                 title={missionModalTitle} data={missionModalData} TeamSelectBar={TeamSelectBar}
+                onRollback={handleRollback}
             />
 
             <IdentityModal
                 show={showIdentityModal} onClose={() => setShowIdentityModal(false)}
                 title={identityModalTitle} data={identityModalData} TeamSelectBar={TeamSelectBar}
+                onRollback={handleRollback}
             />
 
             <FlowModal
                 show={showFlowModal} onClose={() => setShowFlowModal(false)}
                 title={flowModalTitle} data={flowModalData} TeamSelectBar={TeamSelectBar}
+                onRollback={handleRollback}
             />
 
             {/* 전술적 실행과제 열람 모달 */}
@@ -80,7 +85,12 @@ const TeachDetail2Modals = ({
                     <div className="td2-qw-modal" onClick={e => e.stopPropagation()}>
                         <div className="td2-impact-modal-header">
                             <span className="td2-impact-modal-title">{quickWinModalTitle}</span>
-                            <button className="td2-modify-close" onClick={() => setShowQuickWinModal(false)}>&times;</button>
+                            <div className="td2-modal-header-actions">
+                                <button className="td2-rollback-btn" type="button" onClick={handleRollback}>
+                                    <span className="td2-rollback-btn-icon">↶</span> Rollback
+                                </button>
+                                <button className="td2-modify-close" onClick={() => setShowQuickWinModal(false)}>&times;</button>
+                            </div>
                         </div>
                         <TeamSelectBar />
                         <WinCanvasModalBody
@@ -104,7 +114,12 @@ const TeachDetail2Modals = ({
                     <div className="td2-qw-modal" onClick={e => e.stopPropagation()}>
                         <div className="td2-impact-modal-header">
                             <span className="td2-impact-modal-title">{buildWinModalTitle}</span>
-                            <button className="td2-modify-close" onClick={() => setShowBuildWinModal(false)}>&times;</button>
+                            <div className="td2-modal-header-actions">
+                                <button className="td2-rollback-btn" type="button" onClick={handleRollback}>
+                                    <span className="td2-rollback-btn-icon">↶</span> Rollback
+                                </button>
+                                <button className="td2-modify-close" onClick={() => setShowBuildWinModal(false)}>&times;</button>
+                            </div>
                         </div>
                         <TeamSelectBar />
                         <WinCanvasModalBody
@@ -128,7 +143,12 @@ const TeachDetail2Modals = ({
                     <div className="td2-funding-modal" onClick={e => e.stopPropagation()}>
                         <div className="td2-impact-modal-header">
                             <span className="td2-impact-modal-title">{fundingModalTitle}</span>
-                            <button className="td2-modify-close" onClick={() => setShowFundingModal(false)}>&times;</button>
+                            <div className="td2-modal-header-actions">
+                                <button className="td2-rollback-btn" type="button" onClick={handleRollback}>
+                                    <span className="td2-rollback-btn-icon">↶</span> Rollback
+                                </button>
+                                <button className="td2-modify-close" onClick={() => setShowFundingModal(false)}>&times;</button>
+                            </div>
                         </div>
                         <TeamSelectBar />
                         <div className="td2-funding-modal-body">
